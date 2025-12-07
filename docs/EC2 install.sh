@@ -14,8 +14,7 @@ sudo mv composer.phar /usr/local/bin/composer
 curl -fsSL https://bun.sh/install | bash
 source /home/ubuntu/.bashrc
 
-
-git clone https://github.com/alejmendez/teloweb.git teloweb
+git clone https://github.com/alejmendez/telo-web-laravel.git teloweb
 cd teloweb
 
 composer install --no-dev --optimize-autoloader
