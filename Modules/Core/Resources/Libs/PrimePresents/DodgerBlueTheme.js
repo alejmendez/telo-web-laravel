@@ -4,17 +4,17 @@ import { CarrotOrangeTheme } from './CarrotOrangeTheme';
 export const DodgerBlueTheme = definePreset(CarrotOrangeTheme, {
   semantic: {
     primary: {
-      50: '#eef7ff',
-      100: '#d9edff',
-      200: '#bce1ff',
-      300: '#8ecfff',
-      400: '#59b2ff',
-      500: '#2c8eff',
-      600: '#1b71f5',
-      700: '#145be1',
-      800: '#1749b6',
-      900: '#19418f',
-      950: '#142957',
+      50:  '#e6f1fa',
+      100: '#b8d9f2',
+      200: '#8ac1ea',
+      300: '#5ca9e2',
+      400: '#3190da',
+      500: '#005ed1', // base
+      600: '#0052b9',
+      700: '#00479e',
+      800: '#003c84',
+      900: '#003068',
+      950: '#00244c',
     },
   },
 });

@@ -71,7 +71,7 @@ const submit = () => {
         <Button
           class="w-full"
           :loading="form.processing"
-          :label="__('auth.login.form.submit')"
+          :label="form.processing ? __('auth.login.form.processing') : __('auth.login.form.submit')"
           @click="submit"
         />
       </div>

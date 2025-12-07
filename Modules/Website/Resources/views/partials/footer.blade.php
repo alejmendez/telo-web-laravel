@@ -14,14 +14,14 @@
 
       <div class="flex flex-col sm:flex-row items-center gap-6">
         <a
-          href="mailto:hola@telo.cl"
+          href="mailto: telo.equipo@gmail.com"
           class="text-muted-foreground hover:text-primary transition-colors"
         >
-          hola@telo.cl
+            telo.equipo@gmail.com
         </a>
         <div class="flex gap-4">
           <a
-            href="https://instagram.com/telo.cl"
+            href="https://www.instagram.com/telochile.cl"
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted-foreground hover:text-primary transition-colors"
@@ -29,7 +29,7 @@
             Instagram
           </a>
           <a
-            href="https://facebook.com/telo.cl"
+            href="https://www.facebook.com/telochile.cl"
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted-foreground hover:text-primary transition-colors"
@@ -37,12 +37,12 @@
             Facebook
           </a>
           <a
-            href="https://linkedin.com/company/telo"
+            href="https://www.tiktok.com/@telochile.cl"
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted-foreground hover:text-primary transition-colors"
           >
-            LinkedIn
+            Tiktok
           </a>
         </div>
       </div>

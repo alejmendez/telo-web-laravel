@@ -30,7 +30,7 @@ import { router } from '@inertiajs/vue3';
         <!-- Botones de acción -->
         <div class="mt-8 space-y-4">
           <button
-            @click="router.visit('/dashboard')"
+            @click="router.visit('/backoffice/dashboard')"
             class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
           >
             <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,7 +40,7 @@ import { router } from '@inertiajs/vue3';
           </button>
 
           <button
-            @click="router.visit('/')"
+            @click="router.visit('/backoffice')"
             class="group relative w-full flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
           >
             <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -53,8 +53,10 @@ const menuRightItems = menuElementsRight(currentComponent);
       :class="{ 'lg:w-[320px] lg:opacity-100 w-[0px] opacity-0': !showSideBar, 'lg:w-[0px] lg:opacity-0 w-full opacity-100': showSideBar }"
     >
       <h3 class="font-bold text-xl inline ms-6 mt-4">
-        <span class="text-(color:--p-primary-color)">SW </span>
-        <span class="text-gray-900 dark:text-gray-50">Agricola</span>
+        <a href="/">
+          <span class="text-(color:--p-primary-color)">Te </span>
+          <span class="text-gray-900 dark:text-gray-50">lo</span>
+        </a>
       </h3>
       <SideBarLeft />
     </div>

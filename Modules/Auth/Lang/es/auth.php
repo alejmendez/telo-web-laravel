@@ -8,6 +8,7 @@ return [
             'password' => 'Contraseña',
             'remember_me' => 'Recuerdame',
             'submit' => 'Ingresar',
+            'processing' => 'Ingresando...',
         ],
         'links' => [
             'restore_password' => 'Restablecer contraseña',
