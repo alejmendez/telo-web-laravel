@@ -46,6 +46,24 @@ export default defineConfig({
           additionalLangPaths: modules.map(module => `Modules/${module}/Lang`)
         }),
     ],
+    build: {
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('primevue') || id.includes('primeicons')) {
+                            return 'primevue';
+                        }
+                        if (id.includes('apexcharts') || id.includes('vue3-apexcharts')) {
+                            return 'apexcharts';
+                        }
+                        return 'vendor';
+                    }
+                }
+            }
+        }
+    },
     resolve: {
         alias: alias,
     },

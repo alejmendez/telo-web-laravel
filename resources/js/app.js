@@ -8,10 +8,10 @@ import { initLibs } from '@Core/Libs';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Telo';
 
-// Importamos todos los módulos de una vez
-const modulePages = import.meta.glob('./../../Modules/*/Resources/Pages/**/*.vue', { eager: true });
+// Importamos los módulos dinámicamente para code-splitting
+const modulePages = import.meta.glob('./../../Modules/*/Resources/Pages/**/*.vue');
 
-const resolvePageComponent = (name) => {
+const resolvePageComponent = async (name) => {
   const [module, pageName] = name.split('::');
   const pagePath = `../../Modules/${module}/Resources/Pages/${pageName}.vue`;
 
@@ -19,9 +19,8 @@ const resolvePageComponent = (name) => {
     throw new Error(`Page "${pagePath}" not found`);
   }
 
-  const page = modulePages[pagePath];
-
-  return typeof page === 'function' ? page() : page;
+  const page = await modulePages[pagePath]();
+  return page.default;
 };
 
 createInertiaApp({
