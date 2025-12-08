@@ -7,6 +7,10 @@ use Modules\Core\Http\Controllers\NotificationsController;
 use Modules\Core\Http\Controllers\StartController;
 use Modules\Core\Services\Contracts\CacheServiceContract;
 
+Route::middleware('throttle:web')->get('health-check', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 Route::middleware('throttle:web')->prefix('backoffice')->group(function () {
     Route::get('/', function (CacheServiceContract $cacheService) {
         if (Auth::check()) {

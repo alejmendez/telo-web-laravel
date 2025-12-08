@@ -1,35 +1,87 @@
-name: Deploy to AWS EC2
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.2.1
+    # 1. Preparar PHP para poder ejecutar artisan ziggy:generate
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite
+
+    # 2. Instalar dependencias de Composer (solo lo mínimo para que arranque artisan)
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+
+    # 3. Generar el archivo de rutas de Ziggy
+    # Importante: Creamos un .env temporal porque artisan lo necesita para arrancar
+    - name: Generate Ziggy Routes
+      run: |
+        cp .env.example .env
+        sed -i 's/APP_ENV=local/APP_ENV=production/g' .env
+        sed -i 's/APP_DEBUG=true/APP_DEBUG=false/g' .env
+        php artisan key:generate
+        php artisan ziggy:generate "resources/js/ziggy.js"
+
+    # 4. Preparar Bun y Caché (lo que vimos antes)
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Cache Bun dependencies
+      id: cache-bun
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
+    - name: Install JS dependencies
+      run: bun install --frozen-lockfile
+
+    # 5. Compilar los assets (Vite)
+    - name: Build assets
+      run: bun run build
+
+    # 6. Desplegar al servidor
+    # A. Subimos SOLO los assets compilados y el archivo Ziggy generado
+    - name: Upload Assets to EC2
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
-        port: 22
+        source: "public/build"
+        target: "/home/ubuntu/teloweb"
+
+    - name: Execute remote commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd /home/ubuntu/laratrufas
-          sudo systemctl stop nginx
-          sudo systemctl stop php8.3-fpm
-          sudo systemctl stop octane
+          cd /home/ubuntu/teloweb
+          # 1. Actualizamos el código PHP desde GitHub
           git pull origin main
-          composer install --optimize-autoloader --no-dev
-          composer dump-autoload
+
+          # 2. Instalamos dependencias de PHP
+          composer install --no-dev --optimize-autoloader
+
+          # 3. Corremos migraciones y optimizaciones
           php artisan migrate --force
           php artisan optimize
-          sudo systemctl start octane
-          sudo systemctl start php8.3-fpm
-          sudo systemctl start nginx
+
+          # 4. Reiniciar Octane
+          sudo systemctl restart octane

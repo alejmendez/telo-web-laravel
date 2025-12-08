@@ -1,5 +1,5 @@
 # sudo docker compose down ; sudo docker compose up -d
-# sudo docker exec laratrufa_app php artisan app:sync-permissions
+# sudo docker exec telo_app php artisan app:sync-permissions
 
 docker compose down
 git reset --hard
@@ -10,7 +10,7 @@ npm i
 npm run build
 
 docker compose up -d
-docker exec laratrufa_app composer install --optimize-autoloader --no-dev
-docker exec laratrufa_app php artisan optimize
-docker exec laratrufa_app php artisan migrate --force
-docker exec laratrufa_app php artisan app:sync-permissions
+docker exec telo_app composer install --optimize-autoloader --no-dev
+docker exec telo_app php artisan optimize
+docker exec telo_app php artisan migrate --force
+docker exec telo_app php artisan app:sync-permissions

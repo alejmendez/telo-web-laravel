@@ -1,6 +1,16 @@
 sudo apt update
 sudo apt upgrade -y
 
+# --- CONFIGURACIÓN SWAP (CRÍTICO PARA BUILD) ---
+# Crea un archivo de intercambio de 2GB para evitar que el servidor
+# se congele compilando assets (npm run build / bun run build)
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
