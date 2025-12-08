@@ -30,7 +30,7 @@
 
 <script>
 const handleWhatsAppClick = () => {
-    window.open("https://wa.me/56912345678?text=Hola%20Telo,%20necesito%20ayuda%20con%20mi%20hogar", "_blank");
+  window.open("https://wa.me/56954105279?text=Hola%20Telo!%20Me%20gustar%C3%ADa%20cotizar%20un%20servicio%20para%20mi%20hogar%20con%20un%20profesional%20verificado.", "_blank");
 };
 </script>
 </body>
