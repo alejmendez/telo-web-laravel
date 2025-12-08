@@ -35,14 +35,13 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Modules\\": "Modules/"
+            "Modules\\": "Modules/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Modules\\": "Modules/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
