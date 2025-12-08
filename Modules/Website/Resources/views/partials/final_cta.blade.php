@@ -1,4 +1,4 @@
-<section class="py-16 lg:py-24 bg-linear-to-br from-primary/5 via-accent to-secondary/5">
+<section class="py-16 lg:py-24 bg-linear-to-br from-primary/5 via-primary/10 to-secondary/5">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto text-center space-y-8">
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
@@ -13,7 +13,7 @@
         onclick="handleWhatsAppClick()"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle w-5 h-5"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
-        Contáctanos por WhatsApp
+        Contacta a un ejecutivo
       </button>
     </div>
   </div>

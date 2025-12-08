@@ -3,8 +3,8 @@
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div class="space-y-6 lg:space-y-8">
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-          Tu hogar perfecto está a un
-          <span class="ms-3 bg-gradient-to-r from-primary to-[hsl(210_95%_50%)] bg-clip-text text-transparent">
+          Servicios confiables al alcance de un
+          <span class="ms-3 text-primary bg-clip-text font-extrabold">
             click
           </span>
         </h1>
@@ -16,7 +16,7 @@
           onclick="handleWhatsAppClick()"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle w-5 h-5"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
-          Contáctanos por WhatsApp
+          Contacta a un ejecutivo
         </button>
       </div>
       <div class="relative">
