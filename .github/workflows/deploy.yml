@@ -17,8 +17,23 @@ jobs:
       with:
         php-version: '8.3'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite
+        coverage: none
 
-    # 2. Instalar dependencias de Composer (solo lo mínimo para que arranque artisan)
+    # 2. Cachear dependencias de Composer
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: |
+        echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    # 3. Instalar dependencias de Composer (usará la caché si existe)
     - name: Install Composer dependencies
       run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
 
