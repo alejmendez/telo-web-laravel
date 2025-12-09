@@ -25,6 +25,13 @@
   <meta name="twitter:description" content="¿Reparaciones en casa? Conecta al instante con expertos certificados en Santiago. Calidad y seguridad garantizada." />
   <meta name="twitter:image" content="{{ asset('assets/img/hero-image.jpg') }}" />
 
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/icon/apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/icon/favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/icon/favicon-16x16.png') }}">
+  <link rel="manifest" href="{{ asset('assets/img/icon/site.webmanifest') }}">
+  <link rel="shortcut icon" href="{{ asset('assets/img/icon/favicon.ico') }}">
+
   @vite([
     'resources/css/website.css',
   ])
