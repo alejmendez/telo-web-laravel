@@ -8,7 +8,7 @@
           class="h-12 w-auto mb-2 mx-auto md:mx-0"
         />
         <p class="text-sm text-muted-foreground">
-          Conectamos tus problemas con miles de soluciones
+          Conectamos tus problemas con miles de soluciones
         </p>
       </div>
 
