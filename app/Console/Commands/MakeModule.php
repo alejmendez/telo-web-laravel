@@ -25,7 +25,7 @@ class MakeModule extends Command
      */
     public function handle()
     {
-        $module = $this->argument('module');
+        $module = ucfirst($this->argument('module'));
         $this->createDirectories($module);
 
         // Crear archivos base
