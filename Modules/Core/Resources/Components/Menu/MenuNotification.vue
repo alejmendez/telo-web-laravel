@@ -32,7 +32,7 @@ onUnmounted(() => {
 <template>
   <div class="relative me-3" ref="root">
     <div
-      class="text-lg w-[40px] h-[40px] cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 pt-2 ps-2 rounded-full transition-all ease-out duration-300"
+      class="text-lg w-10 h-10 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 pt-2 ps-2 rounded-full transition-all ease-out duration-300"
       @click="toggleDrop"
     >
       <span class="material-symbols-rounded">notifications</span>
@@ -58,7 +58,7 @@ onUnmounted(() => {
       <div v-else>
         <ul>
           <li v-for="notification in unread_notifications">
-            <div class="material-symbols-rounded text-sky-600 !text-[20px]">info</div>
+            <div class="material-symbols-rounded text-sky-600 text-[20px]!">info</div>
             <Link :href="route('tasks.show', notification.data.task_id)">
               Hay una actualizacion en la tarea {{ notification.data.task_name }}
             </Link>
