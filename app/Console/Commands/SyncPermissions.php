@@ -31,6 +31,7 @@ class SyncPermissions extends Command
 
     protected $entities = [
         'users',
+        'countries',
     ];
 
     protected $defaultActions = [

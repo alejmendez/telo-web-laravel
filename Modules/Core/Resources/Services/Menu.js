@@ -11,13 +11,13 @@ export const menuElements = (currentComponent) => {
 
 export const menuElementsRight = (currentComponent) => {
   const menuItems = [
-    // {
-    //   link: route('backup.index'),
-    //   text: 'menu.right.backup',
-    //   icon: 'backup',
-    //   active: currentComponent.startsWith('Backup'),
-    //   can: can('backup.index'),
-    // },
+    {
+      link: route('countries.index'),
+      text: 'menu.right.countries',
+      icon: 'globe',
+      active: currentComponent.startsWith('countries'),
+      can: can('countries.index'),
+    },
   ];
 
   const menuItemsFiltered = menuItems.filter((item) => item.can);

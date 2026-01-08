@@ -15,5 +15,5 @@ export const can = (permission) => {
 };
 
 export const canShowRightMenu = () => {
-  return can('category_products.index') || can('importers.index') || can('owners.index') || can('plant_types.index');
+  return can('countries.index');
 };

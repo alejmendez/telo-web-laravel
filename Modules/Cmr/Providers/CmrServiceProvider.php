@@ -30,5 +30,9 @@ class CmrServiceProvider extends ServiceProvider
                 return 'Database\\Factories\\'.class_basename($modelName).'Factory';
             });
         }
+
+        $this->app->singleton(CountryService::class, function (Application $app) {
+            return new CountryService();
+        });
     }
 }
