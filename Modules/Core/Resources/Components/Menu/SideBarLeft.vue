@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import Accordion from 'primevue/accordion';
@@ -22,8 +22,8 @@ const openHandler = (e) => {
 };
 </script>
 <template>
-  <aside class="aside-left-menu min-h-[calc(100vh-50px)] ps-[15px] pe-[20px]">
-    <div class="flex flex-col justify-between space-y-[10px] mt-3 mb-10">
+  <aside class="aside-left-menu min-h-[calc(100vh-50px)] ps-[15px] pe-5">
+    <div class="flex flex-col justify-between space-y-2.5 mt-3 mb-10">
       <Accordion :value="menuState" multiple @update:value="openHandler">
         <AccordionPanel :value="index" v-for="(menu, index) in menuData" :key="index">
           <div v-if="menu.link">

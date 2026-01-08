@@ -82,7 +82,7 @@ onUnmounted(() => {
 <template>
   <div class="relative me-3" ref="root" v-if="showRightMenu">
     <div
-      class="text-lg w-[40px] h-[40px] cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 pt-2 ps-2 rounded-full transition-all ease-out duration-300"
+      class="text-lg w-10 h-10 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 pt-2 ps-2 rounded-full transition-all ease-out duration-300"
       @click="toggleDropMenu"
     >
       <span class="material-symbols-rounded">settings</span>
@@ -91,7 +91,7 @@ onUnmounted(() => {
 
   <MenuNotification />
 
-  <div class="w-[40px]" ref="root">
+  <div class="w-10" ref="root">
     <!-- User login -->
     <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
       <img class="w-10 h-10 rounded-full border-2 border-gray-50" :src="$page.props.auth.user.avatar_url" alt="" />

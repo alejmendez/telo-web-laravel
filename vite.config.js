@@ -9,7 +9,7 @@ const modules = [
   'Core',
   'Auth',
   'Dashboard',
-  'Tasks',
+  'Cmr',
   'Users',
 ]
 

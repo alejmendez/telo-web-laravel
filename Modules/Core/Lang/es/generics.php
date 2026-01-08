@@ -64,6 +64,7 @@ return [
         'save_edit' => 'Guardar Cambios',
         'cancel' => 'Cancelar',
         'filter' => 'Filtrar',
+        'back' => 'Atrás',
     ],
     'actions' => [
         'create' => 'Crear',
