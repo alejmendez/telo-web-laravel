@@ -7,6 +7,6 @@ return [
         Modules\Auth\Providers\AuthServiceProvider::class,
         Modules\Dashboard\Providers\DashboardServiceProvider::class,
         Modules\Website\Providers\WebsiteServiceProvider::class,
-        Modules\Cmr\Providers\CmrServiceProvider::class,
+        Modules\Crm\Providers\CrmServiceProvider::class,
     ],
 ];

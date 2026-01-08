@@ -1,5 +1,5 @@
 # 0. Consideraciones
-Todos los cambios deben ser realizados en el modulo de Cmr, esto es el directorio Modules/Cmr.
+Todos los cambios deben ser realizados en el modulo de Crm, esto es el directorio Modules/Crm.
 
 # 1. Modelo de dominio
 

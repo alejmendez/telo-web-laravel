@@ -17,8 +17,8 @@
             "@Website/*": [
                 "./Modules/Website/Resources/*"
             ],
-            "@Cmr/*": [
-                "./Modules/Cmr/Resources/*"
+            "@Crm/*": [
+                "./Modules/Crm/Resources/*"
             ]
         }
     },
