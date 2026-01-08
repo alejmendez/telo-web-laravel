@@ -1,0 +1,50 @@
+<?php
+
+namespace Modules\{{module}}\Services;
+
+use Modules\{{module}}\Models\{{resource}};
+use Modules\Core\Services\PrimevueDatatables;
+
+class {{resource}}Service
+{
+    protected const SEARCHABLE_COLUMNS = ['name'];
+
+    public function list(Array $params = [])
+    {
+        $query = {{resource}}::query();
+
+        $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
+        ${{resource_plural_lower}} = $datatable->of($query)->make();
+
+        return ${{resource_plural_lower}};
+    }
+
+    public function find(int $id): {{resource}}
+    {
+        return {{resource}}::findOrFail($id);
+    }
+
+    public function create(Array $data): {{resource}}
+    {
+        ${{resource_lower}} = new {{resource}};
+        ${{resource_lower}}->name = $data['name'];
+        ${{resource_lower}}->save();
+
+        return ${{resource_lower}};
+    }
+
+    public function update(int $id, Array $data): {{resource}}
+    {
+        ${{resource_lower}} = $this->find($id);
+        ${{resource_lower}}->name = $data['name'] ?? ${{resource_lower}}->name;
+        ${{resource_lower}}->save();
+
+        return ${{resource_lower}};
+    }
+
+    public function delete(int $id): bool
+    {
+        ${{resource_lower}} = $this->find($id);
+        return ${{resource_lower}}->delete();
+    }
+}

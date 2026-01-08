@@ -1,0 +1,29 @@
+<script setup>
+import { useForm } from '@inertiajs/vue3';
+
+import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
+import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
+import Form{{resource}} from '@{{module}}/Pages/{{resource_plural}}/Form.vue';
+
+const props = defineProps();
+
+const form = useForm({
+  name: null,
+});
+
+const submitHandler = () => form.post(route('{{resource_plural_lower}}.store'));
+</script>
+
+<template>
+  <AuthenticatedLayout :title="__('{{resource_lower}}.titles.entity_breadcrumb')">
+    <HeaderCrud
+      :title="__('{{resource_lower}}.titles.create')"
+      :breadcrumbs="[{ to: '{{resource_plural_lower}}.index', text: __('{{resource_lower}}.titles.entity_breadcrumb') }, { text: __('generics.actions.create') }]"
+      :form="{ instance: form, submitHandler, submitText: __('generics.buttons.create'), hrefCancel: route('{{resource_plural_lower}}.index') }"
+    />
+    <Form{{resource}}
+      :form="form"
+      :submitHandler="submitHandler"
+    />
+  </AuthenticatedLayout>
+</template>

@@ -1,0 +1,20 @@
+<?php
+
+namespace Modules\{{module}}\Providers;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+
+class {{module}}ServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        $this->loadViewsFrom(__DIR__.'/../Resources/views', '{{module}}');
+        $this->loadTranslationsFrom(__DIR__.'/../Lang');
+        $this->loadJsonTranslationsFrom(__DIR__.'/../Lang');
+
+        Route::middleware('web')->group(base_path('Modules/{{module}}/Routes/web.php'));
+        Route::middleware('api')->group(base_path('Modules/{{module}}/Routes/api.php'));
+    }
+}

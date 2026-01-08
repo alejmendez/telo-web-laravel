@@ -1,0 +1,111 @@
+<?php
+
+namespace Modules\{{module}}\Http\Controllers;
+
+use Inertia\Inertia;
+use Modules\Core\Http\Controllers\Controller;
+use Modules\Core\Traits\HasPermissionMiddleware;
+use Modules\{{module}}\Http\Requests\Store{{resource}}Request;
+use Modules\{{module}}\Http\Requests\Update{{resource}}Request;
+use Modules\{{module}}\Http\Resources\{{resource}}Resource;
+use Modules\{{module}}\Services\{{resource}}Service;
+
+class {{resource_plural}}Controller extends Controller
+{
+    use HasPermissionMiddleware;
+
+    public function __construct(protected {{resource}}Service ${{resource_camel}}Service)
+    {
+        $this->setupPermissionMiddleware();
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        if (request()->exists('dt_params')) {
+            $params = json_decode(request('dt_params', '[]'), true);
+
+            return response()->json($this->{{resource_camel}}Service->list($params));
+        }
+
+        return Inertia::render('{{module}}::{{resource_plural}}/List', [
+            'toast' => session('toast'),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return Inertia::render('{{module}}::{{resource_plural}}/Create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Store{{resource}}Request $request)
+    {
+        $data = $request->validated();
+        $this->{{resource_camel}}Service->create($data);
+
+        return redirect()->route('{{resource_plural_lower}}.index')->with('toast', [
+            'severity' => 'success',
+            'summary' => __('generics.messages.saved_successfully'),
+            'detail' => __('generics.messages.saved_successfully'),
+            'life' => 5000,
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(int $id)
+    {
+        ${{resource_lower}} = $this->{{resource_camel}}Service->find($id);
+
+        return Inertia::render('{{module}}::{{resource_plural}}/Show', [
+            'data' => new {{resource}}Resource(${{resource_lower}}),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(int $id)
+    {
+        ${{resource_lower}} = $this->{{resource_camel}}Service->find($id);
+
+        return Inertia::render('{{module}}::{{resource_plural}}/Edit', [
+            'data' => new {{resource}}Resource(${{resource_lower}}),
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Update{{resource}}Request $request, int $id)
+    {
+        $data = $request->validated();
+        ${{resource_lower}} = $this->{{resource_camel}}Service->update($id, $data);
+
+        return redirect()->route('{{resource_plural_lower}}.index')->with('toast', [
+            'severity' => 'success',
+            'summary' => __('generics.messages.saved_successfully'),
+            'detail' => __('generics.messages.saved_successfully'),
+            'life' => 5000,
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $id)
+    {
+        $this->{{resource_camel}}Service->delete($id);
+
+        return response()->noContent();
+    }
+}
