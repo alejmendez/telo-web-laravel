@@ -212,4 +212,88 @@ class MakeCrud extends Command
              $this->createFile($path, 'ServiceProvider', $placeholders);
         }
     }
+
+    protected function bindServiceInProvider($module, $resource, $placeholders)
+    {
+        $path = base_path("Modules/{$module}/Providers/{$module}ServiceProvider.php");
+        
+        if (!File::exists($path)) {
+            $this->warn("ServiceProvider not found: {$path}");
+            return;
+        }
+
+        $content = File::get($path);
+        $serviceClass = "{$resource}Service";
+        $binding = "        \$this->app->singleton({$serviceClass}::class, function (Application \$app) {\n            return new {$serviceClass}();\n        });";
+        $useStatement = "use Modules\\{$module}\\Services\\{$serviceClass};";
+        $appUseStatement = "use Illuminate\\Foundation\\Application;";
+
+        if (strpos($content, $serviceClass . '::class') !== false) {
+             return;
+        }
+
+        // Add use statements
+        if (strpos($content, $useStatement) === false) {
+             $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$useStatement}\n", $content, 1);
+        }
+        if (strpos($content, $appUseStatement) === false) {
+             $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$appUseStatement}\n", $content, 1);
+        }
+
+        // Add binding to boot method
+        // Try to find the end of boot method
+        if (preg_match('/public function boot\(\): void\s*\{(.*)\}/s', $content, $matches)) {
+            $bootBody = $matches[1];
+            // Insert at the end of the boot body
+            $newBootBody = $bootBody . "\n" . $binding . "\n    ";
+            $content = str_replace($bootBody, $newBootBody, $content);
+        } else {
+             // Fallback for different formatting
+             $content = str_replace('    public function boot(): void
+    {', '    public function boot(): void
+    {' . "\n" . $binding, $content);
+        }
+
+        File::put($path, $content);
+        $this->info("Service bound in: {$path}");
+    }
+
+    protected function addEntityToPermissions($placeholders)
+    {
+        $path = base_path('app/Console/Commands/SyncPermissions.php');
+        
+        if (!File::exists($path)) {
+            $this->warn("SyncPermissions command not found: {$path}");
+            return;
+        }
+
+        $content = File::get($path);
+        $entity = $placeholders['{{resource_plural_lower}}'];
+        
+        if (strpos($content, "'{$entity}'") !== false) {
+            return;
+        }
+
+        // Look for protected $entities = [ ... ];
+        $pattern = '/protected \$entities = \[\s*([^;]*)\s*\];/s';
+        
+        if (preg_match($pattern, $content, $matches)) {
+            $entitiesBlock = $matches[1];
+            // Append the new entity
+            // Trim the last comma and whitespace
+            $entitiesBlock = rtrim($entitiesBlock);
+            if (substr($entitiesBlock, -1) !== ',') {
+                $entitiesBlock .= ',';
+            }
+            
+            $newEntitiesBlock = $entitiesBlock . "\n        '{$entity}',";
+            
+            $content = str_replace($matches[1], $newEntitiesBlock, $content);
+            
+            File::put($path, $content);
+            $this->info("Entity '{$entity}' added to SyncPermissions.");
+        } else {
+            $this->warn("Could not find entities array in SyncPermissions.php");
+        }
+    }
 }
