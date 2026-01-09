@@ -2,6 +2,7 @@
 import { useAttrs, ref, onMounted, watch, computed } from 'vue';
 
 import Select from 'primevue/select';
+import InputText from 'primevue/inputtext';
 import VElementFormWrapper from '@Core/Components/Form/VElementFormWrapper.vue';
 
 const model = defineModel();
@@ -25,6 +26,10 @@ const props = defineProps({
     type: String,
   },
   autofocus: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
     type: Boolean,
     default: false,
   },
@@ -59,6 +64,13 @@ onMounted(() => {
       optionLabel="text"
       :options="options"
       :invalid="isInvalid"
+      v-if="!props.readonly"
+    />
+    <InputText
+      v-bind="attrs"
+      fluid
+      readonly
+      :value="model.text"
     />
   </VElementFormWrapper>
 </template>
