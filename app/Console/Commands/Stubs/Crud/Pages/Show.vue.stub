@@ -22,8 +22,8 @@ const submitHandler = () => {};
 <template>
   <AuthenticatedLayout :title="__('{{resource_lower}}.titles.entity_breadcrumb')">
     <HeaderCrud
-      :title="__('{{resource_lower}}.titles.edit')"
-      :breadcrumbs="[{ to: '{{resource_plural_lower}}.index', text: __('{{resource_lower}}.titles.entity_breadcrumb') }, { text: __('generics.actions.edit') }]"
+      :title="__('{{resource_lower}}.titles.show')"
+      :breadcrumbs="[{ to: '{{resource_plural_lower}}.index', text: __('{{resource_lower}}.titles.entity_breadcrumb') }, { text: __('generics.actions.show') }]"
       :links="[{ to: route('{{resource_plural_lower}}.index'), text: __('generics.buttons.back') }]"
     />
     <Form{{resource}}
