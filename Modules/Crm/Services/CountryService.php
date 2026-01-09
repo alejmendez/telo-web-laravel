@@ -24,6 +24,17 @@ class CountryService
         return Country::findOrFail($id);
     }
 
+    public function list_for_select(Array $filter = [])
+    {
+        $countries = Country::select('id as value', 'name as text')->orderBy('name');
+
+        if (isset($filter['name'])) {
+            $countries->where('name', 'like', "%{$filter['name']}%");
+        }
+
+        return $countries->get();
+    }
+
     public function create(Array $data): Country
     {
         $country = new Country;

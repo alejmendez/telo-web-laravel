@@ -78,6 +78,15 @@ onMounted(async () => {
           <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre" />
         </template>
       </Column>
+      <Column field="country.name" :header="__('city.table.country')" sortable style="min-width: 200px">
+        <template #body="{ data }">
+          <img :src="`https://flagsapi.com/${data.country.iso2}/flat/24.png`" class="inline-block" alt="Bandera de {{ data.country.name }}" />
+          {{ data.country.name }}
+        </template>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por país" />
+        </template>
+      </Column>
 
       <Column :exportable="false" style="max-width: 130px">
         <template #body="slotProps">

@@ -19,17 +19,4 @@ return [
             'label' => 'Código',
         ],
     ],
-    'show' => [
-        'created_at' => 'Fecha de creación',
-        'updated_at' => 'Última modificación',
-        'file' => [
-            'title' => 'Detalles del país',
-            'name' => [
-                'label' => 'Nombre',
-            ],
-            'iso2' => [
-                'label' => 'Código',
-            ],
-        ],
-    ],
 ];

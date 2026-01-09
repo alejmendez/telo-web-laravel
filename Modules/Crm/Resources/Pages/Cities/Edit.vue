@@ -7,6 +7,7 @@ import FormCity from '@Crm/Pages/Cities/Form.vue';
 
 const props = defineProps({
   data: Object,
+  countries: Array,
 });
 
 const { data } = props.data;
@@ -15,6 +16,7 @@ const form = useForm({
   _method: 'PATCH',
   id: data.id,
   name: data.name,
+  country_id: props.countries.find((item) => item.value === data.country_id.value),
 });
 
 const submitHandler = () => form.post(route('cities.update', data.id));
@@ -30,6 +32,7 @@ const submitHandler = () => form.post(route('cities.update', data.id));
     <FormCity
       :form="form"
       :submitHandler="submitHandler"
+      :countries="props.countries"
     />
   </AuthenticatedLayout>
 </template>

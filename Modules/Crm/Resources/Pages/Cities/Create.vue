@@ -5,10 +5,13 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import FormCity from '@Crm/Pages/Cities/Form.vue';
 
-const props = defineProps();
+const props = defineProps({
+  countries: Array,
+});
 
 const form = useForm({
   name: null,
+  country_id: null,
 });
 
 const submitHandler = () => form.post(route('cities.store'));
@@ -24,6 +27,7 @@ const submitHandler = () => form.post(route('cities.store'));
     <FormCity
       :form="form"
       :submitHandler="submitHandler"
+      :countries="props.countries"
     />
   </AuthenticatedLayout>
 </template>

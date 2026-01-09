@@ -16,6 +16,7 @@ class StoreCityRequest extends FormRequest
     {
         return [
             'name' => 'required|max:250',
+            'country_id' => 'required|exists:countries,id',
         ];
     }
 
@@ -23,13 +24,15 @@ class StoreCityRequest extends FormRequest
     {
         return [
             'name' => __('city.form.name.label'),
+            'country_id' => __('city.form.country_id.label'),
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            // 'name' => Str::title($this->name),
+            'name' => Str::title($this->name),
+            'country_id' => $this->country_id['value'],
         ]);
     }
 }

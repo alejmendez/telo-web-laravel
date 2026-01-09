@@ -7,13 +7,14 @@ import FormCity from '@Crm/Pages/Cities/Form.vue';
 
 const props = defineProps({
   data: Object,
+  countries: Array,
 });
 
 const { data } = props.data;
 
 const form = useForm({
-  id: data.id,
   name: data.name,
+  country_id: props.countries.find((item) => item.value === data.country_id.value),
 });
 
 const submitHandler = () => {};
@@ -22,12 +23,13 @@ const submitHandler = () => {};
 <template>
   <AuthenticatedLayout :title="__('city.titles.entity_breadcrumb')">
     <HeaderCrud
-      :title="__('city.titles.edit')"
-      :breadcrumbs="[{ to: 'cities.index', text: __('city.titles.entity_breadcrumb') }, { text: __('generics.actions.edit') }]"
+      :title="__('city.titles.show')"
+      :breadcrumbs="[{ to: 'cities.index', text: __('city.titles.entity_breadcrumb') }, { text: __('generics.actions.show') }]"
       :links="[{ to: route('cities.index'), text: __('generics.buttons.back') }]"
     />
     <FormCity
       :form="form"
+      :countries="props.countries"
       :readOnly="true"
       :submitHandler="submitHandler"
     />

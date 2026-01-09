@@ -24,8 +24,8 @@ const submitHandler = () => {};
 <template>
   <AuthenticatedLayout :title="__('country.titles.entity_breadcrumb')">
     <HeaderCrud
-      :title="__('country.titles.edit')"
-      :breadcrumbs="[{ to: 'countries.index', text: __('country.titles.entity_breadcrumb') }, { text: __('generics.actions.edit') }]"
+      :title="__('country.titles.show')"
+      :breadcrumbs="[{ to: 'countries.index', text: __('country.titles.entity_breadcrumb') }, { text: __('generics.actions.show') }]"
       :links="[{ to: route('countries.index'), text: __('generics.buttons.back') }]"
     />
     <FormCountry

@@ -70,7 +70,8 @@ onMounted(() => {
       v-bind="attrs"
       fluid
       readonly
-      :value="model.text"
+      :value="model?.text"
+      v-else
     />
   </VElementFormWrapper>
 </template>

@@ -18,6 +18,13 @@ export const menuElementsRight = (currentComponent) => {
       active: currentComponent.startsWith('countries'),
       can: can('countries.index'),
     },
+    {
+      link: route('cities.index'),
+      text: 'menu.right.cities',
+      icon: 'location_city',
+      active: currentComponent.startsWith('cities'),
+      can: can('cities.index'),
+    },
   ];
 
   const menuItemsFiltered = menuItems.filter((item) => item.can);

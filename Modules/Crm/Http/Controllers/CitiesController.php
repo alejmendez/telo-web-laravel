@@ -9,12 +9,16 @@ use Modules\Crm\Http\Requests\StoreCityRequest;
 use Modules\Crm\Http\Requests\UpdateCityRequest;
 use Modules\Crm\Http\Resources\CityResource;
 use Modules\Crm\Services\CityService;
+use Modules\Crm\Services\CountryService;
 
 class CitiesController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected CityService $cityService)
+    public function __construct(
+        protected CountryService $countryService,
+        protected CityService $cityService
+    )
     {
         $this->setupPermissionMiddleware();
     }
@@ -40,7 +44,9 @@ class CitiesController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crm::Cities/Create');
+        return Inertia::render('Crm::Cities/Create', [
+            'countries' => $this->countryService->list_for_select(),
+        ]);
     }
 
     /**
@@ -68,6 +74,7 @@ class CitiesController extends Controller
 
         return Inertia::render('Crm::Cities/Show', [
             'data' => new CityResource($city),
+            'countries' => $this->countryService->list_for_select(),
         ]);
     }
 
@@ -80,6 +87,7 @@ class CitiesController extends Controller
 
         return Inertia::render('Crm::Cities/Edit', [
             'data' => new CityResource($city),
+            'countries' => $this->countryService->list_for_select(),
         ]);
     }
 

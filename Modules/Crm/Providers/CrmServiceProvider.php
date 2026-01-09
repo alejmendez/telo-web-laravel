@@ -3,8 +3,11 @@
 namespace Modules\Crm\Providers;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Modules\Crm\Services\CityService;
+use Modules\Crm\Services\CountryService;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -33,6 +36,10 @@ class CrmServiceProvider extends ServiceProvider
 
         $this->app->singleton(CountryService::class, function (Application $app) {
             return new CountryService();
+        });
+
+        $this->app->singleton(CityService::class, function (Application $app) {
+            return new CityService();
         });
     }
 }

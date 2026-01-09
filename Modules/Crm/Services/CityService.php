@@ -7,11 +7,15 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class CityService
 {
-    protected const SEARCHABLE_COLUMNS = ['name'];
+    protected const SEARCHABLE_COLUMNS = ['name', 'country_id'];
+
+    public function __construct()
+    {
+    }
 
     public function list(Array $params = [])
     {
-        $query = City::query();
+        $query = City::query()->with('country');
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $cities = $datatable->of($query)->make();
@@ -28,6 +32,7 @@ class CityService
     {
         $city = new City;
         $city->name = $data['name'];
+        $city->country_id = $data['country_id'];
         $city->save();
 
         return $city;
@@ -37,6 +42,7 @@ class CityService
     {
         $city = $this->find($id);
         $city->name = $data['name'] ?? $city->name;
+        $city->country_id = $data['country_id'] ?? $city->country_id;
         $city->save();
 
         return $city;
