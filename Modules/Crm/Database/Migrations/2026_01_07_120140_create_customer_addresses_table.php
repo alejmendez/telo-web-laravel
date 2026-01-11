@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('commune_id')->constrained('communes')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->restrictOnDelete();
             $table->string('line1', 200);
             $table->string('line2', 200)->nullable();
             $table->string('postal_code', 32)->nullable();

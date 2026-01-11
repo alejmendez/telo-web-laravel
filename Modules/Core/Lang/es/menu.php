@@ -7,8 +7,7 @@ return [
     ],
     'right' => [
         'backup' => 'Backup',
-        'countries' => 'Países',
-        'cities' => 'Ciudades',
+        'locations' => 'Ubicaciones',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

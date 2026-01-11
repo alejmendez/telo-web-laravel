@@ -5,16 +5,16 @@ namespace Modules\Crm\Http\Controllers;
 use Inertia\Inertia;
 use Modules\Core\Http\Controllers\Controller;
 use Modules\Core\Traits\HasPermissionMiddleware;
-use Modules\Crm\Http\Requests\StoreCountryRequest;
-use Modules\Crm\Http\Requests\UpdateCountryRequest;
-use Modules\Crm\Http\Resources\CountryResource;
-use Modules\Crm\Services\CountryService;
+use Modules\Crm\Http\Requests\Location\StoreRequest;
+use Modules\Crm\Http\Requests\Location\UpdateRequest;
+use Modules\Crm\Http\Resources\LocationResource;
+use Modules\Crm\Services\LocationService;
 
-class CountriesController extends Controller
+class LocationsController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected CountryService $countryService)
+    public function __construct(protected LocationService $locationService)
     {
         $this->setupPermissionMiddleware();
     }
@@ -24,14 +24,9 @@ class CountriesController extends Controller
      */
     public function index()
     {
-        if (request()->exists('dt_params')) {
-            $params = json_decode(request('dt_params', '[]'), true);
-
-            return response()->json($this->countryService->list($params));
-        }
-
-        return Inertia::render('Crm::Countries/List', [
+        return Inertia::render('Crm::Locations/List', [
             'toast' => session('toast'),
+            'nodes' => $this->locationService->list(),
         ]);
     }
 
@@ -40,18 +35,18 @@ class CountriesController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crm::Countries/Create');
+        return Inertia::render('Crm::Locations/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCountryRequest $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $this->countryService->create($data);
+        $this->locationService->create($data);
 
-        return redirect()->route('countries.index')->with('toast', [
+        return redirect()->route('locations.index')->with('toast', [
             'severity' => 'success',
             'summary' => __('generics.messages.saved_successfully'),
             'detail' => __('generics.messages.saved_successfully'),
@@ -64,10 +59,10 @@ class CountriesController extends Controller
      */
     public function show(int $id)
     {
-        $country = $this->countryService->find($id);
+        $location = $this->locationService->find($id);
 
-        return Inertia::render('Crm::Countries/Show', [
-            'data' => new CountryResource($country),
+        return Inertia::render('Crm::Locations/Show', [
+            'data' => new LocationResource($location),
         ]);
     }
 
@@ -76,22 +71,22 @@ class CountriesController extends Controller
      */
     public function edit(int $id)
     {
-        $country = $this->countryService->find($id);
+        $location = $this->locationService->find($id);
 
-        return Inertia::render('Crm::Countries/Edit', [
-            'data' => new CountryResource($country),
+        return Inertia::render('Crm::Locations/Edit', [
+            'data' => new LocationResource($location),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCountryRequest $request, int $id)
+    public function update(UpdateRequest $request, int $id)
     {
         $data = $request->validated();
-        $country = $this->countryService->update($id, $data);
+        $location = $this->locationService->update($id, $data);
 
-        return redirect()->route('countries.index')->with('toast', [
+        return redirect()->route('locations.index')->with('toast', [
             'severity' => 'success',
             'summary' => __('generics.messages.saved_successfully'),
             'detail' => __('generics.messages.saved_successfully'),
@@ -104,7 +99,7 @@ class CountriesController extends Controller
      */
     public function destroy(int $id)
     {
-        $this->countryService->delete($id);
+        $this->locationService->delete($id);
 
         return response()->noContent();
     }

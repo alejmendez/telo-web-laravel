@@ -38,9 +38,9 @@ class Customer extends Model
         return $this->belongsTo(CustomerType::class);
     }
 
-    public function dni_country(): BelongsTo
+    public function dniLocation(): BelongsTo
     {
-        return $this->belongsTo(Country::class, 'dni_country_id');
+        return $this->belongsTo(Location::class, 'dni_location_id');
     }
 
     public function requests(): HasMany

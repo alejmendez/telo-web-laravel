@@ -12,18 +12,11 @@ export const menuElements = (currentComponent) => {
 export const menuElementsRight = (currentComponent) => {
   const menuItems = [
     {
-      link: route('countries.index'),
-      text: 'menu.right.countries',
+      link: route('locations.index'),
+      text: 'menu.right.locations',
       icon: 'globe',
-      active: currentComponent.startsWith('countries'),
-      can: can('countries.index'),
-    },
-    {
-      link: route('cities.index'),
-      text: 'menu.right.cities',
-      icon: 'location_city',
-      active: currentComponent.startsWith('cities'),
-      can: can('cities.index'),
+      active: currentComponent.startsWith('locations'),
+      can: can('locations.index'),
     },
   ];
 

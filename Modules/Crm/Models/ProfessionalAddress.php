@@ -12,7 +12,7 @@ class ProfessionalAddress extends Model
 
     protected $fillable = [
         'professional_id',
-        'commune_id',
+        'location_id',
         'line1',
         'line2',
         'postal_code',
@@ -32,8 +32,8 @@ class ProfessionalAddress extends Model
         return $this->belongsTo(Professional::class);
     }
 
-    public function commune(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Commune::class);
+        return $this->belongsTo(Location::class);
     }
 }
