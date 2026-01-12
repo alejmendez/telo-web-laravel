@@ -11,6 +11,7 @@ return [
         'contacttypes' => 'Tipos de Contacto',
         'professionaltypes' => 'Tipos de Profesionales',
         'customertypes' => 'Tipos de Clientes',
+        'categories' => 'Categorías',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

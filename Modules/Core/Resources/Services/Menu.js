@@ -39,6 +39,13 @@ export const menuElementsRight = (currentComponent) => {
       active: currentComponent.startsWith('professionaltypes'),
       can: can('professionaltypes.index'),
     },
+    {
+      link: route('categories.index'),
+      text: 'menu.right.categories',
+      icon: 'folder',
+      active: currentComponent.startsWith('categories'),
+      can: can('categories.index'),
+    },
   ];
 
   const menuItemsFiltered = menuItems.filter((item) => item.can);
