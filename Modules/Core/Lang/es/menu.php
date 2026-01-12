@@ -12,6 +12,7 @@ return [
         'professionaltypes' => 'Tipos de Profesionales',
         'customertypes' => 'Tipos de Clientes',
         'categories' => 'Categorías',
+        'urgencytypes' => 'Tipos de Urgencia',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

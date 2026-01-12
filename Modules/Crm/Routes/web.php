@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Crm\Http\Controllers\UrgencyTypesController;
 use Modules\Crm\Http\Controllers\CategoriesController;
 use Modules\Crm\Http\Controllers\CustomerTypesController;
 use Modules\Crm\Http\Controllers\ProfessionalTypesController;
@@ -10,6 +11,7 @@ use Modules\Crm\Http\Controllers\LocationsController;
 Route::middleware('throttle:web')->prefix('backoffice')->group(function () {
     Route::middleware(['auth', 'check.permission'])->group(function () {
         Route::resources([
+            'urgencytypes' => UrgencyTypesController::class,
             'categories' => CategoriesController::class,
             'customertypes' => CustomerTypesController::class,
             'professionaltypes' => ProfessionalTypesController::class,

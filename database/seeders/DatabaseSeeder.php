@@ -11,6 +11,7 @@ use Modules\Crm\Database\Seeders\CustomerTypesSeeder;
 use Modules\Crm\Database\Seeders\ContactTypesSeeder;
 use Modules\Crm\Database\Seeders\ProfessionalTypesSeeder;
 use Modules\Crm\Database\Seeders\CategoriesSubcategoriesSeeder;
+use Modules\Crm\Database\Seeders\UrgencyTypesSeeder;
 
 use Modules\Users\Models\User;
 
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder
             CustomerTypesSeeder::class,
             ContactTypesSeeder::class,
             ProfessionalTypesSeeder::class,
+            UrgencyTypesSeeder::class,
         ];
 
         $this->call($seeders);

@@ -1,0 +1,58 @@
+<script setup>
+import CardSection from '@Core/Components/CardSection.vue';
+import VInput from '@Core/Components/Form/VInput.vue';
+
+const props = defineProps({
+  form: Object,
+  readOnly: Boolean,
+  submitHandler: {
+    type: Function,
+    default: false,
+  },
+});
+
+const form = props.form;
+</script>
+
+<template>
+  <form @submit.prevent="props.submitHandler">
+    <CardSection>
+      <VInput
+        id="name"
+        v-model="form.name"
+        :label="__('urgencytype.form.name.label')"
+        :message="form.errors.name"
+        :readonly="props.readOnly"
+      />
+      <VInput
+        id="code"
+        v-model="form.code"
+        :label="__('urgencytype.form.code.label')"
+        :message="form.errors.code"
+        :readonly="props.readOnly"
+      />
+      <VInput
+        id="priority_weight"
+        v-model="form.priority_weight"
+        type="number"
+        min="0"
+        step="1"
+        max="100"
+        :label="__('urgencytype.form.priority_weight.label')"
+        :message="form.errors.priority_weight"
+        :readonly="props.readOnly"
+      />
+      <VInput
+        id="sla_hours"
+        v-model="form.sla_hours"
+        type="number"
+        min="0"
+        step="1"
+        max="168"
+        :label="__('urgencytype.form.sla_hours.label')"
+        :message="form.errors.sla_hours"
+        :readonly="props.readOnly"
+      />
+    </CardSection>
+  </form>
+</template>

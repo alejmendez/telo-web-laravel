@@ -15,5 +15,13 @@ export const can = (permission) => {
 };
 
 export const canShowRightMenu = () => {
-  return can('locations.index') || can('contacttypes.index') || can('professionaltypes.index') || can('customertypes.index') || can('categories.index');
+  const permissions = [
+    'locations.index',
+    'contacttypes.index',
+    'professionaltypes.index',
+    'customertypes.index',
+    'categories.index',
+    'urgencytypes.index',
+  ];
+  return permissions.some(permission => can(permission));
 };

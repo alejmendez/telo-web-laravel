@@ -36,6 +36,7 @@ class SyncPermissions extends Command
         'professionaltypes',
         'customertypes',
         'categories',
+        'urgencytypes',
     ];
 
     protected $defaultActions = [
