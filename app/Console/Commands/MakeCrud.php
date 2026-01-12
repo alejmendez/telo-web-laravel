@@ -58,6 +58,7 @@ class MakeCrud extends Command
         $this->createResource($module, $resource, $placeholders);
         $this->createServicePHP($module, $resource, $placeholders);
         $this->createServiceJS($module, $resource, $placeholders);
+        $this->createLangFile($module, $resource, $placeholders);
         $this->createViews($module, $resource, $resourcePlural, $placeholders);
         $this->updateRoutes($module, $resource, $resourcePlural, $placeholders);
 
@@ -128,6 +129,12 @@ class MakeCrud extends Command
     {
         $path = base_path("Modules/{$module}/Resources/Services/{$resource}Service.js");
         $this->createFile($path, 'ServiceJS', $placeholders);
+    }
+
+    protected function createLangFile($module, $resource, $placeholders)
+    {
+        $path = base_path("Modules/{$module}/Lang/es/{$placeholders['{{resource_lower}}']}.php");
+        $this->createFile($path, 'Lang', $placeholders);
     }
 
     protected function createViews($module, $resource, $resourcePlural, $placeholders)
@@ -216,7 +223,7 @@ class MakeCrud extends Command
     protected function bindServiceInProvider($module, $resource, $placeholders)
     {
         $path = base_path("Modules/{$module}/Providers/{$module}ServiceProvider.php");
-        
+
         if (!File::exists($path)) {
             $this->warn("ServiceProvider not found: {$path}");
             return;
@@ -261,7 +268,7 @@ class MakeCrud extends Command
     protected function addEntityToPermissions($placeholders)
     {
         $path = base_path('app/Console/Commands/SyncPermissions.php');
-        
+
         if (!File::exists($path)) {
             $this->warn("SyncPermissions command not found: {$path}");
             return;
@@ -269,14 +276,14 @@ class MakeCrud extends Command
 
         $content = File::get($path);
         $entity = $placeholders['{{resource_plural_lower}}'];
-        
+
         if (strpos($content, "'{$entity}'") !== false) {
             return;
         }
 
         // Look for protected $entities = [ ... ];
         $pattern = '/protected \$entities = \[\s*([^;]*)\s*\];/s';
-        
+
         if (preg_match($pattern, $content, $matches)) {
             $entitiesBlock = $matches[1];
             // Append the new entity
@@ -285,11 +292,11 @@ class MakeCrud extends Command
             if (substr($entitiesBlock, -1) !== ',') {
                 $entitiesBlock .= ',';
             }
-            
+
             $newEntitiesBlock = $entitiesBlock . "\n        '{$entity}',";
-            
+
             $content = str_replace($matches[1], $newEntitiesBlock, $content);
-            
+
             File::put($path, $content);
             $this->info("Entity '{$entity}' added to SyncPermissions.");
         } else {

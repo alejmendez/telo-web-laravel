@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\{{module}}\Http\Requests\{{resource}};
+namespace Modules\Crm\Http\Requests\ProfessionalType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -16,13 +16,15 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:250',
+            'code' => 'required|max:250|unique:professional_types,code',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => __('{{resource_lower}}.form.name.label'),
+            'name' => __('professionaltype.form.name.label'),
+            'code' => __('professionaltype.form.code.label'),
         ];
     }
 
@@ -30,6 +32,7 @@ class StoreRequest extends FormRequest
     {
         $this->merge([
             'name' => Str::title($this->name),
+            'code' => Str::slug($this->code),
         ]);
     }
 }

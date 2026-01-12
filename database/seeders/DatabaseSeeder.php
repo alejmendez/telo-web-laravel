@@ -9,6 +9,7 @@ use Modules\Users\Database\Seeders\UserSeeder;
 use Modules\Crm\Database\Seeders\ChileLocationsSeeder;
 use Modules\Crm\Database\Seeders\CustomerTypesSeeder;
 use Modules\Crm\Database\Seeders\ContactTypesSeeder;
+use Modules\Crm\Database\Seeders\ProfessionalTypesSeeder;
 
 use Modules\Users\Models\User;
 
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ChileLocationsSeeder::class,
             CustomerTypesSeeder::class,
             ContactTypesSeeder::class,
+            ProfessionalTypesSeeder::class,
         ];
 
         $this->call($seeders);

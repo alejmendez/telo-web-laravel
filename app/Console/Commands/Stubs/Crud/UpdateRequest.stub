@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\{{module}}\Http\Requests;
+namespace Modules\{{module}}\Http\Requests\{{resource}};
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class Update{{resource}}Request extends FormRequest
+class UpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -29,7 +29,7 @@ class Update{{resource}}Request extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            // 'name' => Str::title($this->name),
+            'name' => Str::title($this->name),
         ]);
     }
 }

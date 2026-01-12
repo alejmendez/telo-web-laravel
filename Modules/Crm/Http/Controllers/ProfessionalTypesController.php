@@ -1,20 +1,20 @@
 <?php
 
-namespace Modules\{{module}}\Http\Controllers;
+namespace Modules\Crm\Http\Controllers;
 
 use Inertia\Inertia;
 use Modules\Core\Http\Controllers\Controller;
 use Modules\Core\Traits\HasPermissionMiddleware;
-use Modules\{{module}}\Http\Requests\{{resource}}\StoreRequest;
-use Modules\{{module}}\Http\Requests\{{resource}}\UpdateRequest;
-use Modules\{{module}}\Http\Resources\{{resource}}Resource;
-use Modules\{{module}}\Services\{{resource}}Service;
+use Modules\Crm\Http\Requests\ProfessionalType\StoreRequest;
+use Modules\Crm\Http\Requests\ProfessionalType\UpdateRequest;
+use Modules\Crm\Http\Resources\ProfessionalTypeResource;
+use Modules\Crm\Services\ProfessionalTypeService;
 
-class {{resource_plural}}Controller extends Controller
+class ProfessionalTypesController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected {{resource}}Service ${{resource_camel}}Service)
+    public function __construct(protected ProfessionalTypeService $professionalTypeService)
     {
         $this->setupPermissionMiddleware();
     }
@@ -27,10 +27,10 @@ class {{resource_plural}}Controller extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            return response()->json($this->{{resource_camel}}Service->list($params));
+            return response()->json($this->professionalTypeService->list($params));
         }
 
-        return Inertia::render('{{module}}::{{resource_plural}}/List', [
+        return Inertia::render('Crm::ProfessionalTypes/List', [
             'toast' => session('toast'),
         ]);
     }
@@ -40,7 +40,7 @@ class {{resource_plural}}Controller extends Controller
      */
     public function create()
     {
-        return Inertia::render('{{module}}::{{resource_plural}}/Create');
+        return Inertia::render('Crm::ProfessionalTypes/Create');
     }
 
     /**
@@ -49,9 +49,9 @@ class {{resource_plural}}Controller extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $this->{{resource_camel}}Service->create($data);
+        $this->professionalTypeService->create($data);
 
-        return redirect()->route('{{resource_plural_lower}}.index')->with('toast', [
+        return redirect()->route('professionaltypes.index')->with('toast', [
             'severity' => 'success',
             'summary' => __('generics.messages.saved_successfully'),
             'detail' => __('generics.messages.saved_successfully'),
@@ -64,10 +64,10 @@ class {{resource_plural}}Controller extends Controller
      */
     public function show(int $id)
     {
-        ${{resource_lower}} = $this->{{resource_camel}}Service->find($id);
+        $professionaltype = $this->professionalTypeService->find($id);
 
-        return Inertia::render('{{module}}::{{resource_plural}}/Show', [
-            'data' => new {{resource}}Resource(${{resource_lower}}),
+        return Inertia::render('Crm::ProfessionalTypes/Show', [
+            'data' => new ProfessionalTypeResource($professionaltype),
         ]);
     }
 
@@ -76,10 +76,10 @@ class {{resource_plural}}Controller extends Controller
      */
     public function edit(int $id)
     {
-        ${{resource_lower}} = $this->{{resource_camel}}Service->find($id);
+        $professionaltype = $this->professionalTypeService->find($id);
 
-        return Inertia::render('{{module}}::{{resource_plural}}/Edit', [
-            'data' => new {{resource}}Resource(${{resource_lower}}),
+        return Inertia::render('Crm::ProfessionalTypes/Edit', [
+            'data' => new ProfessionalTypeResource($professionaltype),
         ]);
     }
 
@@ -89,9 +89,9 @@ class {{resource_plural}}Controller extends Controller
     public function update(UpdateRequest $request, int $id)
     {
         $data = $request->validated();
-        ${{resource_lower}} = $this->{{resource_camel}}Service->update($id, $data);
+        $professionaltype = $this->professionalTypeService->update($id, $data);
 
-        return redirect()->route('{{resource_plural_lower}}.index')->with('toast', [
+        return redirect()->route('professionaltypes.index')->with('toast', [
             'severity' => 'success',
             'summary' => __('generics.messages.saved_successfully'),
             'detail' => __('generics.messages.saved_successfully'),
@@ -104,7 +104,7 @@ class {{resource_plural}}Controller extends Controller
      */
     public function destroy(int $id)
     {
-        $this->{{resource_camel}}Service->delete($id);
+        $this->professionalTypeService->delete($id);
 
         return response()->noContent();
     }

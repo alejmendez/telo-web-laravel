@@ -9,6 +9,7 @@ return [
         'backup' => 'Backup',
         'locations' => 'Ubicaciones',
         'contacttypes' => 'Tipos de Contacto',
+        'professionaltypes' => 'Tipos de Profesionales',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

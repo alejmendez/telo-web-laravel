@@ -3,9 +3,9 @@
 return [
     'titles' => [
         'entity_breadcrumb' => '{{resource_plural}}',
-        'create' => 'Create {{resource}}',
-        'edit' => 'Edit {{resource}}',
-        'show' => '{{resource}} Details',
+        'create' => 'Crear {{resource}}',
+        'edit' => 'Editar {{resource}}',
+        'show' => 'Detalle del {{resource}}',
     ],
     'table' => [
         'name' => 'Name',
@@ -13,16 +13,6 @@ return [
     'form' => [
         'name' => [
             'label' => 'Name',
-        ],
-    ],
-    'show' => [
-        'created_at' => 'Created at',
-        'updated_at' => 'Last updated',
-        'file' => [
-            'title' => '{{resource}} Details',
-            'name' => [
-                'label' => 'Name',
-            ],
         ],
     ],
 ];
