@@ -100,10 +100,10 @@ class MakeCrud extends Command
 
     protected function createRequests($module, $resource, $placeholders)
     {
-        $pathStore = base_path("Modules/{$module}/Http/Requests/Store{$resource}Request.php");
+        $pathStore = base_path("Modules/{$module}/Http/Requests/{$resource}/StoreRequest.php");
         $this->createFile($pathStore, 'StoreRequest', $placeholders);
 
-        $pathUpdate = base_path("Modules/{$module}/Http/Requests/Update{$resource}Request.php");
+        $pathUpdate = base_path("Modules/{$module}/Http/Requests/{$resource}/UpdateRequest.php");
         $this->createFile($pathUpdate, 'UpdateRequest', $placeholders);
     }
 

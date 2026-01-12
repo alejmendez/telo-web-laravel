@@ -10,6 +10,7 @@ return [
         'locations' => 'Ubicaciones',
         'contacttypes' => 'Tipos de Contacto',
         'professionaltypes' => 'Tipos de Profesionales',
+        'customertypes' => 'Tipos de Clientes',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

@@ -26,6 +26,13 @@ export const menuElementsRight = (currentComponent) => {
       can: can('contacttypes.index'),
     },
     {
+      link: route('customertypes.index'),
+      text: 'menu.right.customertypes',
+      icon: 'business',
+      active: currentComponent.startsWith('customertypes'),
+      can: can('customertypes.index'),
+    },
+    {
       link: route('professionaltypes.index'),
       text: 'menu.right.professionaltypes',
       icon: 'construction',

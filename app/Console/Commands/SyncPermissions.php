@@ -34,6 +34,7 @@ class SyncPermissions extends Command
         'locations',
         'contacttypes',
         'professionaltypes',
+        'customertypes',
     ];
 
     protected $defaultActions = [
