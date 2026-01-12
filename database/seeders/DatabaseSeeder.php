@@ -7,7 +7,12 @@ use Illuminate\Database\Seeder;
 use Modules\Users\Database\Seeders\RolSeeder;
 use Modules\Users\Database\Seeders\UserSeeder;
 use Modules\Crm\Database\Seeders\ChileLocationsSeeder;
+use Modules\Crm\Database\Seeders\CustomerTypesSeeder;
+use Modules\Crm\Database\Seeders\ContactTypesSeeder;
+
 use Modules\Users\Models\User;
+
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,15 +29,12 @@ class DatabaseSeeder extends Seeder
             RolSeeder::class,
             UserSeeder::class,
             ChileLocationsSeeder::class,
+            CustomerTypesSeeder::class,
+            ContactTypesSeeder::class,
         ];
 
-        if (app()->isLocal()) {
-            $seeders = [
-                RolSeeder::class,
-                UserSeeder::class,
-                ChileLocationsSeeder::class,
-            ];
-        }
         $this->call($seeders);
+
+        Artisan::call('app:sync-permissions');
     }
 }

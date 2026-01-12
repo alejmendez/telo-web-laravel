@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Modules\Crm\Services\LocationService;
+use Modules\Crm\Services\ContactTypeService;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,10 @@ class CrmServiceProvider extends ServiceProvider
 
         $this->app->singleton(LocationService::class, function (Application $app) {
             return new LocationService();
+        });
+
+        $this->app->singleton(ContactTypeService::class, function (Application $app) {
+            return new ContactTypeService();
         });
     }
 }

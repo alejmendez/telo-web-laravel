@@ -15,5 +15,5 @@ export const can = (permission) => {
 };
 
 export const canShowRightMenu = () => {
-  return can('locations.index');
+  return can('locations.index') || can('contacttypes.index');
 };

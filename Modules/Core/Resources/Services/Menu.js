@@ -18,6 +18,13 @@ export const menuElementsRight = (currentComponent) => {
       active: currentComponent.startsWith('locations'),
       can: can('locations.index'),
     },
+    {
+      link: route('contacttypes.index'),
+      text: 'menu.right.contacttypes',
+      icon: 'people',
+      active: currentComponent.startsWith('contacttypes'),
+      can: can('contacttypes.index'),
+    },
   ];
 
   const menuItemsFiltered = menuItems.filter((item) => item.can);

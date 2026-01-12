@@ -10,6 +10,7 @@ class CrmSeeder extends Seeder
     {
         $this->call([
             CustomerTypesSeeder::class,
+            ContactTypesSeeder::class,
             ProfessionalTypesSeeder::class,
             UrgencyTypesSeeder::class,
             CountriesCitiesCommunesSeeder::class,

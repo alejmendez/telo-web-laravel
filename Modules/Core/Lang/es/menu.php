@@ -8,6 +8,7 @@ return [
     'right' => [
         'backup' => 'Backup',
         'locations' => 'Ubicaciones',
+        'contacttypes' => 'Tipos de Contacto',
     ],
     'dashboard' => 'Escritorio',
     'start' => 'Inicio',

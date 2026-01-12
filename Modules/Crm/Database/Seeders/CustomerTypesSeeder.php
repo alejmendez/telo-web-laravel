@@ -10,9 +10,9 @@ class CustomerTypesSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['code' => 'home_owner', 'name' => 'Home Owner'],
-            ['code' => 'business_owner', 'name' => 'Business Owner'],
-            ['code' => 'company', 'name' => 'Company'],
+            ['code' => 'dueno-de-casa', 'name' => 'Dueño de casa'],
+            ['code' => 'dueno-de-negocio', 'name' => 'Dueño de negocio'],
+            ['code' => 'empresa', 'name' => 'Empresa'],
         ];
 
         foreach ($data as $item) {
