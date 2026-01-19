@@ -2,6 +2,7 @@
 import { useAttrs } from 'vue';
 
 import InputText from 'primevue/inputtext';
+import InputMask from 'primevue/inputmask';
 
 import VInputDate from '@Core/Components/Form/VInputDate.vue';
 import VTextarea from '@Core/Components/Form/VTextarea.vue';
@@ -84,6 +85,21 @@ const isInvalid = props.message !== '' && props.message !== undefined;
         v-model="model"
         fluid
         showButtons
+        :invalid="isInvalid"
+        @change="emit('change', $event)"
+        @input="emit('input', $event)"
+        @click="emit('click', $event)"
+        @focus="emit('focus', $event)"
+        @blur="emit('blur', $event)"
+        @keydown="emit('keydown', $event)"
+      />
+    </template>
+    <template v-else-if="props.type === 'tel'">
+      <InputMask
+        v-bind="attrs"
+        v-model="model"
+        fluid
+        mask="+99999999?9999999"
         :invalid="isInvalid"
         @change="emit('change', $event)"
         @input="emit('input', $event)"

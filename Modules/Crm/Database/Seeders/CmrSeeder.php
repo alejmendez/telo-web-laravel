@@ -13,7 +13,6 @@ class CrmSeeder extends Seeder
             ContactTypesSeeder::class,
             ProfessionalTypesSeeder::class,
             UrgencyTypesSeeder::class,
-            CountriesCitiesCommunesSeeder::class,
             CategoriesSubcategoriesSeeder::class,
             SubscriptionPlansSeeder::class,
             StatusCatalogSeeder::class,

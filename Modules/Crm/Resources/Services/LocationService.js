@@ -5,18 +5,16 @@ const createNodes = (originalNodes) => {
   const map = {};
   const roots = [];
 
-  // First pass: create a map of all nodes and initialize them
-  originalNodes.forEach((item, index) => {
+  originalNodes.forEach((item) => {
     map[item.id] = {
-      key: String(index), // Temporary key, will be updated later
+      key: String(item.id),
       label: item.name,
-      data: item, // Or the whole item if needed: item
-      icon: 'pi pi-fw pi-map-marker', // Default icon
+      data: item,
+      icon: 'pi pi-fw pi-map-marker',
       children: [],
     };
   });
 
-  // Second pass: link children to parents
   originalNodes.forEach((item) => {
     const node = map[item.id];
     if (item.parent_id && map[item.parent_id]) {
@@ -26,26 +24,18 @@ const createNodes = (originalNodes) => {
     }
   });
 
-  // Helper to generate hierarchical keys recursively
-  const generateKeys = (nodes, parentKey = '') => {
-    nodes.forEach((node, index) => {
-      const currentKey = parentKey ? `${parentKey}-${index}` : String(index);
-      node.key = currentKey;
-
-      // Customize icon based on type or level if needed
+  const setIcons = (nodes) => {
+    nodes.forEach((node) => {
       if (node.children.length > 0) {
-        node.icon = 'pi pi-fw pi-folder'; // Icon for nodes with children
+        node.icon = 'pi pi-fw pi-folder';
+        setIcons(node.children);
       } else {
-        node.icon = 'pi pi-fw pi-map-marker'; // Icon for leaf nodes
-      }
-
-      if (node.children.length > 0) {
-        generateKeys(node.children, currentKey);
+        node.icon = 'pi pi-fw pi-map-marker';
       }
     });
   };
 
-  generateKeys(roots);
+  setIcons(roots);
 
   return roots;
 };
@@ -56,15 +46,27 @@ const getDataNode = (nodes, key) => {
     return null;
   }
 
-  const parts = keys[0].split('-').map(Number);
-  let currentNodes = nodes;
-  let element;
+  const targetKey = keys[0];
+  let found = null;
 
-  for (const part of parts) {
-    element = currentNodes[part].data;
-    currentNodes = currentNodes[part].children ?? currentNodes[part];
-  }
-  return element;
+  const search = (currentNodes) => {
+    for (const node of currentNodes) {
+      if (String(node.key) === targetKey) {
+        found = node.data;
+        return true;
+      }
+
+      if (node.children && node.children.length > 0 && search(node.children)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  search(nodes);
+
+  return found;
 };
 
 const list = async (lazyParams) => {

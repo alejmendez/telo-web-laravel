@@ -10,17 +10,35 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $module = DB::table('modules')->where('slug', 'users')->first();
+        $module = DB::table('modules')->where('slug', 'crm')->first();
 
         $menu = [
             [
-                'text' => 'users_module.menu.settings',
+                'text' => 'crm_module.menu.crm',
                 'children' => [
                     [
-                        'text' => 'users_module.menu.users',
-                        'link' => 'users.index',
-                        'icon' => '<span class="material-symbols-rounded">groups</span>',
-                        'active_with' => 'users.*',
+                        'text' => 'crm_module.menu.customers',
+                        'link' => 'customers.index',
+                        'icon' => '<span class="material-symbols-rounded">contacts</span>',
+                        'active_with' => 'customers.*',
+                    ],
+                    [
+                        'text' => 'crm_module.menu.professionals',
+                        'link' => 'professionals.index',
+                        'icon' => '<span class="material-symbols-rounded">handyman</span>',
+                        'active_with' => 'professionals.*',
+                    ],
+                    [
+                        'text' => 'crm_module.menu.requests',
+                        'link' => 'requests.index',
+                        'icon' => '<span class="material-symbols-rounded">call</span>',
+                        'active_with' => 'requests.*',
+                    ],
+                    [
+                        'text' => 'crm_module.menu.services',
+                        'link' => 'services.index',
+                        'icon' => '<span class="material-symbols-rounded">electrical_services</span>',
+                        'active_with' => 'services.*',
                     ],
                 ],
             ],

@@ -37,7 +37,10 @@
             "App\\": "app/",
             "Modules\\": "Modules/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/crud_helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

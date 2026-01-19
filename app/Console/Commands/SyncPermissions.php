@@ -37,6 +37,10 @@ class SyncPermissions extends Command
         'customertypes',
         'categories',
         'urgencytypes',
+        'customers',
+        'professionals',
+        'requests',
+        'services',
     ];
 
     protected $defaultActions = [
@@ -97,6 +101,8 @@ class SyncPermissions extends Command
         foreach ($users as $user) {
             $this->cacheService->clearUserCache($user);
         }
+
+        $this->info("Permissions synced successfully");
 
         return self::SUCCESS;
     }
