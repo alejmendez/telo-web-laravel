@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:250',
-            'code' => 'required|max:250',
+            'code' => 'required|max:250|unique:contact_types,code',
         ];
     }
 
