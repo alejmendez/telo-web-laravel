@@ -24,6 +24,11 @@ class ProfessionalTypeService
         return ProfessionalType::findOrFail($id);
     }
 
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(ProfessionalType::select('id as value', 'name as text')->orderBy('name'), ['id', 'name', 'code'], $filter);
+    }
+
     public function create(Array $data): ProfessionalType
     {
         $professionaltype = new ProfessionalType;

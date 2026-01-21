@@ -18,7 +18,7 @@ class Professional extends Model
         'last_name',
         'email',
         'phone_e164',
-        'dni_location_id',
+        'location_id',
         'dni',
         'average_rating',
         'bio',
@@ -41,9 +41,9 @@ class Professional extends Model
         return $this->belongsTo(ProfessionalType::class);
     }
 
-    public function dniLocation(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'dni_location_id');
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
     public function services(): HasMany

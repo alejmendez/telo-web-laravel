@@ -7,7 +7,7 @@ import FormCustomer from '@Crm/Pages/Customers/Form.vue';
 
 const props = defineProps({
   customer_types: Array,
-  dni_locations: Array,
+  locations: Array,
 });
 
 const form = useForm({
@@ -17,7 +17,7 @@ const form = useForm({
   email: null,
   phone_e164: null,
   customer_type_id: null,
-  dni_location_id: null,
+  location_id: null,
   notes: null,
 });
 
@@ -34,7 +34,7 @@ const submitHandler = () => form.post(route('customers.store'));
     <FormCustomer
       :form="form"
       :customer_types="customer_types"
-      :dni_locations="dni_locations"
+      :locations="locations"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

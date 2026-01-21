@@ -18,6 +18,8 @@ import { can } from '@Auth/Services/Auth';
 
 const props = defineProps({
   toast: Object,
+  professional_types: Array,
+  locations: Array,
 });
 
 const toast = useToast();
@@ -27,7 +29,9 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  full_name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  dni: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
 };
 
 const canShow = can('professionals.show');
@@ -67,15 +71,39 @@ onMounted(async () => {
       ref="datatable"
       :filters="filters"
       :fetchHandler="fetchHandler"
-      sortField="name"
+      sortField="first_name"
       :sortOrder="1"
     >
-      <Column field="name" :header="__('professional.table.name')" sortable frozen style="min-width: 200px">
+      <Column field="dni.label" :header="__('professional.table.dni.label')" sortable frozen style="min-width: 200px">
         <template #body="{ data }">
-          {{ data.name }}
+          {{ data.dni }}
         </template>
         <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre" />
+          <InputText v-model="filterModel.value" type="text" :placeholder="__('professional.form.dni.placeholder')" />
+        </template>
+      </Column>
+      <Column field="full_name.label" :header="__('professional.table.full_name.label')" sortable frozen style="min-width: 200px">
+        <template #body="{ data }">
+          {{ data.full_name }}
+        </template>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" :placeholder="__('professional.form.full_name.placeholder')" />
+        </template>
+      </Column>
+      <Column field="email" :header="__('professional.table.email.label')" sortable style="min-width: 200px">
+        <template #body="{ data }">
+          {{ data.email }}
+        </template>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" :placeholder="__('professional.form.email.placeholder')" />
+        </template>
+      </Column>
+      <Column field="phone_e164" :header="__('professional.table.phone_e164.label')" sortable style="min-width: 150px">
+        <template #body="{ data }">
+          {{ data.phone_e164 }}
+        </template>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" :placeholder="__('professional.form.phone_e164.placeholder')" />
         </template>
       </Column>
 

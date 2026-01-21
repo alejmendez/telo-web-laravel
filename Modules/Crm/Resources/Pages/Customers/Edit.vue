@@ -8,7 +8,7 @@ import FormCustomer from '@Crm/Pages/Customers/Form.vue';
 const props = defineProps({
   data: Object,
   customer_types: Array,
-  dni_locations: Array,
+  locations: Array,
 });
 
 const { data } = props.data;
@@ -26,8 +26,8 @@ const form = useForm({
   email: data.email,
   phone_e164: data.phone_e164,
   customer_type_id: selectValueFromArray(props.customer_types, data.customer_type_id),
-  dni_location_id: {
-    [data.dni_location_id]: true
+  location_id: {
+    [data.location_id]: true
   },
   notes: data.notes,
 });
@@ -45,7 +45,7 @@ const submitHandler = () => form.post(route('customers.update', data.id));
     <FormCustomer
       :form="form"
       :customer_types="customer_types"
-      :dni_locations="dni_locations"
+      :locations="locations"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

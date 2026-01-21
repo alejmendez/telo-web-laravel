@@ -8,11 +8,47 @@ return [
         'show' => 'Detalle del Professional',
     ],
     'table' => [
-        'name' => 'Name',
+        'dni' => [
+            'label' => 'DNI',
+            'placeholder' => 'Buscar por DNI',
+        ],
+        'full_name' => [
+            'label' => 'Nombre Completo',
+            'placeholder' => 'Buscar por Nombre Completo',
+        ],
+        'email' => [
+            'label' => 'Correo Electrónico',
+            'placeholder' => 'Buscar por Correo Electrónico',
+        ],
+        'phone_e164' => [
+            'label' => 'Teléfono',
+            'placeholder' => 'Buscar por Teléfono',
+        ],
     ],
     'form' => [
-        'name' => [
-            'label' => 'Name',
+        'first_name' => [
+            'label' => 'Nombre',
+        ],
+        'last_name' => [
+            'label' => 'Apellido',
+        ],
+        'email' => [
+            'label' => 'Correo Electrónico',
+        ],
+        'phone_e164' => [
+            'label' => 'Teléfono',
+        ],
+        'professional_type_id' => [
+            'label' => 'Tipo Profesional',
+        ],
+        'location_id' => [
+            'label' => 'Lugar de Expedición',
+        ],
+        'dni' => [
+            'label' => 'DNI',
+        ],
+        'bio' => [
+            'label' => 'Biografía',
         ],
     ],
 ];

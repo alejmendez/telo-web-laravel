@@ -7,11 +7,11 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class ProfessionalService
 {
-    protected const SEARCHABLE_COLUMNS = ['name'];
+    protected const SEARCHABLE_COLUMNS = ['dni', 'full_name', 'email', 'phone_e164'];
 
     public function list(Array $params = [])
     {
-        $query = Professional::query();
+        $query = Professional::query()->with(['professionalType', 'location']);
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $professionals = $datatable->of($query)->make();
@@ -21,13 +21,23 @@ class ProfessionalService
 
     public function find(int $id): Professional
     {
-        return Professional::findOrFail($id);
+        return Professional::with(['professionalType', 'location'])->findOrFail($id);
     }
 
     public function create(Array $data): Professional
     {
         $professional = new Professional;
-        $professional->name = $data['name'];
+        $professional->professional_type_id = $data['professional_type_id'];
+        $professional->first_name = $data['first_name'];
+        $professional->last_name = $data['last_name'];
+
+        $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
+
+        $professional->email = $data['email'];
+        $professional->phone_e164 = $data['phone_e164'];
+        $professional->location_id = $data['location_id'];
+        $professional->dni = $data['dni'];
+        $professional->bio = $data['bio'] ?? null;
         $professional->save();
 
         return $professional;
@@ -36,7 +46,17 @@ class ProfessionalService
     public function update(int $id, Array $data): Professional
     {
         $professional = $this->find($id);
-        $professional->name = $data['name'] ?? $professional->name;
+        $professional->professional_type_id = $data['professional_type_id'] ?? $professional->professional_type_id;
+        $professional->first_name = $data['first_name'] ?? $professional->first_name;
+        $professional->last_name = $data['last_name'] ?? $professional->last_name;
+
+        $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
+
+        $professional->email = $data['email'] ?? $professional->email;
+        $professional->phone_e164 = $data['phone_e164'] ?? $professional->phone_e164;
+        $professional->location_id = $data['location_id'] ?? $professional->location_id;
+        $professional->dni = $data['dni'] ?? $professional->dni;
+        $professional->bio = $data['bio'] ?? $professional->bio;
         $professional->save();
 
         return $professional;

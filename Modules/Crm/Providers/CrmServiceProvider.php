@@ -7,11 +7,14 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Modules\Crm\Services\CategoryService;
-use Modules\Crm\Services\CustomerService;
 use Modules\Crm\Services\LocationService;
 use Modules\Crm\Services\ContactTypeService;
 use Modules\Crm\Services\ProfessionalTypeService;
 use Modules\Crm\Services\UrgencyTypeService;
+use Modules\Crm\Services\CustomerService;
+use Modules\Crm\Services\ProfessionalService;
+use Modules\Crm\Services\RequestsService;
+use Modules\Crm\Services\ServicesService;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -50,16 +53,28 @@ class CrmServiceProvider extends ServiceProvider
             return new CategoryService();
         });
 
-        $this->app->singleton(CustomerService::class, function (Application $app) {
-            return new CustomerService();
-        });
-
         $this->app->singleton(ProfessionalTypeService::class, function (Application $app) {
             return new ProfessionalTypeService();
         });
 
         $this->app->singleton(UrgencyTypeService::class, function (Application $app) {
             return new UrgencyTypeService();
+        });
+
+        $this->app->singleton(CustomerService::class, function (Application $app) {
+            return new CustomerService();
+        });
+
+        $this->app->singleton(ProfessionalService::class, function (Application $app) {
+            return new ProfessionalService();
+        });
+
+        $this->app->singleton(RequestsService::class, function (Application $app) {
+            return new RequestsService();
+        });
+
+        $this->app->singleton(ServicesService::class, function (Application $app) {
+            return new ServicesService();
         });
     }
 }

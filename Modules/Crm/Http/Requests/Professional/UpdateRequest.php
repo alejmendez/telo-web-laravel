@@ -2,34 +2,17 @@
 
 namespace Modules\Crm\Http\Requests\Professional;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
-
-class UpdateRequest extends FormRequest
+class UpdateRequest extends StoreRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
-        return [
-            'name' => 'required|max:250',
-        ];
-    }
+        $rules = parent::rules();
+        $id = $this->route('professional');
 
-    public function attributes()
-    {
-        return [
-            'name' => __('professional.form.name.label'),
-        ];
-    }
+        $rules['dni'] = 'required|max:64|unique:professionals,dni,' . $id;
+        $rules['email'] = 'required|email|max:200|unique:professionals,email,' . $id;
+        $rules['phone_e164'] = 'required|max:32|unique:professionals,phone_e164,' . $id . '|regex:/^\+[1-9]\d{7,14}$/';
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'name' => Str::title($this->name),
-        ]);
+        return $rules;
     }
 }

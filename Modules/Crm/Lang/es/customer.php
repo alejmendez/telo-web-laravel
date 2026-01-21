@@ -44,7 +44,7 @@ return [
         'customer_type_id' => [
             'label' => 'Tipo de cliente',
         ],
-        'dni_location_id' => [
+        'location_id' => [
             'label' => 'Ubicación',
         ],
         'notes' => [

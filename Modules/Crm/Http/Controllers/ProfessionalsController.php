@@ -9,12 +9,18 @@ use Modules\Crm\Http\Requests\Professional\StoreRequest;
 use Modules\Crm\Http\Requests\Professional\UpdateRequest;
 use Modules\Crm\Http\Resources\ProfessionalResource;
 use Modules\Crm\Services\ProfessionalService;
+use Modules\Crm\Services\LocationService;
+use Modules\Crm\Services\ProfessionalTypeService;
 
 class ProfessionalsController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected ProfessionalService $professionalService)
+    public function __construct(
+        protected ProfessionalService $professionalService,
+        protected ProfessionalTypeService $professionalTypeService,
+        protected LocationService $locationService
+    )
     {
         $this->setupPermissionMiddleware();
     }
@@ -32,6 +38,8 @@ class ProfessionalsController extends Controller
 
         return Inertia::render('Crm::Professionals/List', [
             'toast' => session('toast'),
+            'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'locations' => $this->locationService->list(),
         ]);
     }
 
@@ -40,7 +48,10 @@ class ProfessionalsController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crm::Professionals/Create');
+        return Inertia::render('Crm::Professionals/Create', [
+            'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'locations' => $this->locationService->list(),
+        ]);
     }
 
     /**
@@ -68,6 +79,8 @@ class ProfessionalsController extends Controller
 
         return Inertia::render('Crm::Professionals/Show', [
             'data' => new ProfessionalResource($professional),
+            'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'locations' => $this->locationService->list(),
         ]);
     }
 
@@ -80,6 +93,8 @@ class ProfessionalsController extends Controller
 
         return Inertia::render('Crm::Professionals/Edit', [
             'data' => new ProfessionalResource($professional),
+            'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'locations' => $this->locationService->list(),
         ]);
     }
 

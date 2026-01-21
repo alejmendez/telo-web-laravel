@@ -7,13 +7,22 @@ import FormProfessional from '@Crm/Pages/Professionals/Form.vue';
 
 const props = defineProps({
   data: Object,
+  professional_types: Array,
+  locations: Array,
 });
 
 const { data } = props.data;
 
 const form = useForm({
   id: data.id,
-  name: data.name,
+  dni: data.dni,
+  first_name: data.first_name,
+  last_name: data.last_name,
+  email: data.email,
+  phone_e164: data.phone_e164,
+  professional_type_id: data.professional_type_id,
+  location_id: data.location_id,
+  bio: data.bio,
 });
 
 const submitHandler = () => {};
@@ -30,6 +39,8 @@ const submitHandler = () => {};
       :form="form"
       :readOnly="true"
       :submitHandler="submitHandler"
+      :professional_types="props.professional_types"
+      :locations="props.locations"
     />
   </AuthenticatedLayout>
 </template>

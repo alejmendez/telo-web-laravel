@@ -11,14 +11,14 @@ const props = defineProps({
   form: Object,
   readOnly: Boolean,
   customer_types: Array,
-  dni_locations: Array,
+  locations: Array,
   submitHandler: {
     type: Function,
     default: false,
   },
 });
 
-const locations_nodes = LocationService.createNodes(props.dni_locations);
+const locations_nodes = LocationService.createNodes(props.locations);
 const form = props.form;
 </script>
 
@@ -65,6 +65,7 @@ const form = props.form;
       <VSelect
         id="customer_type_id"
         v-model="form.customer_type_id"
+        filter
         :options="props.customer_types"
         :label="__('customer.form.customer_type_id.label')"
         :placeholder="__('generics.please_select')"
@@ -72,14 +73,14 @@ const form = props.form;
         :readonly="props.readOnly"
       />
       <VInputLocation
-        id="dni_location_id"
-        v-model="form.dni_location_id"
+        id="location_id"
+        v-model="form.location_id"
         filter
         filterMode="lenient"
         :options="locations_nodes"
-        :label="__('customer.form.dni_location_id.label')"
+        :label="__('customer.form.location_id.label')"
         :placeholder="__('generics.please_select')"
-        :message="form.errors.dni_location_id"
+        :message="form.errors.location_id"
         :readonly="props.readOnly"
       />
       <VInput

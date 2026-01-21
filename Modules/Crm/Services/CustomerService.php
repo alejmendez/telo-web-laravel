@@ -36,7 +36,7 @@ class CustomerService
         $customer->email = $data['email'];
         $customer->phone_e164 = $data['phone_e164'];
         $customer->customer_type_id = $data['customer_type_id'];
-        $customer->dni_location_id = $data['dni_location_id'];
+        $customer->location_id = $data['location_id'];
         $customer->notes = $data['notes'];
         $customer->save();
 
@@ -55,7 +55,7 @@ class CustomerService
         $customer->email = $data['email'] ?? $customer->email;
         $customer->phone_e164 = $data['phone_e164'] ?? $customer->phone_e164;
         $customer->customer_type_id = $data['customer_type_id'] ?? $customer->customer_type_id;
-        $customer->dni_location_id = $data['dni_location_id'] ?? $customer->dni_location_id;
+        $customer->location_id = $data['location_id'] ?? $customer->location_id;
         $customer->notes = $data['notes'] ?? $customer->notes;
         $customer->save();
 

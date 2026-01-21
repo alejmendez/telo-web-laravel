@@ -16,7 +16,7 @@ class Customer extends Model
         'last_name',
         'email',
         'phone_e164',
-        'dni_location_id',
+        'location_id',
         'customer_type_id',
         'dni',
         'notes',
@@ -38,9 +38,9 @@ class Customer extends Model
         return $this->belongsTo(CustomerType::class);
     }
 
-    public function dniLocation(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'dni_location_id');
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
     public function requests(): HasMany
