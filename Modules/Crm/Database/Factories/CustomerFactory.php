@@ -3,9 +3,9 @@
 namespace Modules\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Crm\Models\Country;
 use Modules\Crm\Models\Customer;
 use Modules\Crm\Models\CustomerType;
+use Modules\Crm\Models\Location;
 
 class CustomerFactory extends Factory
 {
@@ -13,20 +13,29 @@ class CustomerFactory extends Factory
 
     public function definition(): array
     {
-        $country = Country::query()->inRandomOrder()->first();
         $type = CustomerType::query()->inRandomOrder()->first();
-        $first = $this->faker->firstName();
-        $last = $this->faker->lastName();
-        $email = strtolower($first.'.'.$last.$this->faker->unique()->numberBetween(1, 100000).'@example.com');
+        if (!$type) {
+             $type = CustomerType::create(['name' => 'Regular', 'code' => 'REG']);
+        }
+
+        $location = Location::query()->inRandomOrder()->first();
+        if (!$location) {
+            $location = Location::create(['name' => 'New York', 'type' => 'city', 'country_code' => 'US']);
+        }
+
+        $firstName = $this->faker->firstName();
+        $lastName = $this->faker->lastName();
+        $fullName = trim($firstName . ' ' . $lastName);
 
         return [
-            'customer_type_id' => $type?->id,
-            'first_name' => $first,
-            'last_name' => $last,
-            'email' => $email,
+            'customer_type_id' => $type->id,
+            'full_name' => $fullName,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $this->faker->unique()->safeEmail(),
             'phone_e164' => $this->faker->unique()->e164PhoneNumber(),
-            'dni_country_id' => $country?->id,
-            'dni' => strtoupper($this->faker->bothify('########')),
+            'location_id' => $location->id,
+            'dni' => $this->faker->unique()->numerify('########'),
             'notes' => $this->faker->optional()->paragraph(),
         ];
     }

@@ -11,16 +11,17 @@ return new class extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('subcategory_id')->constrained('subcategories')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('urgency_type_id')->constrained('urgency_types')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('assigned_professional_id')->nullable()->constrained('professionals')->cascadeOnUpdate()->nullOnDelete();
             $table->string('title', 200);
             $table->text('description');
             $table->string('status', 20);
             $table->integer('priority');
             $table->timestamp('sla_due_at');
             $table->timestamp('accepted_at')->nullable();
+
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('subcategory_id')->constrained('subcategories')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('urgency_type_id')->constrained('urgency_types')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('assigned_professional_id')->nullable()->constrained('professionals')->cascadeOnUpdate()->nullOnDelete();
 
             $table->index(['status']);
             $table->index(['customer_id']);

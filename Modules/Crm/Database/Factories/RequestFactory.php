@@ -15,19 +15,37 @@ class RequestFactory extends Factory
 
     public function definition(): array
     {
-        $customer = Customer::query()->inRandomOrder()->first();
+        $customer = Customer::factory()->create();
+
         $subcategory = Subcategory::query()->inRandomOrder()->first();
+        if (!$subcategory) {
+            $category = \Modules\Crm\Models\Category::query()->inRandomOrder()->first() ?? \Modules\Crm\Models\Category::factory()->create();
+            $subcategory = Subcategory::factory()->create(['category_id' => $category->id]);
+        }
+
         $urgency = UrgencyType::query()->inRandomOrder()->first();
+        if (!$urgency) {
+             $urgency = UrgencyType::create(['code' => 'medium', 'name' => 'Medium', 'priority_weight' => 2, 'sla_hours' => 48]);
+        }
+
         $status = $this->faker->randomElement(['pending', 'active', 'rejected']);
-        $priority = $urgency ? $urgency->priority_weight : 1;
-        $slaDue = now()->addHours($urgency ? $urgency->sla_hours : 24);
-        $assigned = $this->faker->boolean(50) ? Professional::query()->inRandomOrder()->value('id') : null;
+        $priority = $urgency->priority_weight;
+        $slaDue = now()->addHours($urgency->sla_hours);
+
+        $assigned = null;
+        if ($this->faker->boolean(50)) {
+             $professional = Professional::query()->inRandomOrder()->first();
+             if ($professional) {
+                 $assigned = $professional->id;
+             }
+        }
+
         $acceptedAt = $status === 'active' ? $this->faker->dateTimeBetween('-3 days', 'now') : null;
 
         return [
-            'customer_id' => $customer?->id,
-            'subcategory_id' => $subcategory?->id,
-            'urgency_type_id' => $urgency?->id,
+            'customer_id' => $customer->id,
+            'subcategory_id' => $subcategory->id,
+            'urgency_type_id' => $urgency->id,
             'assigned_professional_id' => $assigned,
             'title' => $this->faker->sentence(6),
             'description' => $this->faker->paragraph(),
