@@ -3,13 +3,14 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Request extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'customer_id',
@@ -29,6 +30,11 @@ class Request extends Model
         'sla_due_at' => 'datetime',
         'accepted_at' => 'datetime',
     ];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\RequestFactory::new();
+    }
 
     public function customer(): BelongsTo
     {

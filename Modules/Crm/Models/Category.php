@@ -3,14 +3,20 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'slug'];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\CategoryFactory::new();
+    }
 
     public function subcategories(): HasMany
     {
