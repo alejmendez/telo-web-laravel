@@ -19,6 +19,11 @@ class ContactTypeService
         return $contacttypes;
     }
 
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(ContactType::select('id as value', 'name as text')->orderBy('name'), ['id', 'name', 'code'], $filter);
+    }
+
     public function find(int $id): ContactType
     {
         return ContactType::findOrFail($id);

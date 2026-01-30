@@ -1,7 +1,10 @@
 <script setup>
-import { ref, onMounted, useAttrs } from 'vue';
+import { ref, computed, watch, onMounted, useAttrs } from 'vue';
 
 import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import OverlayPanel from 'primevue/overlaypanel';
+import Checkbox from 'primevue/checkbox';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
@@ -22,6 +25,10 @@ const props = defineProps({
   scrollHeight: {
     type: String,
     default: null,
+  },
+  columns: {
+    type: Array,
+    default: () => [],
   },
 });
 
@@ -51,6 +58,35 @@ const metadataInitial = {
   per_page: 10,
 };
 const metadata = ref(metadataInitial);
+
+const toggleableColumns = computed(() => props.columns.filter((col) => col.header && !col.frozen));
+const selectedColumns = ref([]);
+
+const visibleColumns = computed(() => {
+  if (props.columns.length === 0) return [];
+  return props.columns.filter((col) => !col.header || col.frozen || selectedColumns.value.includes(col.field));
+});
+
+const initialized = ref(false);
+
+watch(
+  () => toggleableColumns.value,
+  (val) => {
+    if (!initialized.value && val.length > 0) {
+      selectedColumns.value = val.map((col) => col.field);
+      initialized.value = true;
+    }
+  },
+  { immediate: true },
+);
+
+const getFieldValue = (data, field) => {
+  if (!field) return null;
+  if (field.includes('.')) {
+    return field.split('.').reduce((obj, key) => obj?.[key], data);
+  }
+  return data[field];
+};
 
 const loadLazyData = async () => {
   loading.value = true;
@@ -98,6 +134,33 @@ const clearFilter = () => {
   loadLazyData();
 };
 
+const op = ref();
+
+const toggleMenu = (event) => {
+  op.value.toggle(event);
+};
+
+const allColumnsSelected = computed(() => {
+  return toggleableColumns.value.length > 0 &&
+         toggleableColumns.value.every(col => selectedColumns.value.includes(col.field));
+});
+
+const toggleAllColumns = () => {
+  if (allColumnsSelected.value) {
+    selectedColumns.value = [];
+  } else {
+    selectedColumns.value = toggleableColumns.value.map(col => col.field);
+  }
+};
+
+const toggleColumn = (field) => {
+  if (selectedColumns.value.includes(field)) {
+    selectedColumns.value = selectedColumns.value.filter(f => f !== field);
+  } else {
+    selectedColumns.value.push(field);
+  }
+};
+
 onMounted(() => {
   loadLazyData();
 });
@@ -116,10 +179,10 @@ onMounted(() => {
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       v-model:filters="filters"
       scrollable
-      :scrollHeight="props.scrollHeight"
+      stripedRows
       tableStyle="min-width: 100px"
       v-bind="attrs"
-      :stripedRows="true"
+      :scrollHeight="props.scrollHeight"
       :value="records"
       :totalRecords="metadata.total"
       :first="metadata.from"
@@ -142,13 +205,50 @@ onMounted(() => {
     >
       <template #header>
         <div class="flex justify-between">
-          <div class="sm:hidden md:block">
-            <Button
-              type="button"
-              icon="pi pi-filter-slash"
-              label="Limpiar"
-              @click="clearFilter"
-            />
+          <div class="flex items-center gap-2">
+            <div class="sm:hidden md:block">
+              <Button
+                type="button"
+                icon="pi pi-filter-slash"
+                label="Limpiar"
+                @click="clearFilter"
+              />
+            </div>
+            <div v-if="toggleableColumns.length > 0">
+              <Button
+                type="button"
+                icon="pi pi-ellipsis-v"
+                class="!p-2 !rounded-full !w-10 !h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                text
+                rounded
+                @click="toggleMenu"
+              />
+              <OverlayPanel ref="op">
+                <div class="flex flex-col w-64">
+                  <div
+                    class="flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors rounded-md mb-1"
+                    @click="toggleAllColumns"
+                  >
+                    <Checkbox :modelValue="allColumnsSelected" binary readonly class="pointer-events-none" />
+                    <span class="ml-2 font-medium">
+                      {{ allColumnsSelected ? 'Ocultar todas' : 'Mostrar todas' }}
+                    </span>
+                  </div>
+                  <div class="h-px bg-slate-200 dark:bg-slate-700 my-1"></div>
+                  <div class="max-h-64 overflow-y-auto">
+                    <div
+                      v-for="col in toggleableColumns"
+                      :key="col.field"
+                      class="flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors rounded-md"
+                      @click="toggleColumn(col.field)"
+                    >
+                      <Checkbox :modelValue="selectedColumns.includes(col.field)" binary readonly class="pointer-events-none" />
+                      <span class="ml-2 truncate" :title="col.header">{{ col.header }}</span>
+                    </div>
+                  </div>
+                </div>
+              </OverlayPanel>
+            </div>
           </div>
           <IconField>
             <InputIcon>
@@ -160,6 +260,22 @@ onMounted(() => {
       </template>
 
       <template #empty> {{ __('generics.tables.empty') }} </template>
+
+      <Column v-for="(col, index) in visibleColumns" :key="col.field || index" v-bind="col">
+        <template #body="slotProps">
+          <slot :name="'body-' + (col.field || col.type)" :data="slotProps.data" :index="slotProps.index">
+            {{ getFieldValue(slotProps.data, col.field) }}
+          </slot>
+        </template>
+        <template #filter="slotProps">
+          <slot
+            :name="'filter-' + (col.field || col.type)"
+            :filterModel="slotProps.filterModel"
+            :filterCallback="slotProps.filterCallback"
+          >
+          </slot>
+        </template>
+      </Column>
 
       <slot></slot>
     </DataTable>

@@ -5,10 +5,24 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import FormRequests from '@Crm/Pages/Requests/Form.vue';
 
-const props = defineProps();
+const props = defineProps({
+  customers: Array,
+  subcategories: Array,
+  urgency_types: Array,
+  professionals: Array,
+});
 
 const form = useForm({
-  name: null,
+  title: null,
+  description: null,
+  status: 'pending',
+  priority: null,
+  sla_due_at: null,
+  accepted_at: null,
+  customer_id: null,
+  subcategory_id: null,
+  urgency_type_id: null,
+  assigned_professional_id: null,
 });
 
 const submitHandler = () => form.post(route('requests.store'));
@@ -23,6 +37,10 @@ const submitHandler = () => form.post(route('requests.store'));
     />
     <FormRequests
       :form="form"
+      :customers="customers"
+      :subcategories="subcategories"
+      :urgency_types="urgency_types"
+      :professionals="professionals"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

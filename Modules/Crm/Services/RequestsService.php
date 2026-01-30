@@ -2,16 +2,16 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Requests;
+use Modules\Crm\Models\Request;
 use Modules\Core\Services\PrimevueDatatables;
 
 class RequestsService
 {
-    protected const SEARCHABLE_COLUMNS = ['name'];
+    protected const SEARCHABLE_COLUMNS = ['title', 'description', 'status'];
 
     public function list(Array $params = [])
     {
-        $query = Requests::query();
+        $query = Request::with(['customer', 'subcategory', 'urgencyType', 'assignedProfessional']);
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $requests = $datatable->of($query)->make();
@@ -19,32 +19,56 @@ class RequestsService
         return $requests;
     }
 
-    public function find(int $id): Requests
+    public function find(int $id): Request
     {
-        return Requests::findOrFail($id);
+        return Request::with(['customer', 'subcategory', 'urgencyType', 'assignedProfessional'])->findOrFail($id);
     }
 
-    public function create(Array $data): Requests
+    public function create(Array $data): Request
     {
-        $requests = new Requests;
-        $requests->name = $data['name'];
-        $requests->save();
+        $request = new Request;
 
-        return $requests;
+        $request->title = $data['title'];
+        $request->description = $data['description'];
+        $request->status = $data['status'];
+        $request->priority = $data['priority'];
+        $request->sla_due_at = $data['sla_due_at'];
+        $request->accepted_at = $data['accepted_at'] ?? null;
+
+        $request->customer_id = $data['customer_id'];
+
+        $request->subcategory_id = $data['subcategory_id'];
+        $request->urgency_type_id = $data['urgency_type_id'];
+        $request->assigned_professional_id = $data['assigned_professional_id'] ?? null;
+        $request->save();
+
+        return $request;
     }
 
-    public function update(int $id, Array $data): Requests
+    public function update(int $id, Array $data): Request
     {
-        $requests = $this->find($id);
-        $requests->name = $data['name'] ?? $requests->name;
-        $requests->save();
+        $request = $this->find($id);
 
-        return $requests;
+        $request->title = $data['title'] ?? $request->title;
+        $request->description = $data['description'] ?? $request->description;
+        $request->status = $data['status'] ?? $request->status;
+        $request->priority = $data['priority'] ?? $request->priority;
+        $request->sla_due_at = $data['sla_due_at'] ?? $request->sla_due_at;
+        $request->accepted_at = $data['accepted_at'] ?? $request->accepted_at;
+
+        $request->customer_id = $data['customer_id'] ?? $request->customer_id;
+        $request->subcategory_id = $data['subcategory_id'] ?? $request->subcategory_id;
+        $request->urgency_type_id = $data['urgency_type_id'] ?? $request->urgency_type_id;
+        $request->assigned_professional_id = $data['assigned_professional_id'] ?? $request->assigned_professional_id;
+
+        $request->save();
+
+        return $request;
     }
 
     public function delete(int $id): bool
     {
-        $requests = $this->find($id);
-        return $requests->delete();
+        $request = $this->find($id);
+        return $request->delete();
     }
 }

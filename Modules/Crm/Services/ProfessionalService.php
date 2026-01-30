@@ -19,6 +19,20 @@ class ProfessionalService
         return $professionals;
     }
 
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(
+            Professional::select('id', 'full_name', 'dni')->orderBy('full_name'),
+            ['id', 'full_name', 'dni'],
+            $filter
+        )->map(function (Professional $professional) {
+            return [
+                'value' => $professional->id,
+                'text' => $professional->full_name . ' - ' . $professional->dni,
+            ];
+        });
+    }
+
     public function find(int $id): Professional
     {
         return Professional::with(['professionalType', 'location'])->findOrFail($id);

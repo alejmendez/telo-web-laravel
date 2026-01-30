@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Modules\Crm\Services\CategoryService;
+use Modules\Crm\Services\SubcategoryService;
 use Modules\Crm\Services\LocationService;
 use Modules\Crm\Services\ContactTypeService;
 use Modules\Crm\Services\ProfessionalTypeService;
@@ -51,6 +52,10 @@ class CrmServiceProvider extends ServiceProvider
 
         $this->app->singleton(CategoryService::class, function (Application $app) {
             return new CategoryService();
+        });
+
+        $this->app->singleton(SubcategoryService::class, function (Application $app) {
+            return new SubcategoryService();
         });
 
         $this->app->singleton(ProfessionalTypeService::class, function (Application $app) {

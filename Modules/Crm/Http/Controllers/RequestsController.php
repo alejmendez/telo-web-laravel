@@ -8,13 +8,25 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Requests\StoreRequest;
 use Modules\Crm\Http\Requests\Requests\UpdateRequest;
 use Modules\Crm\Http\Resources\RequestsResource;
-use Modules\Crm\Services\RequestsService;
+use Modules\Crm\Services\{
+    RequestsService,
+    CustomerService,
+    SubcategoryService,
+    UrgencyTypeService,
+    ProfessionalService
+};
 
 class RequestsController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected RequestsService $requestsService)
+    public function __construct(
+        protected RequestsService $requestsService,
+        protected CustomerService $customerService,
+        protected SubcategoryService $subcategoryService,
+        protected UrgencyTypeService $urgencyTypeService,
+        protected ProfessionalService $professionalService
+    )
     {
         $this->setupPermissionMiddleware();
     }
@@ -32,6 +44,10 @@ class RequestsController extends Controller
 
         return Inertia::render('Crm::Requests/List', [
             'toast' => session('toast'),
+            'subcategories' => $this->subcategoryService->listAsSelect(),
+            'urgency_types' => $this->urgencyTypeService->listAsSelect(),
+            'customers' => $this->customerService->listAsSelect(),
+            'professionals' => $this->professionalService->listAsSelect(),
         ]);
     }
 
@@ -40,7 +56,12 @@ class RequestsController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crm::Requests/Create');
+        return Inertia::render('Crm::Requests/Create', [
+            'subcategories' => $this->subcategoryService->listAsSelect(),
+            'urgency_types' => $this->urgencyTypeService->listAsSelect(),
+            'customers' => $this->customerService->listAsSelect(),
+            'professionals' => $this->professionalService->listAsSelect(),
+        ]);
     }
 
     /**
@@ -68,6 +89,10 @@ class RequestsController extends Controller
 
         return Inertia::render('Crm::Requests/Show', [
             'data' => new RequestsResource($requests),
+            'subcategories' => $this->subcategoryService->listAsSelect(),
+            'urgency_types' => $this->urgencyTypeService->listAsSelect(),
+            'customers' => $this->customerService->listAsSelect(),
+            'professionals' => $this->professionalService->listAsSelect(),
         ]);
     }
 
@@ -80,6 +105,10 @@ class RequestsController extends Controller
 
         return Inertia::render('Crm::Requests/Edit', [
             'data' => new RequestsResource($requests),
+            'subcategories' => $this->subcategoryService->listAsSelect(),
+            'urgency_types' => $this->urgencyTypeService->listAsSelect(),
+            'customers' => $this->customerService->listAsSelect(),
+            'professionals' => $this->professionalService->listAsSelect(),
         ]);
     }
 

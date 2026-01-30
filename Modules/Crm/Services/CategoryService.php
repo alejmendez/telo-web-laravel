@@ -19,6 +19,11 @@ class CategoryService
         return $categories;
     }
 
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(Category::select('id as value', 'name as text')->orderBy('name'), ['id', 'name', 'slug'], $filter);
+    }
+
     public function find(int $id): Category
     {
         return Category::findOrFail($id);

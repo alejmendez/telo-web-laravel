@@ -19,6 +19,20 @@ class CustomerService
         return $customers;
     }
 
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(
+            Customer::select('id', 'full_name', 'dni')->orderBy('full_name'),
+            ['id', 'full_name', 'dni'],
+            $filter
+        )->map(function (Customer $customer) {
+            return [
+                'value' => $customer->id,
+                'text' => $customer->full_name . ' - ' . $customer->dni,
+            ];
+        });
+    }
+
     public function find(int $id): Customer
     {
         return Customer::findOrFail($id);
