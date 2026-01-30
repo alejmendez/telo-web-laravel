@@ -1,4 +1,4 @@
-import { definePreset } from '@primevue/themes';
+import { definePreset } from '@primeuix/themes';
 import { CarrotOrangeTheme } from './CarrotOrangeTheme';
 
 export const AppleTheme = definePreset(CarrotOrangeTheme, {

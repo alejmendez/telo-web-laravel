@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { usePreset } from '@primevue/themes';
+import { usePreset } from '@primeuix/themes';
 import SelectButton from 'primevue/selectbutton';
 import Presents from '@Core/Libs/PrimePresents';
 import { useDrawerRightMenuStore } from '@Core/Stores/sidebar.js';
@@ -16,6 +16,7 @@ const darkMode = ref([
 import MenuNotification from './MenuNotification.vue';
 
 const root = ref(null);
+const current_theme = ref(localStorage.getItem('theme') || 'DodgerBlue');
 const drawerRightMenuStore = useDrawerRightMenuStore();
 
 const showDropDown = ref(false);
@@ -60,6 +61,7 @@ if (localStorage.themeType === 'dark' || (!('theme' in localStorage) && window.m
 }
 
 const setTheme = (theme) => {
+  current_theme.value = theme.name;
   localStorage.setItem('theme', theme.name);
   usePreset(Presents[theme.name]);
 };
@@ -125,7 +127,11 @@ onUnmounted(() => {
         </SelectButton>
       </div>
       <div class="px-4 py-2 mb-4">
-        <div :class="`${theme.class} rounded-full w-4 h-4 float-left me-2`" v-for="theme in themes" @click="setTheme(theme)"></div>
+        <div
+          :class="`${theme.class} ${current_theme === theme.name ? 'ring-2 ring-white' : ''} rounded-full w-4 h-4 float-left me-2`"
+          v-for="theme in themes"
+          @click="setTheme(theme)"
+        ></div>
       </div>
       <div class="py-1 text-left" role="none">
         <Link :href="route('profile.edit')" class="text-gray-700 dark:text-gray-100 block px-4 py-2"> {{ __('menu.top.profile') }} </Link>

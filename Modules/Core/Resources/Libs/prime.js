@@ -11,7 +11,8 @@ export const initPrime = (app) => {
   let theme = localStorage.getItem('theme') || 'DodgerBlue';
 
   if (!Presents[theme]) {
-    theme = 'CarrotOrange';
+    theme = 'DodgerBlue';
+    localStorage.setItem('theme', theme);
   }
 
   Quill.register({ 'blots/mention': MentionBlot, 'modules/mention': Mention });
