@@ -45,29 +45,21 @@ jobs:
         sed -i 's/APP_ENV=local/APP_ENV=production/g' .env
         sed -i 's/APP_DEBUG=true/APP_DEBUG=false/g' .env
         php artisan key:generate
-        php artisan ziggy:generate "resources/js/ziggy.js"
+        php artisan ziggy:generate "resources/js/ziggy.js" --url=https://telochile.cl
 
-    # 4. Preparar Bun y Caché (lo que vimos antes)
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v1
+    # 4. Preparar Node.js y Caché
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        bun-version: latest
-
-    - name: Cache Bun dependencies
-      id: cache-bun
-      uses: actions/cache@v4
-      with:
-        path: ~/.bun/install/cache
-        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-        restore-keys: |
-          ${{ runner.os }}-bun-
+        node-version: '20'
+        cache: 'npm'
 
     - name: Install JS dependencies
-      run: bun install --frozen-lockfile
+      run: npm ci
 
     # 5. Compilar los assets (Vite)
     - name: Build assets
-      run: bun run build
+      run: npm run build
 
     # 6. Desplegar al servidor
     # A. Subimos SOLO los assets compilados y el archivo Ziggy generado
