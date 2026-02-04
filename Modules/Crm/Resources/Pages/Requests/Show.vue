@@ -23,6 +23,7 @@ const form = useForm({
   assigned_professional_id: data.assigned_professional_id,
   description: data.description,
   status: data.status,
+  address: data.address,
   priority: data.priority,
   sla_due_at: data.sla_due_at,
   accepted_at: data.accepted_at,

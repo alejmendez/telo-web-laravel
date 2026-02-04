@@ -11,6 +11,7 @@ class RequestsResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'address' => $this->address,
             'description' => $this->description,
             'status' => $this->status,
             'priority' => $this->priority,

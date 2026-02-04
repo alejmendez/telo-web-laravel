@@ -16,6 +16,14 @@ return [
             'label' => 'Estado',
             'placeholder' => 'Ingrese el estado',
         ],
+        'description' => [
+            'label' => 'Descripción',
+            'placeholder' => 'Ingrese la descripción',
+        ],
+        'address' => [
+            'label' => 'Dirección',
+            'placeholder' => 'Ingrese la dirección',
+        ],
         'priority' => [
             'label' => 'Prioridad',
             'placeholder' => 'Ingrese la prioridad',
@@ -40,6 +48,9 @@ return [
         ],
         'description' => [
             'label' => 'Descripción',
+        ],
+        'address' => [
+            'label' => 'Dirección',
         ],
         'status' => [
             'label' => 'Estado',

@@ -15,6 +15,7 @@ const props = defineProps({
 const form = useForm({
   description: null,
   status: 'pending',
+  address: null,
   priority: null,
   sla_due_at: null,
   accepted_at: null,

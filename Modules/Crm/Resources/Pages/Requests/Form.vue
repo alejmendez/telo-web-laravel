@@ -78,6 +78,14 @@ const statusOptions = [
         :readonly="props.readOnly"
         classWrapper="col-span-2"
       />
+      <VInput
+        id="address"
+        v-model="form.address"
+        :label="__('requests.form.address.label')"
+        :message="form.errors.address"
+        :readonly="props.readOnly"
+        classWrapper="col-span-2"
+      />
       <VSelect
         id="status"
         v-model="form.status"

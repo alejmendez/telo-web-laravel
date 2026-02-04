@@ -52,6 +52,8 @@ const deleteHandler = (record) => {
 const columns = computed(() => [
   { field: 'customer.full_name', header: trans('requests.table.customer.label'), style: 'min-width: 200px' },
   { field: 'status', header: trans('requests.table.status.label'), sortable: true, style: 'min-width: 150px' },
+  { field: 'description', header: trans('requests.table.description.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'address', header: trans('requests.table.address.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'priority', header: trans('requests.table.priority.label'), sortable: true, style: 'min-width: 150px' },
   { field: 'sla_due_at', header: trans('requests.table.sla_due_at.label'), sortable: true, style: 'min-width: 200px' },
   { type: 'actions', style: 'min-width: 130px', exportable: false },
@@ -86,6 +88,14 @@ onMounted(async () => {
 
       <template #filter-status="{ filterModel }">
         <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.status.placeholder')" />
+      </template>
+
+      <template #filter-description="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.description.placeholder')" />
+      </template>
+
+      <template #filter-address="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.address.placeholder')" />
       </template>
 
       <template #filter-priority="{ filterModel }">
