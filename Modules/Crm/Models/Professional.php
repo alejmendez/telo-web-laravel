@@ -72,9 +72,9 @@ class Professional extends Model
         return $this->hasMany(ProfessionalAddress::class);
     }
 
-    public function subcategories(): BelongsToMany
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Subcategory::class, 'professional_subcategory');
+        return $this->belongsToMany(Category::class, 'professional_categories');
     }
 
     public function scopeWithActiveSubscription($query)

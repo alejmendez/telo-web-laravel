@@ -20,7 +20,7 @@ class RequestsResource extends JsonResource
             'customer_id' => $this->customer_id,
             'assigned_professional_id' => $this->assigned_professional_id,
             'urgency_type_id' => $this->urgency_type_id,
-            'subcategory_id' => $this->subcategory_id,
+            'category_id' => $this->category_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

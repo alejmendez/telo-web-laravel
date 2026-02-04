@@ -2,10 +2,10 @@
 
 return [
     'titles' => [
-        'entity_breadcrumb' => 'Requests',
-        'create' => 'Crear Requests',
-        'edit' => 'Editar Requests',
-        'show' => 'Detalle del Requests',
+        'entity_breadcrumb' => 'Solicitudes',
+        'create' => 'Crear Solicitud',
+        'edit' => 'Editar Solicitud',
+        'show' => 'Detalle de la Solicitud',
     ],
     'table' => [
         'title' => [
@@ -33,8 +33,8 @@ return [
         'customer_id' => [
             'label' => 'Cliente',
         ],
-        'subcategory_id' => [
-            'label' => 'Subcategoría',
+        'category_id' => [
+            'label' => 'Categoría',
         ],
         'urgency_type_id' => [
             'label' => 'Tipo de Urgencia',

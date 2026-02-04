@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Crm\Models\Customer;
 use Modules\Crm\Models\Professional;
 use Modules\Crm\Models\Request;
-use Modules\Crm\Models\Subcategory;
+use Modules\Crm\Models\Category;
 use Modules\Crm\Models\UrgencyType;
 
 class RequestFactory extends Factory
@@ -17,10 +17,10 @@ class RequestFactory extends Factory
     {
         $customer = Customer::factory()->create();
 
-        $subcategory = Subcategory::query()->inRandomOrder()->first();
-        if (!$subcategory) {
+        $category = Category::query()->inRandomOrder()->first();
+        if (!$category) {
             $category = \Modules\Crm\Models\Category::query()->inRandomOrder()->first() ?? \Modules\Crm\Models\Category::factory()->create();
-            $subcategory = Subcategory::factory()->create(['category_id' => $category->id]);
+            $category = Category::factory()->create(['category_id' => $category->id]);
         }
 
         $urgency = UrgencyType::query()->inRandomOrder()->first();
@@ -44,7 +44,7 @@ class RequestFactory extends Factory
 
         return [
             'customer_id' => $customer->id,
-            'subcategory_id' => $subcategory->id,
+            'category_id' => $category->id,
             'urgency_type_id' => $urgency->id,
             'assigned_professional_id' => $assigned,
             'title' => $this->faker->sentence(6),

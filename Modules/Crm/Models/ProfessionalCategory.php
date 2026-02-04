@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProfessionalSubcategory extends Model
+class ProfessionalCategory extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'professional_subcategory';
+    protected $table = 'professional_categories';
 
-    protected $fillable = ['professional_id', 'subcategory_id'];
+    protected $fillable = ['professional_id', 'category_id'];
 
     public function professional(): BelongsTo
     {
         return $this->belongsTo(Professional::class);
     }
 
-    public function subcategory(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsTo(Category::class);
     }
 }

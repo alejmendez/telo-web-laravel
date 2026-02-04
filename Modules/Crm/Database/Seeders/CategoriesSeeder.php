@@ -4,10 +4,9 @@ namespace Modules\Crm\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Crm\Models\Category;
-use Modules\Crm\Models\Subcategory;
 use Illuminate\Support\Str;
 
-class CategoriesSubcategoriesSeeder extends Seeder
+class CategoriesSeeder extends Seeder
 {
     public function run(): void
     {

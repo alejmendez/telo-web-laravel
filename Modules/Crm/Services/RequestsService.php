@@ -11,7 +11,7 @@ class RequestsService
 
     public function list(Array $params = [])
     {
-        $query = Request::with(['customer', 'subcategory', 'urgencyType', 'assignedProfessional']);
+        $query = Request::with(['customer', 'category', 'urgencyType', 'assignedProfessional']);
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $requests = $datatable->of($query)->make();
@@ -21,7 +21,7 @@ class RequestsService
 
     public function find(int $id): Request
     {
-        return Request::with(['customer', 'subcategory', 'urgencyType', 'assignedProfessional'])->findOrFail($id);
+        return Request::with(['customer', 'category', 'urgencyType', 'assignedProfessional'])->findOrFail($id);
     }
 
     public function create(Array $data): Request
@@ -37,7 +37,7 @@ class RequestsService
 
         $request->customer_id = $data['customer_id'];
 
-        $request->subcategory_id = $data['subcategory_id'];
+        $request->category_id = $data['category_id'];
         $request->urgency_type_id = $data['urgency_type_id'];
         $request->assigned_professional_id = $data['assigned_professional_id'] ?? null;
         $request->save();
@@ -57,7 +57,7 @@ class RequestsService
         $request->accepted_at = $data['accepted_at'] ?? $request->accepted_at;
 
         $request->customer_id = $data['customer_id'] ?? $request->customer_id;
-        $request->subcategory_id = $data['subcategory_id'] ?? $request->subcategory_id;
+        $request->category_id = $data['category_id'] ?? $request->category_id;
         $request->urgency_type_id = $data['urgency_type_id'] ?? $request->urgency_type_id;
         $request->assigned_professional_id = $data['assigned_professional_id'] ?? $request->assigned_professional_id;
 

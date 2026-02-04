@@ -8,7 +8,7 @@ const props = defineProps({
   form: Object,
   readOnly: Boolean,
   customers: Array,
-  subcategories: Array,
+  categories: Array,
   urgency_types: Array,
   professionals: Array,
   submitHandler: {
@@ -40,13 +40,13 @@ const statusOptions = [
         :readonly="props.readOnly"
       />
       <VSelect
-        id="subcategory_id"
-        v-model="form.subcategory_id"
+        id="category_id"
+        v-model="form.category_id"
         filter
-        :options="props.subcategories"
-        :label="__('requests.form.subcategory_id.label')"
+        :options="props.categories"
+        :label="__('requests.form.category_id.label')"
         :placeholder="__('generics.please_select')"
-        :message="form.errors.subcategory_id"
+        :message="form.errors.category_id"
         :readonly="props.readOnly"
       />
       <VSelect

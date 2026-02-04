@@ -14,7 +14,7 @@ class Request extends Model
 
     protected $fillable = [
         'customer_id',
-        'subcategory_id',
+        'category_id',
         'urgency_type_id',
         'assigned_professional_id',
         'title',
@@ -41,9 +41,9 @@ class Request extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function subcategory(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function urgencyType(): BelongsTo

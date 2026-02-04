@@ -10,7 +10,7 @@ use Modules\Crm\Database\Seeders\ChileLocationsSeeder;
 use Modules\Crm\Database\Seeders\CustomerTypesSeeder;
 use Modules\Crm\Database\Seeders\ContactTypesSeeder;
 use Modules\Crm\Database\Seeders\ProfessionalTypesSeeder;
-use Modules\Crm\Database\Seeders\CategoriesSubcategoriesSeeder;
+use Modules\Crm\Database\Seeders\CategoriesSeeder;
 use Modules\Crm\Database\Seeders\UrgencyTypesSeeder;
 use Modules\Crm\Database\Seeders\CustomerSeeder;
 use Modules\Crm\Database\Seeders\ProfessionalSeeder;
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         $seeders = [
             RolSeeder::class,
-            CategoriesSubcategoriesSeeder::class,
+            CategoriesSeeder::class,
             UserSeeder::class,
             ChileLocationsSeeder::class,
             CustomerTypesSeeder::class,

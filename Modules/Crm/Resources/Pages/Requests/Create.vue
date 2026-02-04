@@ -7,7 +7,7 @@ import FormRequests from '@Crm/Pages/Requests/Form.vue';
 
 const props = defineProps({
   customers: Array,
-  subcategories: Array,
+  categories: Array,
   urgency_types: Array,
   professionals: Array,
 });
@@ -20,7 +20,7 @@ const form = useForm({
   sla_due_at: null,
   accepted_at: null,
   customer_id: null,
-  subcategory_id: null,
+  category_id: null,
   urgency_type_id: null,
   assigned_professional_id: null,
 });
@@ -38,7 +38,7 @@ const submitHandler = () => form.post(route('requests.store'));
     <FormRequests
       :form="form"
       :customers="customers"
-      :subcategories="subcategories"
+      :categories="categories"
       :urgency_types="urgency_types"
       :professionals="professionals"
       :submitHandler="submitHandler"

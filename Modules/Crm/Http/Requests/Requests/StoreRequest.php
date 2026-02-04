@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
             'sla_due_at' => 'required|date_format:Y-m-d',
             'accepted_at' => 'nullable|date_format:Y-m-d',
             'customer_id' => 'required|exists:customers,id',
-            'subcategory_id' => 'required|exists:subcategories,id',
+            'category_id' => 'required|exists:categories,id',
             'urgency_type_id' => 'required|exists:urgency_types,id',
             'assigned_professional_id' => 'nullable|exists:professionals,id',
         ];
@@ -38,7 +38,7 @@ class StoreRequest extends FormRequest
             'sla_due_at' => __('requests.form.sla_due_at.label'),
             'accepted_at' => __('requests.form.accepted_at.label'),
             'customer_id' => __('requests.form.customer_id.label'),
-            'subcategory_id' => __('requests.form.subcategory_id.label'),
+            'category_id' => __('requests.form.category_id.label'),
             'urgency_type_id' => __('requests.form.urgency_type_id.label'),
             'assigned_professional_id' => __('requests.form.assigned_professional_id.label'),
         ];
@@ -48,7 +48,7 @@ class StoreRequest extends FormRequest
     {
         $status = isset($this->status['value']) ? $this->status['value'] : null;
         $customer_id = isset($this->customer_id['value']) ? $this->customer_id['value'] : null;
-        $subcategory_id = isset($this->subcategory_id['value']) ? $this->subcategory_id['value'] : null;
+        $category_id = isset($this->category_id['value']) ? $this->category_id['value'] : null;
         $urgency_type_id = isset($this->urgency_type_id['value']) ? $this->urgency_type_id['value'] : null;
         $assigned_professional_id = isset($this->assigned_professional_id['value']) ? $this->assigned_professional_id['value'] : null;
 
@@ -60,7 +60,7 @@ class StoreRequest extends FormRequest
             'sla_due_at' => $this->sla_due_at ? date('Y-m-d', strtotime($this->sla_due_at)) : null,
             'accepted_at' => $this->accepted_at ? date('Y-m-d', strtotime($this->accepted_at)) : null,
             'customer_id' => $customer_id,
-            'subcategory_id' => $subcategory_id,
+            'category_id' => $category_id,
             'urgency_type_id' => $urgency_type_id,
             'assigned_professional_id' => $assigned_professional_id,
         ]);

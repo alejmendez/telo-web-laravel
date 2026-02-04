@@ -8,12 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('subcategories', function (Blueprint $table) {
+        Schema::create('professional_category', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->restrictOnDelete();
-            $table->string('name');
-            $table->string('slug');
-            $table->unique(['category_id', 'slug']);
+            $table->unique(['professional_id', 'category_id']);
 
             $table->timestamps();
             $table->softDeletes();
@@ -22,6 +21,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('subcategories');
+        Schema::dropIfExists('professional_category');
     }
 };

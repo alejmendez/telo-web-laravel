@@ -17,9 +17,4 @@ class Category extends Model
     {
         return \Modules\Crm\Database\Factories\CategoryFactory::new();
     }
-
-    public function subcategories(): HasMany
-    {
-        return $this->hasMany(Subcategory::class);
-    }
 }
