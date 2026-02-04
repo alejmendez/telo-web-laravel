@@ -17,7 +17,7 @@ class Request extends Model
         'category_id',
         'urgency_type_id',
         'assigned_professional_id',
-        'title',
+        'address',
         'description',
         'status',
         'priority',

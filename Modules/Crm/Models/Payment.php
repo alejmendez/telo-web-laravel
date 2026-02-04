@@ -3,12 +3,13 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payment extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'professional_id',
@@ -24,6 +25,11 @@ class Payment extends Model
         'amount_cents' => 'integer',
         'paid_at' => 'datetime',
     ];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\PaymentFactory::new();
+    }
 
     public function professional(): BelongsTo
     {

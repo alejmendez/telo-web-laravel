@@ -74,7 +74,7 @@ class Professional extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'professional_categories');
+        return $this->belongsToMany(Category::class, 'professional_category');
     }
 
     public function scopeWithActiveSubscription($query)

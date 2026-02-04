@@ -21,7 +21,6 @@ const form = useForm({
   category_id: data.category_id,
   urgency_type_id: data.urgency_type_id,
   assigned_professional_id: data.assigned_professional_id,
-  title: data.title,
   description: data.description,
   status: data.status,
   priority: data.priority,

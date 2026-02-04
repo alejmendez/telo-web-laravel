@@ -8,10 +8,6 @@ return [
         'show' => 'Detalle de la Solicitud',
     ],
     'table' => [
-        'title' => [
-            'label' => 'Título',
-            'placeholder' => 'Ingrese el título',
-        ],
         'customer' => [
             'label' => 'Cliente',
             'placeholder' => 'Ingrese el cliente',
@@ -41,9 +37,6 @@ return [
         ],
         'assigned_professional_id' => [
             'label' => 'Profesional Asignado',
-        ],
-        'title' => [
-            'label' => 'Título',
         ],
         'description' => [
             'label' => 'Descripción',

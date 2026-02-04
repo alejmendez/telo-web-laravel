@@ -13,7 +13,6 @@ const props = defineProps({
 });
 
 const form = useForm({
-  title: null,
   description: null,
   status: 'pending',
   priority: null,

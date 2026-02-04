@@ -7,7 +7,7 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class RequestsService
 {
-    protected const SEARCHABLE_COLUMNS = ['title', 'description', 'status'];
+    protected const SEARCHABLE_COLUMNS = ['description', 'status'];
 
     public function list(Array $params = [])
     {
@@ -28,7 +28,6 @@ class RequestsService
     {
         $request = new Request;
 
-        $request->title = $data['title'];
         $request->description = $data['description'];
         $request->status = $data['status'];
         $request->priority = $data['priority'];
@@ -49,7 +48,6 @@ class RequestsService
     {
         $request = $this->find($id);
 
-        $request->title = $data['title'] ?? $request->title;
         $request->description = $data['description'] ?? $request->description;
         $request->status = $data['status'] ?? $request->status;
         $request->priority = $data['priority'] ?? $request->priority;

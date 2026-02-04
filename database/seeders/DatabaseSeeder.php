@@ -6,15 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Modules\Users\Database\Seeders\RolSeeder;
 use Modules\Users\Database\Seeders\UserSeeder;
-use Modules\Crm\Database\Seeders\ChileLocationsSeeder;
-use Modules\Crm\Database\Seeders\CustomerTypesSeeder;
-use Modules\Crm\Database\Seeders\ContactTypesSeeder;
-use Modules\Crm\Database\Seeders\ProfessionalTypesSeeder;
-use Modules\Crm\Database\Seeders\CategoriesSeeder;
-use Modules\Crm\Database\Seeders\UrgencyTypesSeeder;
-use Modules\Crm\Database\Seeders\CustomerSeeder;
-use Modules\Crm\Database\Seeders\ProfessionalSeeder;
-use Modules\Crm\Database\Seeders\RequestSeeder;
+use Modules\Crm\Database\Seeders\CrmSeeder;
 
 use Modules\Users\Models\User;
 
@@ -33,20 +25,9 @@ class DatabaseSeeder extends Seeder
 
         $seeders = [
             RolSeeder::class,
-            CategoriesSeeder::class,
             UserSeeder::class,
-            ChileLocationsSeeder::class,
-            CustomerTypesSeeder::class,
-            ContactTypesSeeder::class,
-            ProfessionalTypesSeeder::class,
-            UrgencyTypesSeeder::class,
+            CrmSeeder::class,
         ];
-
-        if (env('APP_ENV') === 'local') {
-            $seeders[] = CustomerSeeder::class;
-            $seeders[] = ProfessionalSeeder::class;
-            $seeders[] = RequestSeeder::class;
-        }
 
         $this->call($seeders);
 

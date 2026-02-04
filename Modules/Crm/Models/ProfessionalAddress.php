@@ -3,12 +3,13 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProfessionalAddress extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'professional_id',
@@ -26,6 +27,11 @@ class ProfessionalAddress extends Model
         'effective_to' => 'date',
         'is_primary' => 'boolean',
     ];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\ProfessionalAddressFactory::new();
+    }
 
     public function professional(): BelongsTo
     {

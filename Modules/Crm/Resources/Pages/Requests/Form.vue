@@ -70,14 +70,6 @@ const statusOptions = [
         :readonly="props.readOnly"
       />
       <VInput
-        id="title"
-        v-model="form.title"
-        :label="__('requests.form.title.label')"
-        :message="form.errors.title"
-        :readonly="props.readOnly"
-        classWrapper="col-span-2"
-      />
-      <VInput
         id="description"
         v-model="form.description"
         type="textarea"

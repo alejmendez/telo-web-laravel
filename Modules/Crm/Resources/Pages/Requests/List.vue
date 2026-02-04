@@ -28,7 +28,6 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  title: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
   status: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
 };
 
@@ -51,7 +50,6 @@ const deleteHandler = (record) => {
 };
 
 const columns = computed(() => [
-  { field: 'title', header: trans('requests.table.title.label'), sortable: true, frozen: true, style: 'min-width: 200px' },
   { field: 'customer.full_name', header: trans('requests.table.customer.label'), style: 'min-width: 200px' },
   { field: 'status', header: trans('requests.table.status.label'), sortable: true, style: 'min-width: 150px' },
   { field: 'priority', header: trans('requests.table.priority.label'), sortable: true, style: 'min-width: 150px' },
@@ -78,14 +76,10 @@ onMounted(async () => {
       ref="datatable"
       :filters="filters"
       :fetchHandler="fetchHandler"
-      sortField="title"
+      sortField="status"
       :sortOrder="1"
       :columns="columns"
     >
-      <template #filter-title="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.title.placeholder')" />
-      </template>
-
       <template #filter-customer.full_name="{ filterModel }">
         <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.customer.placeholder')" />
       </template>

@@ -15,7 +15,6 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:200',
             'description' => 'required|string',
             'status' => 'required|in:pending,active,rejected',
             'priority' => 'required|integer',
@@ -31,7 +30,6 @@ class StoreRequest extends FormRequest
     public function attributes()
     {
         return [
-            'title' => __('requests.form.title.label'),
             'description' => __('requests.form.description.label'),
             'status' => __('requests.form.status.label'),
             'priority' => __('requests.form.priority.label'),
@@ -53,8 +51,7 @@ class StoreRequest extends FormRequest
         $assigned_professional_id = isset($this->assigned_professional_id['value']) ? $this->assigned_professional_id['value'] : null;
 
         $this->merge([
-            'title' => Str::title($this->title),
-            'description' => Str::title($this->description),
+            'description' => $this->description,
             'status' => $status,
             'priority' => $this->priority,
             'sla_due_at' => $this->sla_due_at ? date('Y-m-d', strtotime($this->sla_due_at)) : null,

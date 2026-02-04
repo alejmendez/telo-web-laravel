@@ -8,15 +8,19 @@ class CrmSeeder extends Seeder
 {
     public function run()
     {
-        $this->call([
+        $seeders = [
             CustomerTypesSeeder::class,
             ContactTypesSeeder::class,
             ProfessionalTypesSeeder::class,
             UrgencyTypesSeeder::class,
             CategoriesSeeder::class,
             SubscriptionPlansSeeder::class,
-            StatusCatalogSeeder::class,
-            SampleDataSeeder::class,
-        ]);
+        ];
+
+        if (env('APP_ENV') === 'local') {
+            $seeders[] = SampleDataSeeder::class;
+        }
+
+        $this->call($seeders);
     }
 }

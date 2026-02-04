@@ -18,7 +18,6 @@ const { data } = props.data;
 const form = useForm({
   _method: 'PATCH',
   id: data.id,
-  title: data.title,
   description: data.description,
   status: data.status,
   priority: data.priority,

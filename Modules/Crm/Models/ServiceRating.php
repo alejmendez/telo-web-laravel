@@ -3,19 +3,25 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class ServiceRating extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['service_id', 'customer_id', 'csat', 'comment'];
 
     protected $casts = [
         'csat' => 'integer',
     ];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\ServiceRatingFactory::new();
+    }
 
     public function service(): BelongsTo
     {

@@ -3,13 +3,14 @@
 namespace Modules\Crm\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Subscription extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'professional_id',
@@ -23,6 +24,11 @@ class Subscription extends Model
         'active_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
+
+    protected static function newFactory()
+    {
+        return \Modules\Crm\Database\Factories\SubscriptionFactory::new();
+    }
 
     public function professional(): BelongsTo
     {
