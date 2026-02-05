@@ -21,7 +21,7 @@ class UrgencyTypeService
 
     public function listAsSelect(array $filter = [])
     {
-        return query_to_select(UrgencyType::select('id as value', 'name as text')->orderBy('name'), ['id', 'name', 'code'], $filter);
+        return query_to_select(UrgencyType::select('id as value', 'name as text')->orderBy('created_at'), ['id', 'name', 'code'], $filter);
     }
 
     public function find(int $id): UrgencyType

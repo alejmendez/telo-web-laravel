@@ -11,6 +11,7 @@ const props = defineProps({
   categories: Array,
   urgency_types: Array,
   professionals: Array,
+  statuses: Array,
 });
 
 const { data } = props.data;
@@ -45,6 +46,7 @@ const submitHandler = () => {};
       :categories="categories"
       :urgency_types="urgency_types"
       :professionals="professionals"
+      :statuses="statuses"
       :readOnly="true"
       :submitHandler="submitHandler"
     />

@@ -13,7 +13,8 @@ use Modules\Crm\Services\{
     CustomerService,
     CategoryService,
     UrgencyTypeService,
-    ProfessionalService
+    ProfessionalService,
+    StatusService
 };
 
 class RequestsController extends Controller
@@ -25,6 +26,7 @@ class RequestsController extends Controller
         protected CustomerService $customerService,
         protected CategoryService $categoryService,
         protected UrgencyTypeService $urgencyTypeService,
+        protected StatusService $statusService,
         protected ProfessionalService $professionalService
     )
     {
@@ -48,6 +50,7 @@ class RequestsController extends Controller
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),
             'professionals' => $this->professionalService->listAsSelect(),
+            'statuses' => $this->statusService->listAsSelect(),
         ]);
     }
 
@@ -61,6 +64,7 @@ class RequestsController extends Controller
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),
             'professionals' => $this->professionalService->listAsSelect(),
+            'statuses' => $this->statusService->listAsSelect(),
         ]);
     }
 
@@ -93,6 +97,7 @@ class RequestsController extends Controller
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),
             'professionals' => $this->professionalService->listAsSelect(),
+            'statuses' => $this->statusService->listAsSelect(),
         ]);
     }
 
@@ -109,6 +114,7 @@ class RequestsController extends Controller
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),
             'professionals' => $this->professionalService->listAsSelect(),
+            'statuses' => $this->statusService->listAsSelect(),
         ]);
     }
 

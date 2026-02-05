@@ -11,9 +11,9 @@ class UrgencyTypesSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['name' => 'Baja', 'priority_weight' => 1, 'sla_hours' => 72],
-            ['name' => 'Media', 'priority_weight' => 2, 'sla_hours' => 48],
             ['name' => 'Alta', 'priority_weight' => 3, 'sla_hours' => 24],
+            ['name' => 'Media', 'priority_weight' => 2, 'sla_hours' => 48],
+            ['name' => 'Baja', 'priority_weight' => 1, 'sla_hours' => 72],
         ];
 
         foreach ($data as $item) {

@@ -26,6 +26,7 @@ class Request extends Model
     ];
 
     protected $casts = [
+        'status' => \Modules\Crm\Enums\RequestStatus::class,
         'priority' => 'integer',
         'sla_due_at' => 'datetime',
         'accepted_at' => 'datetime',
@@ -63,17 +64,17 @@ class Request extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Active);
     }
 
     public function scopePending($query)
     {
-        return $query->where('status', 'pending');
+        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Pending);
     }
 
     public function scopeRejected($query)
     {
-        return $query->where('status', 'rejected');
+        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Rejected);
     }
 
     public function scopeUnassigned($query)

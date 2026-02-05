@@ -10,6 +10,7 @@ const props = defineProps({
   categories: Array,
   urgency_types: Array,
   professionals: Array,
+  statuses: Array,
 });
 
 const form = useForm({
@@ -41,6 +42,7 @@ const submitHandler = () => form.post(route('requests.store'));
       :categories="categories"
       :urgency_types="urgency_types"
       :professionals="professionals"
+      :statuses="statuses"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

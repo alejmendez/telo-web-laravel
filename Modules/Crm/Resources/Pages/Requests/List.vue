@@ -19,6 +19,11 @@ import { can } from '@Auth/Services/Auth';
 
 const props = defineProps({
   toast: Object,
+  categories: Array,
+  urgency_types: Array,
+  customers: Array,
+  professionals: Array,
+  statuses: Array,
 });
 
 const toast = useToast();
@@ -29,6 +34,14 @@ const datatable = ref(null);
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   status: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  urgency_type: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  category: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  assigned_professional: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  customer: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  address: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  priority: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  sla_due_at: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  description: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
 };
 
 const canShow = can('requests.show');
@@ -50,7 +63,9 @@ const deleteHandler = (record) => {
 };
 
 const columns = computed(() => [
-  { field: 'customer.full_name', header: trans('requests.table.customer.label'), style: 'min-width: 200px' },
+  { field: 'created_at', header: trans('requests.table.created_at.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'customer.full_name', header: trans('requests.table.customer.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'assigned_professional.full_name', header: trans('requests.table.assigned_professional.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'status', header: trans('requests.table.status.label'), sortable: true, style: 'min-width: 150px' },
   { field: 'description', header: trans('requests.table.description.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'address', header: trans('requests.table.address.label'), sortable: true, style: 'min-width: 200px' },
@@ -82,8 +97,19 @@ onMounted(async () => {
       :sortOrder="1"
       :columns="columns"
     >
+      <template #body-created_at="{ data }">
+        {{ stringToFormat(data.created_at) }}
+      </template>
+      <template #filter-created_at="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.created_at.placeholder')" />
+      </template>
+
       <template #filter-customer.full_name="{ filterModel }">
         <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.customer.placeholder')" />
+      </template>
+
+      <template #filter-assigned_professional.full_name="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" :placeholder="__('requests.table.assigned_professional.placeholder')" />
       </template>
 
       <template #filter-status="{ filterModel }">

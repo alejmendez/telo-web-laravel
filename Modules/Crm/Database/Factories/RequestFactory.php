@@ -8,6 +8,7 @@ use Modules\Crm\Models\Professional;
 use Modules\Crm\Models\Request;
 use Modules\Crm\Models\Category;
 use Modules\Crm\Models\UrgencyType;
+use Modules\Crm\Enums\RequestStatus;
 
 class RequestFactory extends Factory
 {
@@ -28,7 +29,7 @@ class RequestFactory extends Factory
              $urgency = UrgencyType::create(['code' => 'medium', 'name' => 'Medium', 'priority_weight' => 2, 'sla_hours' => 48]);
         }
 
-        $status = $this->faker->randomElement(['pending', 'active', 'rejected']);
+        $status = $this->faker->randomElement(RequestStatus::values());
         $priority = $urgency->priority_weight;
         $slaDue = now()->addHours($urgency->sla_hours);
 

@@ -11,6 +11,7 @@ const props = defineProps({
   categories: Array,
   urgency_types: Array,
   professionals: Array,
+  statuses: Array,
   submitHandler: {
     type: Function,
     default: false,
@@ -18,12 +19,6 @@ const props = defineProps({
 });
 
 const form = props.form;
-
-const statusOptions = [
-  { value: 'pending', text: 'Pending' },
-  { value: 'active', text: 'Active' },
-  { value: 'rejected', text: 'Rejected' },
-];
 </script>
 
 <template>
@@ -89,7 +84,7 @@ const statusOptions = [
       <VSelect
         id="status"
         v-model="form.status"
-        :options="statusOptions"
+        :options="props.statuses"
         :label="__('requests.form.status.label')"
         :placeholder="__('generics.please_select')"
         :message="form.errors.status"

@@ -7,11 +7,11 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class RequestsService
 {
-    protected const SEARCHABLE_COLUMNS = ['description', 'status'];
+    protected const SEARCHABLE_COLUMNS = ['description', 'status', 'assignedProfessional.full_name', 'customer.full_name'];
 
     public function list(Array $params = [])
     {
-        $query = Request::with(['customer', 'category', 'urgencyType', 'assignedProfessional']);
+        $query = $this->getRequestQueryBase();
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $requests = $datatable->of($query)->make();
@@ -21,13 +21,15 @@ class RequestsService
 
     public function find(int $id): Request
     {
-        return Request::with(['customer', 'category', 'urgencyType', 'assignedProfessional'])->findOrFail($id);
+        $query = $this->getRequestQueryBase();
+        return $query->findOrFail($id);
     }
 
     public function create(Array $data): Request
     {
         $request = new Request;
 
+        $request->address = $data['address'];
         $request->description = $data['description'];
         $request->status = $data['status'];
         $request->priority = $data['priority'];
@@ -48,6 +50,7 @@ class RequestsService
     {
         $request = $this->find($id);
 
+        $request->address = $data['address'] ?? $request->address;
         $request->description = $data['description'] ?? $request->description;
         $request->status = $data['status'] ?? $request->status;
         $request->priority = $data['priority'] ?? $request->priority;
@@ -68,5 +71,23 @@ class RequestsService
     {
         $request = $this->find($id);
         return $request->delete();
+    }
+
+    protected function getRequestQueryBase()
+    {
+        return Request::with([
+            'customer' => function ($query) {
+                $query->select('id', 'full_name');
+            },
+            'assignedProfessional' => function ($query) {
+                $query->select('id', 'full_name');
+            },
+            'category' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'urgencyType' => function ($query) {
+                $query->select('id', 'name');
+            },
+        ]);
     }
 }

@@ -4,6 +4,7 @@ import { useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import FormRequests from '@Crm/Pages/Requests/Form.vue';
+import { stringToDate } from '@Core/Utils/Date';
 
 const props = defineProps({
   data: Object,
@@ -11,6 +12,7 @@ const props = defineProps({
   categories: Array,
   urgency_types: Array,
   professionals: Array,
+  statuses: Array,
 });
 
 const { data } = props.data;
@@ -19,15 +21,15 @@ const form = useForm({
   _method: 'PATCH',
   id: data.id,
   description: data.description,
-  status: data.status,
+  status: props.statuses.find((status) => status.value == data.status),
   address: data.address,
   priority: data.priority,
-  sla_due_at: data.sla_due_at,
+  sla_due_at: stringToDate(data.sla_due_at),
   accepted_at: data.accepted_at,
-  customer_id: data.customer_id,
-  category_id: data.category_id,
-  urgency_type_id: data.urgency_type_id,
-  assigned_professional_id: data.assigned_professional_id,
+  customer_id: props.customers.find((customer) => customer.value == data.customer_id),
+  category_id: props.categories.find((category) => category.value == data.category_id),
+  urgency_type_id: props.urgency_types.find((urgency_type) => urgency_type.value == data.urgency_type_id),
+  assigned_professional_id: props.professionals.find((professional) => professional.value == data.assigned_professional_id),
 });
 
 const submitHandler = () => form.post(route('requests.update', data.id));
@@ -46,6 +48,7 @@ const submitHandler = () => form.post(route('requests.update', data.id));
       :categories="categories"
       :urgency_types="urgency_types"
       :professionals="professionals"
+      :statuses="statuses"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

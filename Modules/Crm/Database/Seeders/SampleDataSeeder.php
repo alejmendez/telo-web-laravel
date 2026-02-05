@@ -16,6 +16,7 @@ use Modules\Crm\Models\Request;
 use Modules\Crm\Models\Service;
 use Modules\Crm\Models\ServiceRating;
 use Modules\Crm\Models\UrgencyType;
+use Modules\Crm\Enums\RequestStatus;
 
 class SampleDataSeeder extends Seeder
 {
@@ -69,23 +70,23 @@ class SampleDataSeeder extends Seeder
 
         Customer::all()->each(function (Customer $c) use ($categories, $urgency) {
             $activeMade = Request::where('customer_id', $c->id)
-                ->whereIn('status', ['pending', 'active'])
+                ->whereIn('status', [RequestStatus::Pending->value, RequestStatus::Active->value])
                 ->exists();
             $count = random_int(1, 3);
             for ($i = 0; $i < $count; $i++) {
                 $cat = $categories->random();
                 $urg = $urgency->random();
-                $status = $activeMade ? 'rejected' : collect(['pending', 'active', 'rejected'])->random();
-                if (in_array($status, ['pending', 'active'])) {
+                $status = $activeMade ? RequestStatus::Rejected->value : collect([RequestStatus::Pending->value, RequestStatus::Active->value, RequestStatus::Rejected->value])->random();
+                if (in_array($status, [RequestStatus::Pending->value, RequestStatus::Active->value])) {
                     if ($activeMade) {
-                        $status = 'rejected';
+                        $status = RequestStatus::Rejected->value;
                     } else {
                         $activeMade = true;
                     }
                 }
 
                 $assigned = null;
-                if ($status !== 'rejected') {
+                if ($status !== RequestStatus::Rejected->value) {
                     $assigned = Professional::query()
                         ->whereHas('categories', function ($q) use ($cat) {
                             $q->where('categories.id', $cat->id);
@@ -96,7 +97,7 @@ class SampleDataSeeder extends Seeder
 
                 $priority = $urg->priority_weight;
                 $slaDue = now()->addHours($urg->sla_hours);
-                $acceptedAt = $status === 'active' ? now()->subHours(random_int(1, 48)) : null;
+                $acceptedAt = $status === RequestStatus::Active->value ? now()->subHours(random_int(1, 48)) : null;
 
                 Request::create([
                     'customer_id' => $c->id,

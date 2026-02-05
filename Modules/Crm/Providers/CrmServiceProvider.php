@@ -15,6 +15,7 @@ use Modules\Crm\Services\CustomerService;
 use Modules\Crm\Services\ProfessionalService;
 use Modules\Crm\Services\RequestsService;
 use Modules\Crm\Services\ServicesService;
+use Modules\Crm\Services\StatusService;
 
 class CrmServiceProvider extends ServiceProvider
 {
@@ -75,6 +76,10 @@ class CrmServiceProvider extends ServiceProvider
 
         $this->app->singleton(ServicesService::class, function (Application $app) {
             return new ServicesService();
+        });
+
+        $this->app->singleton(StatusService::class, function (Application $app) {
+            return new StatusService();
         });
     }
 }

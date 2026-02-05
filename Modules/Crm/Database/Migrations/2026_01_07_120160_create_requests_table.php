@@ -31,15 +31,10 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE requests ADD CONSTRAINT requests_status_check CHECK (status IN ('pending','active','rejected'))");
-        DB::statement("CREATE UNIQUE INDEX requests_unique_active_customer ON requests (customer_id) WHERE status IN ('pending','active')");
     }
 
     public function down(): void
     {
-        DB::statement("DROP INDEX IF EXISTS requests_unique_active_customer");
-        DB::statement("ALTER TABLE requests DROP CONSTRAINT IF EXISTS requests_status_check");
         Schema::dropIfExists('requests');
     }
 };

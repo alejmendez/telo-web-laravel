@@ -8,9 +8,17 @@ return [
         'show' => 'Detalle de la Solicitud',
     ],
     'table' => [
+        'created_at' => [
+            'label' => 'Creado el',
+            'placeholder' => 'Ingrese la fecha de creación',
+        ],
         'customer' => [
             'label' => 'Cliente',
             'placeholder' => 'Ingrese el cliente',
+        ],
+        'assigned_professional' => [
+            'label' => 'Profesional',
+            'placeholder' => 'Ingrese el profesional',
         ],
         'status' => [
             'label' => 'Estado',
