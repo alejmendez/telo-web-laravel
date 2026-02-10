@@ -25,7 +25,7 @@ const form = useForm({
   address: data.address,
   priority: data.priority,
   sla_due_at: stringToDate(data.sla_due_at),
-  accepted_at: data.accepted_at,
+  accepted_at: stringToDate(data.accepted_at),
   customer_id: props.customers.find((customer) => customer.value == data.customer_id),
   category_id: props.categories.find((category) => category.value == data.category_id),
   urgency_type_id: props.urgency_types.find((urgency_type) => urgency_type.value == data.urgency_type_id),

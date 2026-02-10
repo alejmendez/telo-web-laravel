@@ -15,14 +15,14 @@ const props = defineProps({
 
 const form = useForm({
   description: null,
-  status: 'pending',
+  status: props.statuses.find((status) => status.value == 'pending'),
   address: null,
-  priority: null,
+  priority: 1,
   sla_due_at: null,
   accepted_at: null,
   customer_id: null,
   category_id: null,
-  urgency_type_id: null,
+  urgency_type_id: props.urgency_types[props.urgency_types.length - 1],
   assigned_professional_id: null,
 });
 
