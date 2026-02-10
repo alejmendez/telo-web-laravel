@@ -8,13 +8,24 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Services\StoreRequest;
 use Modules\Crm\Http\Requests\Services\UpdateRequest;
 use Modules\Crm\Http\Resources\ServicesResource;
+use Modules\Crm\Services\CustomerService;
+use Modules\Crm\Services\ProfessionalService;
+use Modules\Crm\Services\RequestsService;
 use Modules\Crm\Services\ServicesService;
+use Modules\Crm\Services\StatusService;
+use Modules\Crm\Http\Resources\ServicesResourceCollection;
 
 class ServicesController extends Controller
 {
     use HasPermissionMiddleware;
 
-    public function __construct(protected ServicesService $servicesService)
+    public function __construct(
+        protected RequestsService $requestsService,
+        protected ServicesService $servicesService,
+        protected CustomerService $customerService,
+        protected ProfessionalService $professionalService,
+        protected StatusService $statusService,
+    )
     {
         $this->setupPermissionMiddleware();
     }
@@ -27,7 +38,8 @@ class ServicesController extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            return response()->json($this->servicesService->list($params));
+            $data = $this->servicesService->list($params);
+            return response()->json(new ServicesResourceCollection($data));
         }
 
         return Inertia::render('Crm::Services/List', [
@@ -40,7 +52,7 @@ class ServicesController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crm::Services/Create');
+        return Inertia::render('Crm::Services/Create', $this->view_data());
     }
 
     /**
@@ -66,9 +78,7 @@ class ServicesController extends Controller
     {
         $services = $this->servicesService->find($id);
 
-        return Inertia::render('Crm::Services/Show', [
-            'data' => new ServicesResource($services),
-        ]);
+        return Inertia::render('Crm::Services/Show', $this->view_data($services));
     }
 
     /**
@@ -78,9 +88,7 @@ class ServicesController extends Controller
     {
         $services = $this->servicesService->find($id);
 
-        return Inertia::render('Crm::Services/Edit', [
-            'data' => new ServicesResource($services),
-        ]);
+        return Inertia::render('Crm::Services/Edit', $this->view_data($services));
     }
 
     /**
@@ -107,5 +115,23 @@ class ServicesController extends Controller
         $this->servicesService->delete($id);
 
         return response()->noContent();
+    }
+
+    /**
+     * Get view data.
+     */
+    protected function view_data($services = null): array
+    {
+        $data = [
+            'requests' => $this->requestsService->listAsSelect(),
+            'professionals' => $this->professionalService->listAsSelect(),
+            'statuses' => $this->statusService->listAsSelect(),
+        ];
+
+        if ($services) {
+            $data['data'] = new ServicesResource($services);
+        }
+
+        return $data;
     }
 }

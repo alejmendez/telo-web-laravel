@@ -4,7 +4,7 @@ import { useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import FormRequests from '@Crm/Pages/Requests/Form.vue';
-import { stringToDate } from '@Core/Utils/Date';
+import { stringToDate } from '@Core/Utils/date';
 
 const props = defineProps({
   data: Object,

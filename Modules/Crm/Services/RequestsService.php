@@ -3,6 +3,7 @@
 namespace Modules\Crm\Services;
 
 use Modules\Crm\Models\Request;
+use Modules\Crm\Enums\RequestStatus;
 use Modules\Core\Services\PrimevueDatatables;
 
 class RequestsService
@@ -23,6 +24,24 @@ class RequestsService
     {
         $query = $this->getRequestQueryBase();
         return $query->findOrFail($id);
+    }
+
+    public function listAsSelect(array $filter = [])
+    {
+        return query_to_select(
+            Request::leftJoin('customers', 'requests.customer_id', '=', 'customers.id')
+                ->select('requests.id', 'customers.id', 'customers.full_name', 'requests.address')
+                ->where('requests.status', RequestStatus::Pending->value)
+                ->orderBy('customers.full_name'),
+            ['id', 'full_name', 'address'],
+            $filter
+        )->map(function (Request $request) {
+            return [
+                'value' => $request->id,
+                'text' => $request->full_name . ' - ' . $request->address,
+                'customer_id' => $request->customer_id,
+            ];
+        });
     }
 
     public function create(Array $data): Request

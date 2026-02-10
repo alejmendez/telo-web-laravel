@@ -2,7 +2,8 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Services;
+use Modules\Crm\Models\Service;
+use Modules\Crm\Models\Request;
 use Modules\Core\Services\PrimevueDatatables;
 
 class ServicesService
@@ -11,7 +12,7 @@ class ServicesService
 
     public function list(Array $params = [])
     {
-        $query = Services::query();
+        $query = Service::query();
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $services = $datatable->of($query)->make();
@@ -19,50 +20,50 @@ class ServicesService
         return $services;
     }
 
-    public function find(int $id): Services
+    public function find(int $id): Service
     {
-        return Services::findOrFail($id);
+        return Service::findOrFail($id);
     }
 
-    public function create(Array $data): Services
+    public function create(Array $data): Service
     {
-        $services = new Services;
-        $services->description = $data['description'];
-        $services->status = $data['status'];
-        $services->address = $data['address'];
-        $services->priority = $data['priority'];
-        $services->sla_due_at = $data['sla_due_at'];
-        $services->accepted_at = $data['accepted_at'];
-        $services->customer_id = $data['customer_id'];
-        $services->category_id = $data['category_id'];
-        $services->urgency_type_id = $data['urgency_type_id'];
-        $services->assigned_professional_id = $data['assigned_professional_id'];
-        $services->save();
+        $request_id = $data['request_id'];
+        $request = Request::findOrFail($request_id);
 
-        return $services;
+        $service = new Service;
+        $service->request_id = $request_id;
+        $service->customer_id = $request->customer_id;
+        $service->professional_id = $data['professional_id'];
+        $service->status = $data['status'];
+        $service->started_at = $data['started_at'];
+        $service->completed_at = $data['completed_at'];
+
+        $service->save();
+
+        return $service;
     }
 
-    public function update(int $id, Array $data): Services
+    public function update(int $id, Array $data): Service
     {
-        $services = $this->find($id);
-        $services->description = $data['description'] ?? $services->description;
-        $services->status = $data['status'] ?? $services->status;
-        $services->address = $data['address'] ?? $services->address;
-        $services->priority = $data['priority'] ?? $services->priority;
-        $services->sla_due_at = $data['sla_due_at'] ?? $services->sla_due_at;
-        $services->accepted_at = $data['accepted_at'] ?? $services->accepted_at;
-        $services->customer_id = $data['customer_id'] ?? $services->customer_id;
-        $services->category_id = $data['category_id'] ?? $services->category_id;
-        $services->urgency_type_id = $data['urgency_type_id'] ?? $services->urgency_type_id;
-        $services->assigned_professional_id = $data['assigned_professional_id'] ?? $services->assigned_professional_id;
-        $services->save();
+        $request_id = $data['request_id'] ?? $service->request_id;
+        $request = Request::findOrFail($request_id);
 
-        return $services;
+        $service = $this->find($id);
+        $service->request_id = $request_id;
+        $service->customer_id = $request->customer_id;
+        $service->professional_id = $data['professional_id'] ?? $service->professional_id;
+        $service->status = $data['status'] ?? $service->status;
+        $service->started_at = $data['started_at'] ?? $service->started_at;
+        $service->completed_at = $data['completed_at'] ?? $service->completed_at;
+
+        $service->save();
+
+        return $service;
     }
 
     public function delete(int $id): bool
     {
-        $services = $this->find($id);
-        return $services->delete();
+        $service = $this->find($id);
+        return $service->delete();
     }
 }

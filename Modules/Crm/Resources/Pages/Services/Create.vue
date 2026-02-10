@@ -5,10 +5,18 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import FormServices from '@Crm/Pages/Services/Form.vue';
 
-const props = defineProps();
+const props = defineProps({
+  requests: Array,
+  professionals: Array,
+  statuses: Array,
+});
 
 const form = useForm({
-  name: null,
+  request_id: null,
+  professional_id: null,
+  status: 'pending',
+  started_at: null,
+  completed_at: null,
 });
 
 const submitHandler = () => form.post(route('services.store'));
@@ -23,6 +31,9 @@ const submitHandler = () => form.post(route('services.store'));
     />
     <FormServices
       :form="form"
+      :requests="props.requests"
+      :professionals="props.professionals"
+      :statuses="props.statuses"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>
