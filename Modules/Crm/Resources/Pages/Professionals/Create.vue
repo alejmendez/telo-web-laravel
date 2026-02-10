@@ -8,17 +8,33 @@ import FormProfessional from '@Crm/Pages/Professionals/Form.vue';
 const props = defineProps({
   professional_types: Array,
   locations: Array,
+  categories: Array,
+  contact_types: Array,
 });
 
 const form = useForm({
   dni: null,
   first_name: null,
   last_name: null,
-  email: null,
-  phone_e164: null,
-  location_id: null,
   professional_type_id: null,
+  categories: [],
   bio: null,
+  contacts: [
+    {
+      id: null,
+      contact_type: null,
+      content: null,
+    },
+  ],
+  addresses: [
+    {
+      id: null,
+      location_id: null,
+      address: null,
+      postal_code: null,
+      is_primary: true,
+    },
+  ],
 });
 
 const submitHandler = () => form.post(route('professionals.store'));
@@ -36,6 +52,8 @@ const submitHandler = () => form.post(route('professionals.store'));
       :submitHandler="submitHandler"
       :professional_types="props.professional_types"
       :locations="props.locations"
+      :categories="props.categories"
+      :contact_types="props.contact_types"
     />
   </AuthenticatedLayout>
 </template>

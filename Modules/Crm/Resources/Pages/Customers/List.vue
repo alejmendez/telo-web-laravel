@@ -93,7 +93,9 @@ onMounted(async () => {
 
       <Column field="email" :header="__('customer.table.email.label')" sortable style="min-width: 200px">
         <template #body="{ data }">
-          {{ data.email }}
+          <div v-for="email in data.email">
+            {{ email }}
+          </div>
         </template>
         <template #filter="{ filterModel }">
           <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.email.placeholder')" />
@@ -102,7 +104,9 @@ onMounted(async () => {
 
       <Column field="phone_e164" :header="__('customer.table.phone_e164.label')" sortable style="min-width: 200px">
         <template #body="{ data }">
-          {{ data.phone_e164 }}
+          <div v-for="phone_e164 in data.phone_e164">
+            {{ phone_e164 }}
+          </div>
         </template>
         <template #filter="{ filterModel }">
           <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.phone_e164.placeholder')" />

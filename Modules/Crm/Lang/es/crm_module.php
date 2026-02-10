@@ -5,7 +5,6 @@ return [
         'right' => [
             'backup' => 'Backup',
             'locations' => 'Ubicaciones',
-            'contacttypes' => 'Tipos de Contacto',
             'professionaltypes' => 'Tipos de Profesionales',
             'customertypes' => 'Tipos de Clientes',
             'categories' => 'Categorías',

@@ -3,22 +3,22 @@ import CardSection from '@Core/Components/CardSection.vue';
 import VInputDni from '@Core/Components/Form/VInputDni.vue';
 import VInput from '@Core/Components/Form/VInput.vue';
 import VSelect from '@Core/Components/Form/VSelect.vue';
-import VInputLocation from '@Core/Components/Form/VInputLocation.vue';
 
-import LocationService from '@Crm/Services/LocationService.js';
+import FormContact from '@Crm/Components/FormContact.vue';
+import FormAddress from '@Crm/Components/FormAddress.vue';
 
 const props = defineProps({
   form: Object,
   readOnly: Boolean,
   customer_types: Array,
   locations: Array,
+  contact_types: Array,
   submitHandler: {
     type: Function,
     default: false,
   },
 });
 
-const locations_nodes = LocationService.createNodes(props.locations);
 const form = props.form;
 </script>
 
@@ -47,21 +47,6 @@ const form = props.form;
         :message="form.errors.last_name"
         :readonly="props.readOnly"
       />
-      <VInput
-        id="email"
-        v-model="form.email"
-        :label="__('customer.form.email.label')"
-        :message="form.errors.email"
-        :readonly="props.readOnly"
-      />
-      <VInput
-        id="phone_e164"
-        v-model="form.phone_e164"
-        type="tel"
-        :label="__('customer.form.phone_e164.label')"
-        :message="form.errors.phone_e164"
-        :readonly="props.readOnly"
-      />
       <VSelect
         id="customer_type_id"
         v-model="form.customer_type_id"
@@ -70,17 +55,6 @@ const form = props.form;
         :label="__('customer.form.customer_type_id.label')"
         :placeholder="__('generics.please_select')"
         :message="form.errors.customer_type_id"
-        :readonly="props.readOnly"
-      />
-      <VInputLocation
-        id="location_id"
-        v-model="form.location_id"
-        filter
-        filterMode="lenient"
-        :options="locations_nodes"
-        :label="__('customer.form.location_id.label')"
-        :placeholder="__('generics.please_select')"
-        :message="form.errors.location_id"
         :readonly="props.readOnly"
       />
       <VInput
@@ -94,5 +68,17 @@ const form = props.form;
         :readonly="props.readOnly"
       />
     </CardSection>
+
+    <FormContact
+      :form="form"
+      :contact_types="props.contact_types"
+      :readOnly="props.readOnly"
+    />
+
+    <FormAddress
+      :form="form"
+      :locations="props.locations"
+      :readOnly="props.readOnly"
+    />
   </form>
 </template>

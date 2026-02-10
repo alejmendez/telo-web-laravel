@@ -19,9 +19,6 @@ class ProfessionalFactory extends Factory
         }
 
         $location = Location::query()->inRandomOrder()->first();
-        if (!$location) {
-            $location = Location::create(['name' => 'New York', 'type' => 'city', 'country_code' => 'US']);
-        }
 
         $firstName = $this->faker->firstName();
         $lastName = $this->faker->lastName();
@@ -33,10 +30,7 @@ class ProfessionalFactory extends Factory
             'full_name' => $fullName,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => $email,
-            'phone_e164' => $this->faker->unique()->e164PhoneNumber(),
-            'location_id' => $location->id,
-            'dni' => $this->faker->unique()->numerify('########'),
+            'dni' => $this->faker->unique()->numerify('##.###.###-#'),
             'average_rating' => $this->faker->randomFloat(2, 0, 5),
             'bio' => $this->faker->optional()->paragraph(),
         ];

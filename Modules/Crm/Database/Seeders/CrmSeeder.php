@@ -9,8 +9,8 @@ class CrmSeeder extends Seeder
     public function run()
     {
         $seeders = [
+            ChileLocationsSeeder::class,
             CustomerTypesSeeder::class,
-            ContactTypesSeeder::class,
             ProfessionalTypesSeeder::class,
             UrgencyTypesSeeder::class,
             CategoriesSeeder::class,

@@ -13,16 +13,12 @@ return new class extends Migration
             $table->foreignId('customer_type_id')->constrained('customer_types')->cascadeOnUpdate()->restrictOnDelete();
             $table->string('full_name', 200);
             $table->string('first_name', 100);
-            $table->string('last_name', 100);
-            $table->string('email', 200)->unique();
-            $table->string('phone_e164', 32)->unique();
-            $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->string('last_name', 100)->nullable();
             $table->string('dni', 64);
             $table->text('notes')->nullable();
 
-            $table->unique(['location_id', 'dni']);
+            $table->unique(['dni']);
             $table->index(['customer_type_id']);
-            $table->index(['location_id']);
 
             $table->timestamps();
             $table->softDeletes();

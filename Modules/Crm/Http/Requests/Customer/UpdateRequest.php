@@ -7,10 +7,9 @@ class UpdateRequest extends StoreRequest
     public function rules(): array
     {
         $rules = parent::rules();
+        $id = $this->route('customer');
 
-        $rules['dni'] = 'required|max:20|unique:customers,dni,' . $this->id;
-        $rules['email'] = 'required|email|max:200|unique:customers,email,' . $this->id;
-        $rules['phone_e164'] = 'required|max:20|unique:customers,phone_e164,' . $this->id . '|regex:/^\+[1-9]\d{7,14}$/';
+        $rules['dni'] = 'required|max:20|unique:customers,dni,' . $id;
 
         return $rules;
     }

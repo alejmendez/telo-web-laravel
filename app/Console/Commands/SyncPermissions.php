@@ -32,7 +32,6 @@ class SyncPermissions extends Command
     protected $entities = [
         'users',
         'locations',
-        'contacttypes',
         'professionaltypes',
         'customertypes',
         'categories',

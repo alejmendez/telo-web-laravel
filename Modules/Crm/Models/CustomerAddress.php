@@ -14,17 +14,12 @@ class CustomerAddress extends Model
     protected $fillable = [
         'customer_id',
         'location_id',
-        'line1',
-        'line2',
+        'address',
         'postal_code',
-        'effective_from',
-        'effective_to',
         'is_primary',
     ];
 
     protected $casts = [
-        'effective_from' => 'date',
-        'effective_to' => 'date',
         'is_primary' => 'boolean',
     ];
 

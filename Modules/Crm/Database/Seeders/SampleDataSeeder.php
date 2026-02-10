@@ -4,19 +4,21 @@ namespace Modules\Crm\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Modules\Crm\Enums\RequestStatus;
 use Modules\Crm\Models\Category;
 use Modules\Crm\Models\Customer;
 use Modules\Crm\Models\CustomerAddress;
+use Modules\Crm\Models\CustomerContact;
+use Modules\Crm\Models\Payment;
 use Modules\Crm\Models\Professional;
 use Modules\Crm\Models\ProfessionalAddress;
-use Modules\Crm\Models\Subscription;
-use Modules\Crm\Models\SubscriptionPlan;
-use Modules\Crm\Models\Payment;
+use Modules\Crm\Models\ProfessionalContact;
 use Modules\Crm\Models\Request;
 use Modules\Crm\Models\Service;
 use Modules\Crm\Models\ServiceRating;
+use Modules\Crm\Models\Subscription;
+use Modules\Crm\Models\SubscriptionPlan;
 use Modules\Crm\Models\UrgencyType;
-use Modules\Crm\Enums\RequestStatus;
 
 class SampleDataSeeder extends Seeder
 {
@@ -25,36 +27,30 @@ class SampleDataSeeder extends Seeder
         $customersCount = 50;
         $professionalsCount = 60;
 
-        if (!Customer::where('dni', '12.345.678-1')->exists()) {
-            Customer::factory()->create([
-                'full_name' => 'Alejandro Méndez Customer',
-                'first_name' => 'Alejandro',
-                'last_name' => 'Méndez Customer',
-                'dni' => '12.345.678-1',
-                'email' => 'alejmendez.87@gmail.com',
-                'phone_e164' => '+56968005128',
-            ]);
-        }
+        Customer::factory()->create([
+            'full_name' => 'Alejandro Méndez Customer',
+            'first_name' => 'Alejandro',
+            'last_name' => 'Méndez Customer',
+            'dni' => '12.345.678-1',
+        ]);
 
         Customer::factory()->count($customersCount)->create();
 
-        if (!Professional::where('dni', '12.345.678-1')->exists()) {
-            Professional::factory()->create([
-                'full_name' => 'Alejandro Méndez Professional',
-                'first_name' => 'Alejandro',
-                'last_name' => 'Méndez Professional',
-                'dni' => '12.345.678-1',
-                'email' => 'alejmendez.87@gmail.com',
-                'phone_e164' => '+56968005128',
-            ]);
-        }
+        Professional::factory()->create([
+            'full_name' => 'Alejandro Méndez Professional',
+            'first_name' => 'Alejandro',
+            'last_name' => 'Méndez Professional',
+            'dni' => '12.345.678-1',
+        ]);
         Professional::factory()->count($professionalsCount)->create();
 
         Customer::all()->each(function (Customer $c) {
+            CustomerContact::factory()->count(random_int(1, 2))->create(['customer_id' => $c->id]);
             CustomerAddress::factory()->count(random_int(1, 2))->create(['customer_id' => $c->id]);
         });
 
         Professional::all()->each(function (Professional $p) {
+            ProfessionalContact::factory()->count(random_int(1, 2))->create(['professional_id' => $p->id]);
             ProfessionalAddress::factory()->count(random_int(1, 2))->create(['professional_id' => $p->id]);
         });
 

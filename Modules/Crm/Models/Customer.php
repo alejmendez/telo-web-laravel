@@ -15,9 +15,6 @@ class Customer extends Model
     protected $fillable = [
         'first_name',
         'last_name',
-        'email',
-        'phone_e164',
-        'location_id',
         'customer_type_id',
         'dni',
         'notes',
@@ -32,11 +29,6 @@ class Customer extends Model
     protected static function newFactory()
     {
         return \Modules\Crm\Database\Factories\CustomerFactory::new();
-    }
-
-    public function setEmailAttribute($value): void
-    {
-        $this->attributes['email'] = strtolower($value);
     }
 
     public function customerType(): BelongsTo

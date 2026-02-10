@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class CustomerContact extends Model
+class ProfessionalContact extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['customer_id', 'contact_type', 'content'];
+    protected $fillable = ['professional_id', 'contact_type', 'content'];
 
-    public function customer(): BelongsTo
+    public function professional(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Professional::class);
     }
 }

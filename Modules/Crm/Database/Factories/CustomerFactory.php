@@ -19,9 +19,6 @@ class CustomerFactory extends Factory
         }
 
         $location = Location::query()->inRandomOrder()->first();
-        if (!$location) {
-            $location = Location::create(['name' => 'New York', 'type' => 'city', 'country_code' => 'US']);
-        }
 
         $firstName = $this->faker->firstName();
         $lastName = $this->faker->lastName();
@@ -32,10 +29,7 @@ class CustomerFactory extends Factory
             'full_name' => $fullName,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone_e164' => $this->faker->unique()->e164PhoneNumber(),
-            'location_id' => $location->id,
-            'dni' => $this->faker->unique()->numerify('########'),
+            'dni' => $this->faker->unique()->numerify('##.###.###-#'),
             'notes' => $this->faker->optional()->paragraph(),
         ];
     }

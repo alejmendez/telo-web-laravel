@@ -17,9 +17,6 @@ class Professional extends Model
         'professional_type_id',
         'first_name',
         'last_name',
-        'email',
-        'phone_e164',
-        'location_id',
         'dni',
         'average_rating',
         'bio',
@@ -35,11 +32,6 @@ class Professional extends Model
     protected static function newFactory()
     {
         return \Modules\Crm\Database\Factories\ProfessionalFactory::new();
-    }
-
-    public function setEmailAttribute($value): void
-    {
-        $this->attributes['email'] = strtolower($value);
     }
 
     public function professionalType(): BelongsTo
@@ -75,6 +67,11 @@ class Professional extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'professional_category');
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(ProfessionalContact::class);
     }
 
     public function scopeWithActiveSubscription($query)

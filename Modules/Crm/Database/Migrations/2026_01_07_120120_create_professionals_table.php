@@ -10,20 +10,17 @@ return new class extends Migration
     {
         Schema::create('professionals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_type_id')->constrained('professional_types')->cascadeOnUpdate()->restrictOnDelete();
             $table->string('dni', 64);
             $table->string('full_name', 200);
             $table->string('first_name', 100);
-            $table->string('last_name', 100);
-            $table->string('email', 200)->unique();
-            $table->string('phone_e164', 32)->unique();
-            $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->string('last_name', 100)->nullable();
             $table->decimal('average_rating', 3, 2)->default(0);
             $table->text('bio')->nullable();
 
-            $table->unique(['location_id', 'dni']);
+            $table->foreignId('professional_type_id')->constrained('professional_types')->cascadeOnUpdate()->restrictOnDelete();
+
+            $table->unique(['dni']);
             $table->index(['professional_type_id']);
-            $table->index(['location_id']);
 
             $table->timestamps();
             $table->softDeletes();

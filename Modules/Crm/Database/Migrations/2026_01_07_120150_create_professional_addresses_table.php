@@ -12,13 +12,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->restrictOnDelete();
-            $table->string('line1', 200);
-            $table->string('line2', 200)->nullable();
+            $table->string('address', 250);
             $table->string('postal_code', 32)->nullable();
-            $table->date('effective_from');
-            $table->date('effective_to')->nullable();
             $table->boolean('is_primary')->default(false);
-            $table->index(['professional_id', 'effective_from']);
+            $table->index(['professional_id', 'location_id', 'address']);
 
             $table->timestamps();
             $table->softDeletes();

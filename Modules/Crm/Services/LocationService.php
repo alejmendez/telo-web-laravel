@@ -26,7 +26,7 @@ class LocationService
         $location = new Location;
         $location->name = $data['name'];
         $location->type = $data['type'];
-        $location->country_code = $data['country_code'];
+        $location->country_code_code = $data['country_code'];
         $location->parent_id = $data['parent_id'] ?? null;
         $location->level = $data['level'] ?? 0;
         $location->code = $data['code'] ?? null;
@@ -41,7 +41,7 @@ class LocationService
         $location = $this->find($id);
         $location->name = $data['name'] ?? $location->name;
         $location->type = $data['type'] ?? $location->type;
-        $location->country_code = $data['country_code'] ?? $location->country_code;
+        $location->country_code_code = $data['country_code'] ?? $location->country_code_code;
         $location->parent_id = $data['parent_id'] ?? $location->parent_id;
         $location->level = $data['level'] ?? $location->level;
         $location->code = $data['code'] ?? $location->code;

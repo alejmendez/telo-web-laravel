@@ -7,6 +7,9 @@ return [
         'edit' => 'Editar Cliente',
         'show' => 'Detalle del Cliente',
     ],
+    'buttons' => [
+        'add_contact' => 'Agregar Contacto',
+    ],
     'table' => [
         'dni' => [
             'label' => 'DNI',

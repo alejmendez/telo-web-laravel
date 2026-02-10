@@ -8,9 +8,11 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Customer\StoreRequest;
 use Modules\Crm\Http\Requests\Customer\UpdateRequest;
 use Modules\Crm\Http\Resources\CustomerResource;
+use Modules\Crm\Http\Resources\CustomerResourceCollection;
+use Modules\Crm\Services\ContactTypeService;
 use Modules\Crm\Services\CustomerService;
-use Modules\Crm\Services\LocationService;
 use Modules\Crm\Services\CustomerTypeService;
+use Modules\Crm\Services\LocationService;
 
 class CustomersController extends Controller
 {
@@ -19,7 +21,8 @@ class CustomersController extends Controller
     public function __construct(
         protected CustomerService $customerService,
         protected CustomerTypeService $customerTypeService,
-        protected LocationService $locationService
+        protected LocationService $locationService,
+        protected ContactTypeService $contactTypeService
     )
     {
         $this->setupPermissionMiddleware();
@@ -33,7 +36,8 @@ class CustomersController extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            return response()->json($this->customerService->list($params));
+            $data = $this->customerService->list($params);
+            return response()->json(new CustomerResourceCollection($data));
         }
 
         return Inertia::render('Crm::Customers/List', [
@@ -51,6 +55,7 @@ class CustomersController extends Controller
         return Inertia::render('Crm::Customers/Create', [
             'customer_types' => $this->customerTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }
 
@@ -79,6 +84,9 @@ class CustomersController extends Controller
 
         return Inertia::render('Crm::Customers/Show', [
             'data' => new CustomerResource($customer),
+            'customer_types' => $this->customerTypeService->listAsSelect(),
+            'locations' => $this->locationService->list(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }
 
@@ -93,6 +101,7 @@ class CustomersController extends Controller
             'data' => new CustomerResource($customer),
             'customer_types' => $this->customerTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }
 

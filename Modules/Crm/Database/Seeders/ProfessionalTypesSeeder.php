@@ -11,29 +11,8 @@ class ProfessionalTypesSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            'Electricidad',
-            'Gas',
-            'Plomería',
-            'Climatización y Aire Acondicionado',
-            'Calefacción',
-            'Cerrajería',
-            'Pintura',
-            'Carpintería',
-            'Albañilería',
-            'Obras Menores',
-            'Mantención General',
-            'Instalación de Electrodomésticos',
-            'Reparación de Electrodomésticos',
-            'Impermeabilización',
-            'Techos y Canaletas',
-            'Pisos y Revestimientos',
-            'Vidriería',
-            'Mallas de Seguridad',
-            'Control de Plagas',
-            'Jardinería',
-            'Limpieza Técnica',
-            'Remodelación Parcial',
-            'Energía Solar y Eficiencia Energética',
+            'Empresa',
+            'Independiente',
         ];
 
         foreach ($data as $item) {

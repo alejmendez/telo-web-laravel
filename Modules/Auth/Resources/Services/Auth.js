@@ -17,7 +17,6 @@ export const can = (permission) => {
 export const canShowRightMenu = () => {
   const permissions = [
     'locations.index',
-    'contacttypes.index',
     'professionaltypes.index',
     'customertypes.index',
     'categories.index',

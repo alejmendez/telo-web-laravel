@@ -44,6 +44,9 @@ return [
         'location_id' => [
             'label' => 'Lugar de Expedición',
         ],
+        'categories' => [
+            'label' => 'Categorías',
+        ],
         'dni' => [
             'label' => 'DNI',
         ],

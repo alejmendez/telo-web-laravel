@@ -15,17 +15,12 @@ class ProfessionalAddressFactory extends Factory
     {
         $professional = Professional::query()->inRandomOrder()->first();
         $location = Location::query()->inRandomOrder()->first();
-        $from = $this->faker->dateTimeBetween('-2 years', '-1 month');
-        $to = $this->faker->boolean(40) ? $this->faker->dateTimeBetween($from, 'now') : null;
 
         return [
             'professional_id' => $professional?->id,
             'location_id' => $location?->id,
-            'line1' => $this->faker->streetAddress(),
-            'line2' => $this->faker->optional()->secondaryAddress(),
+            'address' => $this->faker->streetAddress(),
             'postal_code' => $this->faker->optional()->postcode(),
-            'effective_from' => $from,
-            'effective_to' => $to,
             'is_primary' => $this->faker->boolean(30),
         ];
     }

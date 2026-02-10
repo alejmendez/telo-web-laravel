@@ -8,17 +8,31 @@ import FormCustomer from '@Crm/Pages/Customers/Form.vue';
 const props = defineProps({
   customer_types: Array,
   locations: Array,
+  contact_types: Array,
 });
 
 const form = useForm({
   dni: null,
   first_name: null,
   last_name: null,
-  email: null,
-  phone_e164: null,
   customer_type_id: null,
-  location_id: null,
   notes: null,
+  contacts: [
+    {
+      id: null,
+      contact_type: null,
+      content: null,
+    },
+  ],
+  addresses: [
+    {
+      id: null,
+      location_id: null,
+      address: null,
+      postal_code: null,
+      is_primary: true,
+    },
+  ],
 });
 
 const submitHandler = () => form.post(route('customers.store'));
@@ -35,6 +49,7 @@ const submitHandler = () => form.post(route('customers.store'));
       :form="form"
       :customer_types="customer_types"
       :locations="locations"
+      :contact_types="contact_types"
       :submitHandler="submitHandler"
     />
   </AuthenticatedLayout>

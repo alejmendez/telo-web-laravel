@@ -8,8 +8,10 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Professional\StoreRequest;
 use Modules\Crm\Http\Requests\Professional\UpdateRequest;
 use Modules\Crm\Http\Resources\ProfessionalResource;
-use Modules\Crm\Services\ProfessionalService;
+use Modules\Crm\Http\Resources\ProfessionalResourceCollection;
+use Modules\Crm\Services\CategoryService;
 use Modules\Crm\Services\LocationService;
+use Modules\Crm\Services\ProfessionalService;
 use Modules\Crm\Services\ProfessionalTypeService;
 
 class ProfessionalsController extends Controller
@@ -19,7 +21,8 @@ class ProfessionalsController extends Controller
     public function __construct(
         protected ProfessionalService $professionalService,
         protected ProfessionalTypeService $professionalTypeService,
-        protected LocationService $locationService
+        protected LocationService $locationService,
+        protected CategoryService $categoryService
     )
     {
         $this->setupPermissionMiddleware();
@@ -33,13 +36,15 @@ class ProfessionalsController extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            return response()->json($this->professionalService->list($params));
+            $data = $this->professionalService->list($params);
+            return response()->json(new ProfessionalResourceCollection($data));
         }
 
         return Inertia::render('Crm::Professionals/List', [
             'toast' => session('toast'),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
 
@@ -51,6 +56,7 @@ class ProfessionalsController extends Controller
         return Inertia::render('Crm::Professionals/Create', [
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
 
@@ -81,6 +87,7 @@ class ProfessionalsController extends Controller
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
 
@@ -95,6 +102,7 @@ class ProfessionalsController extends Controller
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
+            'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
 
