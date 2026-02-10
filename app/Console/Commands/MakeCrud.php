@@ -111,6 +111,9 @@ class MakeCrud extends Command
     {
         $path = base_path("Modules/{$module}/Http/Resources/{$resource}Resource.php");
         $this->createFile($path, 'Resource', $placeholders);
+
+        $path = base_path("Modules/{$module}/Http/Resources/{$resource}ResourceCollection.php");
+        $this->createFile($path, 'ResourceCollection', $placeholders);
     }
 
     protected function createModel($module, $resource, $placeholders)

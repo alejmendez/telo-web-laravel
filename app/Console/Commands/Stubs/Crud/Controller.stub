@@ -8,6 +8,7 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\{{module}}\Http\Requests\{{resource}}\StoreRequest;
 use Modules\{{module}}\Http\Requests\{{resource}}\UpdateRequest;
 use Modules\{{module}}\Http\Resources\{{resource}}Resource;
+use Modules\{{module}}\Http\Resources\{{resource}}ResourceCollection;
 use Modules\{{module}}\Services\{{resource}}Service;
 
 class {{resource_plural}}Controller extends Controller
@@ -27,7 +28,8 @@ class {{resource_plural}}Controller extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            return response()->json($this->{{resource_camel}}Service->list($params));
+            $data = $this->{{resource_camel}}Service->list($params)
+            return response()->json(new {{resource}}ResourceCollection($data));
         }
 
         return Inertia::render('{{module}}::{{resource_plural}}/List', [
