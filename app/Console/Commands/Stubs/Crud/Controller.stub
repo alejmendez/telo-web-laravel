@@ -42,7 +42,7 @@ class {{resource_plural}}Controller extends Controller
      */
     public function create()
     {
-        return Inertia::render('{{module}}::{{resource_plural}}/Create');
+        return Inertia::render('{{module}}::{{resource_plural}}/Create', $this->view_data());
     }
 
     /**
@@ -68,9 +68,7 @@ class {{resource_plural}}Controller extends Controller
     {
         ${{resource_lower}} = $this->{{resource_camel}}Service->find($id);
 
-        return Inertia::render('{{module}}::{{resource_plural}}/Show', [
-            'data' => new {{resource}}Resource(${{resource_lower}}),
-        ]);
+        return Inertia::render('{{module}}::{{resource_plural}}/Show', $this->view_data(${{resource_lower}}));
     }
 
     /**
@@ -109,5 +107,21 @@ class {{resource_plural}}Controller extends Controller
         $this->{{resource_camel}}Service->delete($id);
 
         return response()->noContent();
+    }
+
+    /**
+     * Get view data.
+     */
+    protected function view_data(${{resource_lower}} = null): array
+    {
+        $data = [
+            '{{resource_lower}}' => $this->{{resource_camel}}Service->list(),
+        ];
+
+        if (${{resource_lower}}) {
+            $data['data'] = ${{resource_lower}};
+        }
+
+        return $data;
     }
 }
