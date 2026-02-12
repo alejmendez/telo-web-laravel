@@ -82,3 +82,11 @@ export const deleteRowDatatable = (options) => {
 
   confirm.require(confirmOptions);
 };
+
+let filterTimeout = null;
+export const debouncedFilter = (callback) => {
+  clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => {
+    callback();
+  }, 500);
+};

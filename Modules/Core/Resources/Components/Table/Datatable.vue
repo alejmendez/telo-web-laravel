@@ -130,6 +130,9 @@ const onFilter = () => {
 };
 
 const clearFilter = () => {
+  Object.keys(filters.value).forEach(key => {
+    filters.value[key] = '';
+  });
   lazyParams.value.filters = {};
   loadLazyData();
 };
@@ -175,7 +178,7 @@ onMounted(() => {
       class="w-full"
       lazy
       dataKey="id"
-      filterDisplay="menu"
+      filterDisplay="row"
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       v-model:filters="filters"
       scrollable
@@ -191,7 +194,6 @@ onMounted(() => {
       :totalPages="metadata.last_page"
       :rows="metadata.per_page"
       :paginator="metadata.total > 0"
-      :filters="filters"
       :rowsPerPageOptions="[5, 10, 25, 50, 100]"
       :loading="loading"
       :currentPageReportTemplate="metadata.total > 0 ? __('generics.tables.pagination.template', {
@@ -201,7 +203,6 @@ onMounted(() => {
       }) : ''"
       @page="onPage($event)"
       @sort="onSort($event)"
-      @filter="onFilter($event)"
     >
       <template #header>
         <div class="flex justify-between">
@@ -261,7 +262,13 @@ onMounted(() => {
 
       <template #empty> {{ __('generics.tables.empty') }} </template>
 
-      <Column v-for="(col, index) in visibleColumns" :key="col.field || index" v-bind="col">
+      <Column
+        v-for="(col, index) in visibleColumns"
+        :key="col.field || index"
+        v-bind="col"
+        :field="col.field"
+        :showFilterMenu="false"
+        :filterField="col.field">
         <template #body="slotProps">
           <slot :name="'body-' + (col.field || col.type)" :data="slotProps.data" :index="slotProps.index">
             {{ getFieldValue(slotProps.data, col.field) }}
@@ -270,8 +277,8 @@ onMounted(() => {
         <template #filter="slotProps">
           <slot
             :name="'filter-' + (col.field || col.type)"
-            :filterModel="slotProps.filterModel"
-            :filterCallback="slotProps.filterCallback"
+            :filterModel="filters[col.field]"
+            :filterCallback="onFilter"
           >
           </slot>
         </template>

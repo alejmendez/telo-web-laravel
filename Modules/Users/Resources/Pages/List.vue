@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
-import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import Column from 'primevue/column';
+import { trans } from 'laravel-vue-i18n';
+
+import { FilterMatchMode } from '@primevue/core/api';
 import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 
@@ -14,7 +15,7 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import UserService from '@Users/Services/UserService.js';
-import { deleteRowDatatable } from '@Core/Utils/table.js';
+import { deleteRowDatatable, debouncedFilter } from '@Core/Utils/table.js';
 import { can } from '@Auth/Services/Auth';
 
 const props = defineProps({
@@ -33,12 +34,21 @@ const filter_role_options = ref(props.roles);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  full_name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  dni: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  phone: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  full_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  dni: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  phone: { value: null, matchMode: FilterMatchMode.CONTAINS },
   'roles.name': { value: null, matchMode: FilterMatchMode.EQUALS },
-  email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  email: { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
+
+const columns = computed(() => [
+  { field: 'full_name', header: trans('user.table.full_name.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'dni', header: trans('user.table.dni.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'phone', header: trans('user.table.phone.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'roles.name', header: trans('user.table.roles_name.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'email', header: trans('user.table.email.label'), sortable: true, style: 'min-width: 200px' },
+  { type: 'actions', style: 'min-width: 130px', exportable: false },
+]);
 
 const canShow = can('users.show');
 const canEdit = can('users.edit');
@@ -81,67 +91,53 @@ onMounted(async () => {
 
     <Datatable
       ref="datatable"
+      sortField="full_name"
       :filters="filters"
       :fetchHandler="fetchHandler"
-      sortField="full_name"
       :sortOrder="1"
+      :columns="columns"
     >
-      <Column field="full_name" :header="__('user.table.name')" sortable frozen style="min-width: 200px">
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre" />
-        </template>
-      </Column>
+      <template #filter-full_name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('user.table.full_name.placeholder')" />
+      </template>
+      <template #filter-dni="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('user.table.dni.placeholder')" />
+      </template>
+      <template #filter-phone="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('user.table.phone.placeholder')" />
+      </template>
+      <template #filter-roles.name="{ filterModel, filterCallback }">
+        <Select v-model="filterModel.value" :options="filter_role_options" optionLabel="text" optionValue="value" showClear @change="filterCallback()" :placeholder="__('user.table.roles_name.placeholder')" />
+      </template>
+      <template #filter-email="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('user.table.email.placeholder')" />
+      </template>
 
-      <Column field="dni" :header="__('user.table.dni')" sortable style="min-width: 200px">
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Dni" />
-        </template>
-      </Column>
+      <template #body-roles.name="{ data }">
+        <span
+          v-for="role in data.roles"
+          class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none border rounded-full role"
+          :class="slugify(role.name)"
+        >
+          {{ role.name }}
+        </span>
+      </template>
 
-      <Column field="phone" :header="__('user.table.phone')" sortable style="min-width: 200px">
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Telefono" />
-        </template>
-      </Column>
-
-      <Column field="roles.name" :header="__('user.table.role')" :showFilterMatchModes="false" style="min-width: 200px">
-        <template #body="{ data }">
-          <span
-            v-for="role in data.roles"
-            class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none border rounded-full role"
-            :class="slugify(role.name)"
-          >
-            {{ role.name }}
-          </span>
-        </template>
-        <template #filter="{ filterModel }">
-          <Select v-model="filterModel.value" :options="filter_role_options" optionLabel="text" placeholder="Todos" />
-        </template>
-      </Column>
-
-      <Column field="email" :header="__('user.table.email')" sortable style="min-width: 200px">
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Email" />
-        </template>
-      </Column>
-
-      <Column :exportable="false" style="min-width: 130px">
-        <template #body="slotProps">
-          <Link :href="route('users.show', slotProps.data.id)" v-if="canShow">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
-          </Link>
-          <Link :href="route('users.edit', slotProps.data.id)" v-if="canEdit">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
-          </Link>
-          <span
-            class="material-symbols-rounded mr-4 cursor-pointer transition-all text-slate-500 hover:text-pink-600"
-            @click="deleteHandler(slotProps.data)"
-            v-if="canDestroy && slotProps.data.id !== current_user_id"
-          >
-            delete
-          </span>
-        </template>
-      </Column>
+      <template #body-actions="{ data }">
+        <Link :href="route('users.show', data.id)" v-if="canShow">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
+        </Link>
+        <Link :href="route('users.edit', data.id)" v-if="canEdit">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
+        </Link>
+        <span
+          class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-pink-600"
+          @click="deleteHandler(data)"
+          v-if="canDestroy && data.id !== current_user_id"
+        >
+          delete
+        </span>
+      </template>
     </Datatable>
   </AuthenticatedLayout>
 </template>

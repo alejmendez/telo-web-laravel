@@ -8,11 +8,26 @@ return [
         'show' => 'Detalle del Usuario',
     ],
     'table' => [
-        'name' => 'Nombre',
-        'dni' => 'RUT / ID',
-        'phone' => 'Teléfono',
-        'role' => 'Tipo de usuario',
-        'email' => 'Correo',
+        'full_name' => [
+            'label' => 'Nombre Completo',
+            'placeholder' => 'Buscar por nombre',
+        ],
+        'dni' => [
+            'label' => 'RUT / ID',
+            'placeholder' => 'Buscar por RUT / ID',
+        ],
+        'phone' => [
+            'label' => 'Teléfono',
+            'placeholder' => 'Buscar por Teléfono',
+        ],
+        'roles_name' => [
+            'label' => 'Tipo de usuario',
+            'placeholder' => 'Buscar por Tipo de usuario',
+        ],
+        'email' => [
+            'label' => 'Correo',
+            'placeholder' => 'Buscar por Correo',
+        ],
     ],
     'form' => [
         'name' => [
