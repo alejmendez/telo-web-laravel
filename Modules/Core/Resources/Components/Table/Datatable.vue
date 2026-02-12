@@ -150,7 +150,7 @@ const allColumnsSelected = computed(() => {
 
 const toggleAllColumns = () => {
   if (allColumnsSelected.value) {
-    selectedColumns.value = [];
+    selectedColumns.value = [toggleableColumns.value[0].field];
   } else {
     selectedColumns.value = toggleableColumns.value.map(col => col.field);
   }
