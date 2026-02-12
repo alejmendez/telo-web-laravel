@@ -15,6 +15,7 @@ class Professional extends Model
 
     protected $fillable = [
         'professional_type_id',
+        'full_name',
         'first_name',
         'last_name',
         'dni',
