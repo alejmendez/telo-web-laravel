@@ -8,8 +8,14 @@ return [
         'show' => 'Detalle de la Categoría',
     ],
     'table' => [
-        'name' => 'Nombre',
-        'slug' => 'Código',
+        'name' => [
+            'label' => 'Nombre',
+            'placeholder' => 'Buscar por nombre',
+        ],
+        'slug' => [
+            'label' => 'Código',
+            'placeholder' => 'Buscar por código',
+        ],
     ],
     'form' => [
         'name' => [

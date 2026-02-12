@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 
-import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
+import { FilterMatchMode } from '@primevue/core/api';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 
@@ -12,7 +12,7 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import CategoryService from '@Crm/Services/CategoryService.js';
-import { defaultDeleteHandler } from '@Core/Utils/table.js';
+import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -27,9 +27,15 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  slug: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  slug: { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
+
+const columns = computed(() => [
+  { field: 'name', header: trans('category.table.name.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'slug', header: trans('category.table.slug.label'), sortable: true, style: 'min-width: 200px' },
+  { type: 'actions', style: 'min-width: 130px', exportable: false },
+]);
 
 const canShow = can('categories.show');
 const canEdit = can('categories.edit');
@@ -70,42 +76,31 @@ onMounted(async () => {
       :fetchHandler="fetchHandler"
       sortField="name"
       :sortOrder="1"
+      :columns="columns"
     >
-      <Column field="name" :header="__('category.table.name')" sortable frozen style="min-width: 200px">
-        <template #body="{ data }">
-          {{ data.name }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre" />
-        </template>
-      </Column>
+      <template #filter-name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('category.table.name.placeholder')" />
+      </template>
 
-      <Column field="slug" :header="__('category.table.slug')" sortable style="min-width: 200px">
-        <template #body="{ data }">
-          {{ data.slug }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por código" />
-        </template>
-      </Column>
+      <template #filter-slug="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('category.table.slug.placeholder')" />
+      </template>
 
-      <Column :exportable="false" style="max-width: 130px">
-        <template #body="slotProps">
-          <Link :href="route('categories.show', slotProps.data.id)" v-if="canShow">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
-          </Link>
-          <Link :href="route('categories.edit', slotProps.data.id)" v-if="canEdit">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
-          </Link>
-          <span
-            class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-pink-600"
-            @click="deleteHandler(slotProps.data)"
-            v-if="canDestroy"
-          >
-            delete
-          </span>
-        </template>
-      </Column>
+      <template #body-actions="{ data }">
+        <Link :href="route('categories.show', data.id)" v-if="canShow">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
+        </Link>
+        <Link :href="route('categories.edit', data.id)" v-if="canEdit">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
+        </Link>
+        <span
+          class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-pink-600"
+          @click="deleteHandler(data)"
+          v-if="canDestroy"
+        >
+          delete
+        </span>
+      </template>
     </Datatable>
   </AuthenticatedLayout>
 </template>
