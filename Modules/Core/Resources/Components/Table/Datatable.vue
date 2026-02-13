@@ -131,7 +131,20 @@ const onFilter = () => {
 
 const clearFilter = () => {
   Object.keys(filters.value).forEach(key => {
-    filters.value[key] = '';
+    const filter = filters.value[key];
+    if (filter && typeof filter === 'object') {
+      if ('constraints' in filter && Array.isArray(filter.constraints)) {
+        filter.constraints.forEach(constraint => {
+          constraint.value = null;
+        });
+      } else if ('value' in filter) {
+        filter.value = null;
+      } else {
+        filters.value[key] = null;
+      }
+    } else {
+      filters.value[key] = null;
+    }
   });
   lazyParams.value.filters = {};
   loadLazyData();
