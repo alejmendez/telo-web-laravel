@@ -16,7 +16,7 @@ class Request extends Model
         'customer_id',
         'category_id',
         'urgency_type_id',
-        'assigned_professional_id',
+        'professional_id',
         'address',
         'description',
         'status',
@@ -47,14 +47,14 @@ class Request extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function urgencyType(): BelongsTo
+    public function urgency_type(): BelongsTo
     {
         return $this->belongsTo(UrgencyType::class, 'urgency_type_id');
     }
 
-    public function assignedProfessional(): BelongsTo
+    public function professional(): BelongsTo
     {
-        return $this->belongsTo(Professional::class, 'assigned_professional_id');
+        return $this->belongsTo(Professional::class, 'professional_id');
     }
 
     public function service(): HasOne
@@ -79,7 +79,7 @@ class Request extends Model
 
     public function scopeUnassigned($query)
     {
-        return $query->whereNull('assigned_professional_id');
+        return $query->whereNull('professional_id');
     }
 
     public function scopeForCustomer($query, $id)

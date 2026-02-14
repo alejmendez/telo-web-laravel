@@ -20,7 +20,7 @@ class ServiceFactory extends Factory
         return [
             'request_id' => $request?->id,
             'customer_id' => $request?->customer_id,
-            'professional_id' => $request?->assigned_professional_id,
+            'professional_id' => $request?->professional_id,
             'status' => $status,
             'started_at' => $started,
             'completed_at' => $completed,

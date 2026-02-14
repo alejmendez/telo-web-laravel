@@ -5,14 +5,39 @@ namespace Modules\Crm\Services;
 use Modules\Crm\Models\Request;
 use Modules\Crm\Enums\RequestStatus;
 use Modules\Core\Services\PrimevueDatatables;
+use Carbon\Carbon;
 
 class RequestsService
 {
-    protected const SEARCHABLE_COLUMNS = ['description', 'status', 'assignedProfessional.full_name', 'customer.full_name'];
+    protected const SEARCHABLE_COLUMNS = [
+        'created_at',
+        'customer.full_name',
+        'professional.full_name',
+        'status',
+        'description',
+        'address',
+        'urgency_type.name',
+        'priority',
+        'sla_due_at',
+    ];
 
     public function list(Array $params = [])
     {
         $query = $this->getRequestQueryBase();
+
+        $params['filters'] = $params['filters'] ?? [];
+
+        foreach (['created_at', 'sla_due_at'] as $field) {
+            if (!empty($params['filters'][$field]['value'])) {
+                $query->whereDate($field, Carbon::parse($params['filters'][$field]['value']));
+            }
+            unset($params['filters'][$field]);
+        }
+
+        if (isset($params['filters']['urgency_type.name'])) {
+            $params['filters']['urgency_type.id'] = $params['filters']['urgency_type.name'];
+            unset($params['filters']['urgency_type.name']);
+        }
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $requests = $datatable->of($query)->make();
@@ -59,7 +84,7 @@ class RequestsService
 
         $request->category_id = $data['category_id'];
         $request->urgency_type_id = $data['urgency_type_id'];
-        $request->assigned_professional_id = $data['assigned_professional_id'] ?? null;
+        $request->professional_id = $data['professional_id'] ?? null;
         $request->save();
 
         return $request;
@@ -79,7 +104,7 @@ class RequestsService
         $request->customer_id = $data['customer_id'] ?? $request->customer_id;
         $request->category_id = $data['category_id'] ?? $request->category_id;
         $request->urgency_type_id = $data['urgency_type_id'] ?? $request->urgency_type_id;
-        $request->assigned_professional_id = $data['assigned_professional_id'] ?? $request->assigned_professional_id;
+        $request->professional_id = $data['professional_id'] ?? $request->professional_id;
 
         $request->save();
 
@@ -98,13 +123,13 @@ class RequestsService
             'customer' => function ($query) {
                 $query->select('id', 'full_name');
             },
-            'assignedProfessional' => function ($query) {
+            'professional' => function ($query) {
                 $query->select('id', 'full_name');
             },
             'category' => function ($query) {
                 $query->select('id', 'name');
             },
-            'urgencyType' => function ($query) {
+            'urgency_type' => function ($query) {
                 $query->select('id', 'name');
             },
         ]);

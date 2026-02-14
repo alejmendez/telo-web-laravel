@@ -8,8 +8,14 @@ return [
         'show' => 'Detalle del Tipo de Cliente',
     ],
     'table' => [
-        'name' => 'Nombre',
-        'code' => 'Código',
+        'name' => [
+            'label' => 'Nombre',
+            'placeholder' => 'Buscar por nombre',
+        ],
+        'code' => [
+            'label' => 'Código',
+            'placeholder' => 'Buscar por código',
+        ],
     ],
     'form' => [
         'name' => [

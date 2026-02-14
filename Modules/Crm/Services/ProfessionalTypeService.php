@@ -7,7 +7,7 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class ProfessionalTypeService
 {
-    protected const SEARCHABLE_COLUMNS = ['name'];
+    protected const SEARCHABLE_COLUMNS = ['name', 'code'];
 
     public function list(Array $params = [])
     {

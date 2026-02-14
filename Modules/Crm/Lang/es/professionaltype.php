@@ -8,15 +8,21 @@ return [
         'show' => 'Detalle del Tipo de profesional',
     ],
     'table' => [
-        'name' => 'Name',
-        'code' => 'Code',
+        'name' => [
+            'label' => 'Nombre',
+            'placeholder' => 'Buscar por nombre',
+        ],
+        'code' => [
+            'label' => 'Código',
+            'placeholder' => 'Buscar por código',
+        ],
     ],
     'form' => [
         'name' => [
-            'label' => 'Name',
+            'label' => 'Nombre',
         ],
         'code' => [
-            'label' => 'Code',
+            'label' => 'Código',
         ],
     ],
 ];

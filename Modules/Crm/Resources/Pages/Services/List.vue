@@ -99,8 +99,8 @@ onMounted(async () => {
         <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.customer.placeholder')" />
       </template>
 
-      <template #filter-assigned_professional.full_name="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.assigned_professional.placeholder')" />
+      <template #filter-professional.full_name="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.professional.placeholder')" />
       </template>
 
       <template #filter-status="{ filterModel }">

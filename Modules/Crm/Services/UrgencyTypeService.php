@@ -7,7 +7,7 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class UrgencyTypeService
 {
-    protected const SEARCHABLE_COLUMNS = ['name'];
+    protected const SEARCHABLE_COLUMNS = ['name', 'code', 'priority_weight', 'sla_hours'];
 
     public function list(Array $params = [])
     {

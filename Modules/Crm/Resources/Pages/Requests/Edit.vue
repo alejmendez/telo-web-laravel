@@ -29,7 +29,7 @@ const form = useForm({
   customer_id: props.customers.find((customer) => customer.value == data.customer_id),
   category_id: props.categories.find((category) => category.value == data.category_id),
   urgency_type_id: props.urgency_types.find((urgency_type) => urgency_type.value == data.urgency_type_id),
-  assigned_professional_id: props.professionals.find((professional) => professional.value == data.assigned_professional_id),
+  professional_id: props.professionals.find((professional) => professional.value == data.professional_id),
 });
 
 const submitHandler = () => form.post(route('requests.update', data.id));

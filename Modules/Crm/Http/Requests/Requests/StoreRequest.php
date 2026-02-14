@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
             'customer_id' => 'required|exists:customers,id',
             'category_id' => 'required|exists:categories,id',
             'urgency_type_id' => 'required|exists:urgency_types,id',
-            'assigned_professional_id' => 'nullable|exists:professionals,id',
+            'professional_id' => 'nullable|exists:professionals,id',
         ];
     }
 
@@ -40,7 +40,7 @@ class StoreRequest extends FormRequest
             'customer_id' => __('requests.form.customer_id.label'),
             'category_id' => __('requests.form.category_id.label'),
             'urgency_type_id' => __('requests.form.urgency_type_id.label'),
-            'assigned_professional_id' => __('requests.form.assigned_professional_id.label'),
+            'professional_id' => __('requests.form.professional_id.label'),
         ];
     }
 
@@ -50,7 +50,7 @@ class StoreRequest extends FormRequest
         $customer_id = isset($this->customer_id['value']) ? $this->customer_id['value'] : null;
         $category_id = isset($this->category_id['value']) ? $this->category_id['value'] : null;
         $urgency_type_id = isset($this->urgency_type_id['value']) ? $this->urgency_type_id['value'] : null;
-        $assigned_professional_id = isset($this->assigned_professional_id['value']) ? $this->assigned_professional_id['value'] : null;
+        $professional_id = isset($this->professional_id['value']) ? $this->professional_id['value'] : null;
 
         $this->merge([
             'description' => $this->description,
@@ -62,7 +62,7 @@ class StoreRequest extends FormRequest
             'customer_id' => $customer_id,
             'category_id' => $category_id,
             'urgency_type_id' => $urgency_type_id,
-            'assigned_professional_id' => $assigned_professional_id,
+            'professional_id' => $professional_id,
         ]);
     }
 }

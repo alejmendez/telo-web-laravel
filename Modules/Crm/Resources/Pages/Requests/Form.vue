@@ -55,13 +55,13 @@ const form = props.form;
         :readonly="props.readOnly"
       />
       <VSelect
-        id="assigned_professional_id"
-        v-model="form.assigned_professional_id"
+        id="professional_id"
+        v-model="form.professional_id"
         filter
         :options="props.professionals"
-        :label="__('requests.form.assigned_professional_id.label')"
+        :label="__('requests.form.professional_id.label')"
         :placeholder="__('generics.please_select')"
-        :message="form.errors.assigned_professional_id"
+        :message="form.errors.professional_id"
         :readonly="props.readOnly"
       />
       <VInput

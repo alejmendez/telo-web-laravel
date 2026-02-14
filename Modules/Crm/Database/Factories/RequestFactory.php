@@ -47,7 +47,7 @@ class RequestFactory extends Factory
             'customer_id' => $customer->id,
             'category_id' => $category->id,
             'urgency_type_id' => $urgency->id,
-            'assigned_professional_id' => $assigned,
+            'professional_id' => $assigned,
             'description' => $this->faker->paragraph(),
             'address' => $customer->address,
             'status' => $status,

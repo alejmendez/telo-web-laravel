@@ -5,7 +5,6 @@ import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 
 import { FilterMatchMode } from '@primevue/core/api';
-import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 
 import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
@@ -13,6 +12,7 @@ import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import CategoryService from '@Crm/Services/CategoryService.js';
 import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
+import { trans } from 'laravel-vue-i18n';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -79,11 +79,11 @@ onMounted(async () => {
       :columns="columns"
     >
       <template #filter-name="{ filterModel, filterCallback }">
-        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('category.table.name.placeholder')" />
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('category.table.name.placeholder')" />
       </template>
 
       <template #filter-slug="{ filterModel, filterCallback }">
-        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" :placeholder="__('category.table.slug.placeholder')" />
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('category.table.slug.placeholder')" />
       </template>
 
       <template #body-actions="{ data }">

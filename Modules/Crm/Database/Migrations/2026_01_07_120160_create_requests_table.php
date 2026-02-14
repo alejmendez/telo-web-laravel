@@ -22,11 +22,11 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('urgency_type_id')->constrained('urgency_types')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('assigned_professional_id')->nullable()->constrained('professionals')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('professional_id')->nullable()->constrained('professionals')->cascadeOnUpdate()->nullOnDelete();
 
             $table->index(['status']);
             $table->index(['customer_id']);
-            $table->index(['assigned_professional_id']);
+            $table->index(['professional_id']);
 
             $table->timestamps();
             $table->softDeletes();

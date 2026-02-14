@@ -23,7 +23,7 @@ const form = useForm({
   customer_id: null,
   category_id: null,
   urgency_type_id: props.urgency_types[props.urgency_types.length - 1],
-  assigned_professional_id: null,
+  professional_id: null,
 });
 
 const submitHandler = () => form.post(route('requests.store'));

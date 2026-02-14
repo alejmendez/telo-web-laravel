@@ -16,7 +16,7 @@ return [
             'label' => 'Cliente',
             'placeholder' => 'Ingrese el cliente',
         ],
-        'assigned_professional' => [
+        'professional' => [
             'label' => 'Profesional',
             'placeholder' => 'Ingrese el profesional',
         ],
@@ -40,6 +40,10 @@ return [
             'label' => 'Vencimiento SLA',
             'placeholder' => 'Ingrese el vencimiento SLA',
         ],
+        'urgency_type' => [
+            'label' => 'Tipo de Urgencia',
+            'placeholder' => 'Ingrese el tipo de urgencia',
+        ],
     ],
     'form' => [
         'customer_id' => [
@@ -51,7 +55,7 @@ return [
         'urgency_type_id' => [
             'label' => 'Tipo de Urgencia',
         ],
-        'assigned_professional_id' => [
+        'professional_id' => [
             'label' => 'Profesional Asignado',
         ],
         'description' => [

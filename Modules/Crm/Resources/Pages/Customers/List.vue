@@ -12,7 +12,7 @@ import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import CustomerService from '@Crm/Services/CustomerService.js';
-import { defaultDeleteHandler } from '@Core/Utils/table.js';
+import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -77,8 +77,8 @@ onMounted(async () => {
         <template #body="{ data }">
           {{ data.dni }}
         </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.dni.placeholder')" />
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.dni.placeholder')" />
         </template>
       </Column>
 
@@ -86,8 +86,8 @@ onMounted(async () => {
         <template #body="{ data }">
           {{ data.full_name }}
         </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.full_name.placeholder')" />
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.full_name.placeholder')" />
         </template>
       </Column>
 
@@ -97,8 +97,8 @@ onMounted(async () => {
             {{ email }}
           </div>
         </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.email.placeholder')" />
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.email.placeholder')" />
         </template>
       </Column>
 
@@ -108,8 +108,8 @@ onMounted(async () => {
             {{ phone_e164 }}
           </div>
         </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" :placeholder="__('customer.table.phone_e164.placeholder')" />
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.phone_e164.placeholder')" />
         </template>
       </Column>
 
