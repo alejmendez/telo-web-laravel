@@ -13,6 +13,7 @@ use Modules\Crm\Services\CategoryService;
 use Modules\Crm\Services\LocationService;
 use Modules\Crm\Services\ProfessionalService;
 use Modules\Crm\Services\ProfessionalTypeService;
+use Modules\Crm\Services\ContactTypeService;
 
 class ProfessionalsController extends Controller
 {
@@ -22,7 +23,8 @@ class ProfessionalsController extends Controller
         protected ProfessionalService $professionalService,
         protected ProfessionalTypeService $professionalTypeService,
         protected LocationService $locationService,
-        protected CategoryService $categoryService
+        protected CategoryService $categoryService,
+        protected ContactTypeService $contactTypeService
     )
     {
         $this->setupPermissionMiddleware();
@@ -55,6 +57,7 @@ class ProfessionalsController extends Controller
     {
         return Inertia::render('Crm::Professionals/Create', [
             'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
@@ -86,6 +89,7 @@ class ProfessionalsController extends Controller
         return Inertia::render('Crm::Professionals/Show', [
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
@@ -101,6 +105,7 @@ class ProfessionalsController extends Controller
         return Inertia::render('Crm::Professionals/Edit', [
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
+            'contact_types' => $this->contactTypeService->listAsSelect(),
             'locations' => $this->locationService->list(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);

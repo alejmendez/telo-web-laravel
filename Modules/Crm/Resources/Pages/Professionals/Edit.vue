@@ -13,6 +13,10 @@ const props = defineProps({
   contact_types: Array,
 });
 
+const selectValueFromArray = (array, value) => {
+  return array.find(item => item.value === value);
+}
+
 const { data } = props.data;
 
 const contacts = data.contacts?.length

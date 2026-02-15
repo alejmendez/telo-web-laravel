@@ -3,7 +3,6 @@ import CardSection from '@Core/Components/CardSection.vue';
 import VInputDni from '@Core/Components/Form/VInputDni.vue';
 import VInput from '@Core/Components/Form/VInput.vue';
 import VSelect from '@Core/Components/Form/VSelect.vue';
-import VInputLocation from '@Core/Components/Form/VInputLocation.vue';
 import VSelectMultiple from '@Core/Components/Form/VSelectMultiple.vue';
 
 import FormContact from '@Crm/Components/FormContact.vue';
@@ -12,14 +11,14 @@ import FormAddress from '@Crm/Components/FormAddress.vue';
 const props = defineProps({
   form: Object,
   readOnly: Boolean,
-  submitHandler: {
-    type: Function,
-    default: false,
-  },
   professional_types: Array,
   categories: Array,
   locations: Array,
   contact_types: Array,
+  submitHandler: {
+    type: Function,
+    default: false,
+  },
 });
 
 const form = props.form;
@@ -80,18 +79,18 @@ const form = props.form;
         :message="form.errors.bio"
         :readonly="props.readOnly"
       />
-
-      <FormContact
-        :form="form"
-        :contact_types="props.contact_types"
-        :readOnly="props.readOnly"
-      />
-
-      <FormAddress
-        :form="form"
-        :locations="props.locations"
-        :readOnly="props.readOnly"
-      />
     </CardSection>
+
+    <FormContact
+      :form="form"
+      :contact_types="props.contact_types"
+      :readOnly="props.readOnly"
+    />
+
+    <FormAddress
+      :form="form"
+      :locations="props.locations"
+      :readOnly="props.readOnly"
+    />
   </form>
 </template>

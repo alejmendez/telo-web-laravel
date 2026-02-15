@@ -9,7 +9,7 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class ProfessionalService
 {
-    protected const SEARCHABLE_COLUMNS = ['dni', 'full_name', 'email', 'phone_e164'];
+    protected const SEARCHABLE_COLUMNS = ['dni', 'full_name'];
 
     public function list(Array $params = [])
     {

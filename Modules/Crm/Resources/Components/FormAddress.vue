@@ -36,6 +36,12 @@ const check_primary = (index) => {
     }
   });
 };
+
+const get_location_name = (location_id) => {
+  location_id = parseInt(Object.keys(location_id)[0]);
+  const location = props.locations.find((location) => location.id === location_id);
+  return location ? location.name : '';
+};
 </script>
 
 <template>
@@ -44,10 +50,19 @@ const check_primary = (index) => {
     wrapperClass="pt-4"
   >
     <div
-      class="border-b-1 border-gray-500 px-6 py-2 grid grid-cols-2 gap-x-16 gap-y-4 relative"
+      class="px-6 py-2 grid grid-cols-2 gap-x-16 gap-y-4 relative"
+      :class="{'pb-6': props.readOnly, 'border-b-1 border-gray-500': !props.readOnly}"
       v-for="(address, index) in form.addresses"
       :key="index"
     >
+      <VInput
+        :id="`location_id_${index}`"
+        :value="get_location_name(address.location_id)"
+        :label="__('address.form.location_id.label')"
+        :readonly="props.readOnly"
+        v-if="props.readOnly"
+      />
+
       <VInputLocation
         :id="`location_id_${index}`"
         v-model="address.location_id"
@@ -57,14 +72,14 @@ const check_primary = (index) => {
         :label="__('address.form.location_id.label')"
         :placeholder="__('generics.please_select')"
         :message="form.errors[`addresses.${index}.location_id`]"
-        :readonly="props.readOnly"
+        v-if="!props.readOnly"
       />
 
       <div class="grid grid-cols-12 gap-x-16 gap-y-4">
         <VInput
           :id="`postal_code_${index}`"
           v-model="address.postal_code"
-          type="number"
+          :type="props.readOnly ? 'text' : 'number'"
           classWrapper="col-span-10"
           :useGrouping="false"
           :max="999999999"
@@ -101,7 +116,7 @@ const check_primary = (index) => {
         <span class="material-symbols-rounded">delete</span>
       </div>
     </div>
-    <div class="px-6 pt-4 pb-6">
+    <div class="px-6 pt-4 pb-6" v-if="!props.readOnly">
       <Button
         class="btn btn-secondary border-gray-800"
         @click.prevent="add_address"

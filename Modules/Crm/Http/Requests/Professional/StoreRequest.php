@@ -49,7 +49,7 @@ class StoreRequest extends FormRequest
             'addresses.*.id' => 'nullable|integer|exists:customer_addresses,id',
             'addresses.*.location_id' => 'required|integer|exists:locations,id',
             'addresses.*.address' => 'required|max:200',
-            'addresses.*.postal_code' => 'required|max:8|digits:8',
+            'addresses.*.postal_code' => 'required|max:8',
             'addresses.*.is_primary' => 'required|boolean',
         ];
     }

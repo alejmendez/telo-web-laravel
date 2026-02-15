@@ -8,11 +8,26 @@ use Modules\Core\Services\PrimevueDatatables;
 
 class ServicesService
 {
-    protected const SEARCHABLE_COLUMNS = ['description', 'address'];
+    protected const SEARCHABLE_COLUMNS = [
+        'customer.full_name',
+        'professional.full_name',
+        'status',
+        'request.description',
+        'request.address',
+    ];
 
     public function list(Array $params = [])
     {
-        $query = Service::query();
+        $query = $this->getServiceQueryBase();
+
+        $params['filters'] = $params['filters'] ?? [];
+
+        foreach (['created_at'] as $field) {
+            if (!empty($params['filters'][$field]['value'])) {
+                $query->whereDate($field, Carbon::parse($params['filters'][$field]['value']));
+            }
+            unset($params['filters'][$field]);
+        }
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $services = $datatable->of($query)->make();
@@ -65,5 +80,20 @@ class ServicesService
     {
         $service = $this->find($id);
         return $service->delete();
+    }
+
+    protected function getServiceQueryBase()
+    {
+        return Service::with([
+            'customer' => function ($query) {
+                $query->select('id', 'full_name');
+            },
+            'professional' => function ($query) {
+                $query->select('id', 'full_name');
+            },
+            'request' => function ($query) {
+                $query->select('id', 'description', 'address');
+            },
+        ]);
     }
 }

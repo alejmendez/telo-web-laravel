@@ -38,12 +38,12 @@ class ServicesController extends Controller
         if (request()->exists('dt_params')) {
             $params = json_decode(request('dt_params', '[]'), true);
 
-            $data = $this->servicesService->list($params);
-            return response()->json(new ServicesResourceCollection($data));
+            return $this->servicesService->list($params);
         }
 
         return Inertia::render('Crm::Services/List', [
             'toast' => session('toast'),
+            'statuses' => $this->statusService->listAsSelect(),
         ]);
     }
 

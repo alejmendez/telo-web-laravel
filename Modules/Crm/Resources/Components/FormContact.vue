@@ -30,6 +30,7 @@ const remove_contact = (index) => {
   >
     <div
       class="px-6 py-2 grid grid-cols-2 gap-x-16 gap-y-4"
+      :class="{'pb-6': props.readOnly}"
       v-for="(contact, index) in form.contacts"
       :key="index"
     >
@@ -60,7 +61,7 @@ const remove_contact = (index) => {
       </div>
 
     </div>
-    <div class="px-6 pt-4 pb-6">
+    <div class="px-6 pt-4 pb-6" v-if="!props.readOnly">
       <Button
         class="btn btn-secondary border-gray-800"
         @click.prevent="add_contact"

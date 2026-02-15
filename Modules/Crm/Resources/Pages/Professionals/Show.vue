@@ -10,7 +10,12 @@ const props = defineProps({
   professional_types: Array,
   locations: Array,
   categories: Array,
+  contact_types: Array,
 });
+
+const selectValueFromArray = (array, value) => {
+  return array.find(item => item.value === value);
+}
 
 const { data } = props.data;
 

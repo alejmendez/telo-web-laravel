@@ -3,23 +3,25 @@ import { ref, computed, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
+import DatePicker from 'primevue/datepicker';
 import { trans } from 'laravel-vue-i18n';
 
-import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import Column from 'primevue/column';
+import { FilterMatchMode } from '@primevue/core/api';
 import InputText from 'primevue/inputtext';
+import Select from 'primevue/select';
 
 import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
 import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import ServicesService from '@Crm/Services/ServicesService.js';
-import { defaultDeleteHandler } from '@Core/Utils/table.js';
+import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
 import { stringToFormat } from '@Core/Utils/date.js';
 
 import { can } from '@Auth/Services/Auth';
 
 const props = defineProps({
   toast: Object,
+  statuses: Array,
 });
 
 const toast = useToast();
@@ -29,12 +31,12 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  status: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  category: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  professional: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  customer: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  address: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  description: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'customer.full_name': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'professional.full_name': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  status: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'request.description': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'request.address': { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
 
 const canShow = can('services.show');
@@ -91,32 +93,28 @@ onMounted(async () => {
       <template #body-created_at="{ data }">
         {{ stringToFormat(data.created_at) }}
       </template>
-      <template #filter-created_at="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.created_at.placeholder')" />
+      <template #filter-created_at="{ filterModel, filterCallback }">
+        <DatePicker v-model="filterModel.value" @value-change="debouncedFilter(filterCallback)" showClear :placeholder="__('services.table.created_at.placeholder')" />
       </template>
 
-      <template #filter-customer.full_name="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.customer.placeholder')" />
+      <template #filter-customer.full_name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="debouncedFilter(filterCallback)" :placeholder="__('services.table.customer.placeholder')" />
       </template>
 
-      <template #filter-professional.full_name="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.professional.placeholder')" />
+      <template #filter-professional.full_name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="debouncedFilter(filterCallback)" :placeholder="__('services.table.professional.placeholder')" />
       </template>
 
-      <template #filter-status="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.status.placeholder')" />
+      <template #filter-status="{ filterModel, filterCallback }">
+        <Select v-model="filterModel.value" :options="props.statuses" optionLabel="text" optionValue="value" showClear @change="filterCallback()" :placeholder="__('services.table.status.placeholder')" />
       </template>
 
-      <template #filter-description="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.description.placeholder')" />
+      <template #filter-request.description="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="debouncedFilter(filterCallback)" :placeholder="__('services.table.description.placeholder')" />
       </template>
 
-      <template #filter-address="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.address.placeholder')" />
-      </template>
-
-      <template #filter-priority="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" :placeholder="__('services.table.priority.placeholder')" />
+      <template #filter-request.address="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="debouncedFilter(filterCallback)" :placeholder="__('services.table.address.placeholder')" />
       </template>
 
        <template #body-actions="{ data }">
