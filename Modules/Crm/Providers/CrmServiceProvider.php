@@ -22,7 +22,12 @@ class CrmServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
-        $this->loadViewsFrom(__DIR__.'/../Resources/views', 'Crm');
+
+        $viewsPath = __DIR__.'/../Resources/views';
+        if (is_dir($viewsPath)) {
+            $this->loadViewsFrom($viewsPath, 'Crm');
+        }
+
         $this->loadTranslationsFrom(__DIR__.'/../Lang');
         $this->loadJsonTranslationsFrom(__DIR__.'/../Lang');
 
