@@ -16,7 +16,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install php8.3 php8.3-cli php8.3-fpm php8.3-pgsql php8.3-gd php8.3-curl php8.3-mbstring php8.3-xml php8.3-zip php8.3-bcmath php8.3-intl postgresql-18 unzip curl git nginx certbot python3-certbot-nginx -y
+sudo apt install php8.5 php8.5-cli php8.5-fpm php8.5-pgsql php8.5-gd php8.5-curl php8.5-mbstring php8.5-xml php8.5-zip php8.5-bcmath php8.5-intl postgresql-18 unzip curl git nginx certbot python3-certbot-nginx -y
 
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
@@ -102,7 +102,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -147,8 +147,8 @@ composer install --optimize-autoloader --no-dev ; composer dump-autoload ; php a
 echo -e '\nif [ -f ~/.bash_aliases ]; then\n    . ~/.bash_aliases\nfi\n' >> ~/.bashrc
 
 touch ~/.bash_aliases
-echo 'alias stop_services="sudo systemctl stop nginx ; sudo systemctl stop php8.3-fpm ; sudo systemctl stop octane"' >> ~/.bash_aliases
-echo 'alias start_services="sudo systemctl start octane ; sudo systemctl start php8.3-fpm ; sudo systemctl start nginx"' >> ~/.bash_aliases
+echo 'alias stop_services="sudo systemctl stop nginx ; sudo systemctl stop php8.5-fpm ; sudo systemctl stop octane"' >> ~/.bash_aliases
+echo 'alias start_services="sudo systemctl start octane ; sudo systemctl start php8.5-fpm ; sudo systemctl start nginx"' >> ~/.bash_aliases
 echo 'alias update_app_with_migrations="stop_services ; git pull ; bun run build ; composer install --optimize-autoloader --no-dev ; php artisan migrate --force ; php artisan optimize ; start_services"' >> ~/.bash_aliases
 echo 'alias update_only_php="stop_services ; git pull ; composer install --optimize-autoloader --no-dev ; composer dump-autoload ; php artisan optimize ; start_services"' >> ~/.bash_aliases
 echo 'alias update_only_js="stop_services ; git pull ; bun run build ; start_services"' >> ~/.bash_aliases
