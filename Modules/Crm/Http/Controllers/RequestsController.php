@@ -93,6 +93,7 @@ class RequestsController extends Controller
 
         return Inertia::render('Crm::Requests/Show', [
             'data' => new RequestsResource($requests),
+            'histories' => $requests->histories,
             'categories' => $this->categoryService->listAsSelect(),
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),
@@ -110,6 +111,7 @@ class RequestsController extends Controller
 
         return Inertia::render('Crm::Requests/Edit', [
             'data' => new RequestsResource($requests),
+            'histories' => $requests->histories,
             'categories' => $this->categoryService->listAsSelect(),
             'urgency_types' => $this->urgencyTypeService->listAsSelect(),
             'customers' => $this->customerService->listAsSelect(),

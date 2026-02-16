@@ -5,6 +5,7 @@ namespace Modules\Crm\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -31,6 +32,25 @@ class Request extends Model
         'sla_due_at' => 'datetime',
         'accepted_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::created(function (self $request) {
+            $request->storeHistory('created');
+        });
+
+        static::updated(function (self $request) {
+            $request->storeHistory('updated');
+        });
+
+        static::deleted(function (self $request) {
+            $request->storeHistory('deleted');
+        });
+
+        static::restored(function (self $request) {
+            $request->storeHistory('restored');
+        });
+    }
 
     protected static function newFactory()
     {
@@ -62,28 +82,21 @@ class Request extends Model
         return $this->hasOne(Service::class);
     }
 
-    public function scopeActive($query)
+    public function histories(): HasMany
     {
-        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Active);
-    }
-
-    public function scopePending($query)
-    {
-        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Pending);
-    }
-
-    public function scopeRejected($query)
-    {
-        return $query->where('status', \Modules\Crm\Enums\RequestStatus::Rejected);
-    }
-
-    public function scopeUnassigned($query)
-    {
-        return $query->whereNull('professional_id');
+        return $this->hasMany(RequestHistory::class);
     }
 
     public function scopeForCustomer($query, $id)
     {
         return $query->where('customer_id', $id);
+    }
+
+    public function storeHistory(string $operation): void
+    {
+        $this->histories()->create([
+            'operation' => $operation,
+            'data' => $this->getAttributes(),
+        ]);
     }
 }

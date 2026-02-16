@@ -66,14 +66,14 @@ class SampleDataSeeder extends Seeder
 
         Customer::all()->each(function (Customer $c) use ($categories, $urgency) {
             $activeMade = Request::where('customer_id', $c->id)
-                ->whereIn('status', [RequestStatus::Pending->value, RequestStatus::Active->value])
+                ->whereIn('status', [RequestStatus::Pending->value, RequestStatus::Assigned->value])
                 ->exists();
             $count = random_int(1, 3);
             for ($i = 0; $i < $count; $i++) {
                 $cat = $categories->random();
                 $urg = $urgency->random();
-                $status = $activeMade ? RequestStatus::Rejected->value : collect([RequestStatus::Pending->value, RequestStatus::Active->value, RequestStatus::Rejected->value])->random();
-                if (in_array($status, [RequestStatus::Pending->value, RequestStatus::Active->value])) {
+                $status = $activeMade ? RequestStatus::Rejected->value : collect([RequestStatus::Pending->value, RequestStatus::Assigned->value, RequestStatus::Rejected->value])->random();
+                if (in_array($status, [RequestStatus::Pending->value, RequestStatus::Assigned->value])) {
                     if ($activeMade) {
                         $status = RequestStatus::Rejected->value;
                     } else {
@@ -93,7 +93,7 @@ class SampleDataSeeder extends Seeder
 
                 $priority = $urg->priority_weight;
                 $slaDue = now()->addHours($urg->sla_hours);
-                $acceptedAt = $status === RequestStatus::Active->value ? now()->subHours(random_int(1, 48)) : null;
+                $acceptedAt = $status === RequestStatus::Assigned->value ? now()->subHours(random_int(1, 48)) : null;
 
                 Request::create([
                     'customer_id' => $c->id,

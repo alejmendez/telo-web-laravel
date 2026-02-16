@@ -7,6 +7,21 @@ return [
         'edit' => 'Editar Solicitud',
         'show' => 'Detalle de la Solicitud',
     ],
+    'buttons' => [
+        'show_history' => 'Mostrar Historial',
+    ],
+    'history' => [
+        'title' => 'Historial de la Solicitud',
+        'button' => [
+            'show_history' => 'Mostrar Historial',
+        ],
+        'operations' => [
+            'created' => 'Creada',
+            'updated' => 'Actualizada',
+            'deleted' => 'Eliminada',
+            'restored' => 'Restaurada',
+        ],
+    ],
     'table' => [
         'created_at' => [
             'label' => 'Creado el',

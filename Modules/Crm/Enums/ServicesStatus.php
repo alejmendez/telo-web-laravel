@@ -12,7 +12,7 @@ enum ServicesStatus: string
     {
         return match($this) {
             self::Pending => __('statuses.pending'),
-            self::Active => __('statuses.active'),
+            self::Assigned => __('statuses.assigned'),
             self::Rejected => __('statuses.rejected'),
         };
     }

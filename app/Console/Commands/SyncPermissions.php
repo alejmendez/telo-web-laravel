@@ -39,7 +39,7 @@ class SyncPermissions extends Command
         'customers',
         'professionals',
         'requests',
-        'services',
+        // 'services',
     ];
 
     protected $defaultActions = [

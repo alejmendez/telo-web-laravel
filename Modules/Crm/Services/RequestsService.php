@@ -117,6 +117,11 @@ class RequestsService
         return $request->delete();
     }
 
+    public function history(int $id)
+    {
+        return $this->find($id)->history;
+    }
+
     protected function getRequestQueryBase()
     {
         return Request::with([

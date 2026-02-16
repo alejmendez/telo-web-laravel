@@ -1,7 +1,14 @@
 <?php
 
 return [
+    'abandoned' => 'Abandonado',
+    'assigned' => 'Asignado',
+    'completed' => 'Completado',
+    'in_process' => 'En proceso',
     'pending' => 'Pendiente',
-    'active' => 'Activo',
+    'reassigned' => 'Reasignado',
     'rejected' => 'Rechazado',
+    'to_be_contacted' => 'A ser contactado',
+    'unassigned' => 'No Asignado',
+    'waiting_response' => 'Esperando respuesta',
 ];
