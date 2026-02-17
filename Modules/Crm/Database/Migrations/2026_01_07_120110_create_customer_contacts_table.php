@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('content', 200);
 
             $table->timestamps();
-            $table->softDeletes();
         });
 
         DB::statement("CREATE UNIQUE INDEX customer_contacts_unique_content ON customer_contacts (customer_id, contact_type, content) WHERE content IS NOT NULL");

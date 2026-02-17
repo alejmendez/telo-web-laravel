@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('sla_hours');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

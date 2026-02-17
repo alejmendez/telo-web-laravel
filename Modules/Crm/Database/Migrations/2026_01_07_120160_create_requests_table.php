@@ -29,7 +29,6 @@ return new class extends Migration
             $table->index(['professional_id']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->index(['status']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
 
         DB::statement("ALTER TABLE subscriptions ADD CONSTRAINT subscriptions_status_check CHECK (status IN ('pending','active','rejected'))");

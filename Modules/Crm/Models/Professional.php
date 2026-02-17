@@ -2,17 +2,16 @@
 
 namespace Modules\Crm\Models;
 
-use Modules\Crm\Enums\ContactTypes;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Crm\Enums\ContactTypes;
 
 class Professional extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $with = ['contacts'];
 
@@ -100,7 +99,6 @@ class Professional extends Model
             ->orderByRaw("(EXISTS (SELECT 1 FROM subscriptions s WHERE s.professional_id = professionals.id AND s.status = 'active')) DESC")
             ->orderBy('average_rating', 'DESC');
     }
-
 
     public function getEmailAttribute()
     {

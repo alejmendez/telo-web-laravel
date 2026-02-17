@@ -18,7 +18,6 @@ return new class extends Migration
             $table->index(['customer_id', 'location_id', 'address']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->index(['professional_type_id']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

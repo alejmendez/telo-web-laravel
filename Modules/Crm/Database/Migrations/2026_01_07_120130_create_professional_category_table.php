@@ -15,7 +15,6 @@ return new class extends Migration
             $table->unique(['professional_id', 'category_id']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

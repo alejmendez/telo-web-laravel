@@ -18,7 +18,6 @@ return new class extends Migration
             $table->boolean('is_trial')->default(false);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

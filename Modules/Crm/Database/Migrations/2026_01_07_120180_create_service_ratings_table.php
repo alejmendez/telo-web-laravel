@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unique(['service_id', 'customer_id']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

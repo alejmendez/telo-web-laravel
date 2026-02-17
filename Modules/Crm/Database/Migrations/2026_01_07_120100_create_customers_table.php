@@ -21,7 +21,6 @@ return new class extends Migration
             $table->index(['customer_type_id']);
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
