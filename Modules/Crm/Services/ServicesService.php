@@ -2,9 +2,9 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Service;
-use Modules\Crm\Models\Request;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\Request;
+use Modules\Crm\Models\Service;
 
 class ServicesService
 {
@@ -16,14 +16,14 @@ class ServicesService
         'request.address',
     ];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = $this->getServiceQueryBase();
 
         $params['filters'] = $params['filters'] ?? [];
 
         foreach (['created_at'] as $field) {
-            if (!empty($params['filters'][$field]['value'])) {
+            if (! empty($params['filters'][$field]['value'])) {
                 $query->whereDate($field, Carbon::parse($params['filters'][$field]['value']));
             }
             unset($params['filters'][$field]);
@@ -40,7 +40,7 @@ class ServicesService
         return Service::findOrFail($id);
     }
 
-    public function create(Array $data): Service
+    public function create(array $data): Service
     {
         $request_id = $data['request_id'];
         $request = Request::findOrFail($request_id);
@@ -58,7 +58,7 @@ class ServicesService
         return $service;
     }
 
-    public function update(int $id, Array $data): Service
+    public function update(int $id, array $data): Service
     {
         $request_id = $data['request_id'] ?? $service->request_id;
         $request = Request::findOrFail($request_id);
@@ -79,6 +79,7 @@ class ServicesService
     public function delete(int $id): bool
     {
         $service = $this->find($id);
+
         return $service->delete();
     }
 

@@ -8,7 +8,6 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Customer\StoreRequest;
 use Modules\Crm\Http\Requests\Customer\UpdateRequest;
 use Modules\Crm\Http\Resources\CustomerResource;
-use Modules\Crm\Http\Resources\CustomerResourceCollection;
 use Modules\Crm\Services\ContactTypeService;
 use Modules\Crm\Services\CustomerService;
 use Modules\Crm\Services\CustomerTypeService;
@@ -23,8 +22,7 @@ class CustomersController extends Controller
         protected CustomerTypeService $customerTypeService,
         protected LocationService $locationService,
         protected ContactTypeService $contactTypeService
-    )
-    {
+    ) {
         $this->setupPermissionMiddleware();
     }
 
@@ -37,6 +35,7 @@ class CustomersController extends Controller
             $params = json_decode(request('dt_params', '[]'), true);
 
             $data = $this->customerService->list($params);
+
             return response()->json($data);
         }
 

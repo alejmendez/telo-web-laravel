@@ -3,8 +3,8 @@
 namespace Modules\Crm\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Crm\Models\Category;
 use Illuminate\Support\Str;
+use Modules\Crm\Models\Category;
 
 class CategoriesSeeder extends Seeder
 {

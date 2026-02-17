@@ -4,10 +4,10 @@ namespace Modules\Core\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Modules\Core\Services\Contracts\CacheServiceContract;
-use Modules\Core\Services\Contracts\MenuServiceContract;
 use Modules\Core\Models\Menu;
 use Modules\Core\Models\Module;
+use Modules\Core\Services\Contracts\CacheServiceContract;
+use Modules\Core\Services\Contracts\MenuServiceContract;
 use Modules\Users\Models\User;
 
 /**

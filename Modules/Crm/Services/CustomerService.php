@@ -2,16 +2,16 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Customer;
-use Modules\Crm\Models\CustomerContact;
-use Modules\Crm\Models\CustomerAddress;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\Customer;
+use Modules\Crm\Models\CustomerAddress;
+use Modules\Crm\Models\CustomerContact;
 
 class CustomerService
 {
     protected const SEARCHABLE_COLUMNS = ['dni', 'full_name'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = Customer::query()->with(['customerType', 'addresses', 'contacts']);
 
@@ -30,7 +30,7 @@ class CustomerService
         )->map(function (Customer $customer) {
             return [
                 'value' => $customer->id,
-                'text' => $customer->full_name . ' - ' . $customer->dni,
+                'text' => $customer->full_name.' - '.$customer->dni,
             ];
         });
     }
@@ -40,13 +40,13 @@ class CustomerService
         return Customer::with('contacts')->findOrFail($id);
     }
 
-    public function create(Array $data): Customer
+    public function create(array $data): Customer
     {
         $customer = new Customer;
         $customer->dni = $data['dni'];
         $customer->first_name = $data['first_name'];
         $customer->last_name = $data['last_name'];
-        $customer->full_name = trim($customer->first_name . ' ' . $customer->last_name);
+        $customer->full_name = trim($customer->first_name.' '.$customer->last_name);
         $customer->customer_type_id = $data['customer_type_id'];
         $customer->notes = $data['notes'];
 
@@ -58,13 +58,13 @@ class CustomerService
         return $customer;
     }
 
-    public function update(int $id, Array $data): Customer
+    public function update(int $id, array $data): Customer
     {
         $customer = $this->find($id);
         $customer->dni = $data['dni'] ?? $customer->dni;
         $customer->first_name = $data['first_name'] ?? $customer->first_name;
         $customer->last_name = $data['last_name'] ?? $customer->last_name;
-        $customer->full_name = trim($customer->first_name . ' ' . $customer->last_name);
+        $customer->full_name = trim($customer->first_name.' '.$customer->last_name);
         $customer->customer_type_id = $data['customer_type_id'] ?? $customer->customer_type_id;
         $customer->notes = $data['notes'] ?? $customer->notes;
 
@@ -76,7 +76,7 @@ class CustomerService
         return $customer;
     }
 
-    protected function create_contacts(Customer $customer, Array $contacts_data)
+    protected function create_contacts(Customer $customer, array $contacts_data)
     {
         foreach ($contacts_data as $contact) {
             if ($contact['contact_type'] == null && $contact['content'] == null) {
@@ -90,13 +90,13 @@ class CustomerService
         }
     }
 
-    protected function update_contacts(Customer $customer, Array $contacts_data)
+    protected function update_contacts(Customer $customer, array $contacts_data)
     {
         $contacts = collect($contacts_data);
 
         $idContacts = $customer->contacts()->pluck('id');
         $idContactsToDestroy = $idContacts->filter(function ($id, int $key) use ($contacts) {
-            return !$contacts->firstWhere('id', $id);
+            return ! $contacts->firstWhere('id', $id);
         })->toArray();
 
         CustomerContact::destroy($idContactsToDestroy);
@@ -105,8 +105,8 @@ class CustomerService
                 continue;
             }
             $customer_contact = CustomerContact::find($contact['id']);
-            if (!$customer_contact) {
-                $customer_contact = new CustomerContact();
+            if (! $customer_contact) {
+                $customer_contact = new CustomerContact;
                 $customer_contact->customer_id = $customer->id;
             }
 
@@ -116,7 +116,7 @@ class CustomerService
         }
     }
 
-    protected function create_addresses(Customer $customer, Array $addresses_data)
+    protected function create_addresses(Customer $customer, array $addresses_data)
     {
         foreach ($addresses_data as $address) {
             if ($address['location_id'] == null && $address['address'] == null && $address['postal_code'] == null) {
@@ -132,13 +132,13 @@ class CustomerService
         }
     }
 
-    protected function update_addresses(Customer $customer, Array $addresses_data)
+    protected function update_addresses(Customer $customer, array $addresses_data)
     {
         $addresses = collect($addresses_data);
 
         $idAddresses = $customer->addresses()->pluck('id');
         $idAddressesToDestroy = $idAddresses->filter(function ($id, int $key) use ($addresses) {
-            return !$addresses->firstWhere('id', $id);
+            return ! $addresses->firstWhere('id', $id);
         })->toArray();
 
         CustomerAddress::destroy($idAddressesToDestroy);
@@ -147,8 +147,8 @@ class CustomerService
                 continue;
             }
             $customer_address = CustomerAddress::find($address['id']);
-            if (!$customer_address) {
-                $customer_address = new CustomerAddress();
+            if (! $customer_address) {
+                $customer_address = new CustomerAddress;
                 $customer_address->customer_id = $customer->id;
             }
 
@@ -163,6 +163,7 @@ class CustomerService
     public function delete(int $id): bool
     {
         $customer = $this->find($id);
+
         return $customer->delete();
     }
 }

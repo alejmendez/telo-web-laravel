@@ -31,7 +31,7 @@ class ProfessionalResource extends JsonResource
         $email = $contacts->where('contact_type', ContactTypes::Email->value)->pluck('content')->toArray();
         $phone_e164 = $contacts->whereIn('contact_type', [
             ContactTypes::Phone->value,
-            ContactTypes::Whatsapp->value
+            ContactTypes::Whatsapp->value,
         ])->pluck('content')->toArray();
 
         return [

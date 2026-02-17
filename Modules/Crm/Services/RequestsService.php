@@ -2,10 +2,10 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Request;
-use Modules\Crm\Enums\RequestStatus;
-use Modules\Core\Services\PrimevueDatatables;
 use Carbon\Carbon;
+use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Enums\RequestStatus;
+use Modules\Crm\Models\Request;
 
 class RequestsService
 {
@@ -21,14 +21,14 @@ class RequestsService
         'sla_due_at',
     ];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = $this->getRequestQueryBase();
 
         $params['filters'] = $params['filters'] ?? [];
 
         foreach (['created_at', 'sla_due_at'] as $field) {
-            if (!empty($params['filters'][$field]['value'])) {
+            if (! empty($params['filters'][$field]['value'])) {
                 $query->whereDate($field, Carbon::parse($params['filters'][$field]['value']));
             }
             unset($params['filters'][$field]);
@@ -48,6 +48,7 @@ class RequestsService
     public function find(int $id): Request
     {
         $query = $this->getRequestQueryBase();
+
         return $query->findOrFail($id);
     }
 
@@ -63,13 +64,13 @@ class RequestsService
         )->map(function (Request $request) {
             return [
                 'value' => $request->id,
-                'text' => $request->full_name . ' - ' . $request->address,
+                'text' => $request->full_name.' - '.$request->address,
                 'customer_id' => $request->customer_id,
             ];
         });
     }
 
-    public function create(Array $data): Request
+    public function create(array $data): Request
     {
         $request = new Request;
 
@@ -90,7 +91,7 @@ class RequestsService
         return $request;
     }
 
-    public function update(int $id, Array $data): Request
+    public function update(int $id, array $data): Request
     {
         $request = $this->find($id);
 
@@ -114,6 +115,7 @@ class RequestsService
     public function delete(int $id): bool
     {
         $request = $this->find($id);
+
         return $request->delete();
     }
 

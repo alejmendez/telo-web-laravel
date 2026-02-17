@@ -26,7 +26,7 @@ return [
         'phone_e164' => [
             'label' => 'Número de teléfono',
             'placeholder' => 'Buscar por número de teléfono',
-        ]
+        ],
     ],
     'form' => [
         'dni' => [

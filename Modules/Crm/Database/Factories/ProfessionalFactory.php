@@ -14,7 +14,7 @@ class ProfessionalFactory extends Factory
     public function definition(): array
     {
         $type = ProfessionalType::query()->inRandomOrder()->first();
-        if (!$type) {
+        if (! $type) {
             $type = ProfessionalType::create(['name' => 'Technician', 'code' => 'TECH']);
         }
 
@@ -22,7 +22,7 @@ class ProfessionalFactory extends Factory
 
         $firstName = $this->faker->firstName();
         $lastName = $this->faker->lastName();
-        $fullName = trim($firstName . ' ' . $lastName);
+        $fullName = trim($firstName.' '.$lastName);
         $email = strtolower($firstName.'.'.$lastName.$this->faker->unique()->numberBetween(1, 100000).'@pro.example.com');
 
         return [

@@ -2,14 +2,14 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\UrgencyType;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\UrgencyType;
 
 class UrgencyTypeService
 {
     protected const SEARCHABLE_COLUMNS = ['name', 'code', 'priority_weight', 'sla_hours'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = UrgencyType::query();
 
@@ -29,7 +29,7 @@ class UrgencyTypeService
         return UrgencyType::findOrFail($id);
     }
 
-    public function create(Array $data): UrgencyType
+    public function create(array $data): UrgencyType
     {
         $urgencytype = new UrgencyType;
         $urgencytype->name = $data['name'];
@@ -41,7 +41,7 @@ class UrgencyTypeService
         return $urgencytype;
     }
 
-    public function update(int $id, Array $data): UrgencyType
+    public function update(int $id, array $data): UrgencyType
     {
         $urgencytype = $this->find($id);
         $urgencytype->name = $data['name'] ?? $urgencytype->name;
@@ -56,6 +56,7 @@ class UrgencyTypeService
     public function delete(int $id): bool
     {
         $urgencytype = $this->find($id);
+
         return $urgencytype->delete();
     }
 }

@@ -8,13 +8,12 @@ use Modules\Dashboard\Services\ShowDashboard;
 
 class DashboardController extends Controller
 {
-    public function __construct(private readonly ShowDashboard $showDashboard)
-    {
-    }
+    public function __construct(private readonly ShowDashboard $showDashboard) {}
 
     public function index()
     {
         $data = $this->showDashboard->execute();
+
         return Inertia::render('Dashboard::Index', $data);
     }
 }

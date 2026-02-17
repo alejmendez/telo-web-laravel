@@ -22,7 +22,7 @@ class UsersServiceProvider extends CoreServiceProvider
         });
 
         $this->app->singleton(RoleServiceContract::class, function ($app) {
-            return new RoleService();
+            return new RoleService;
         });
     }
 

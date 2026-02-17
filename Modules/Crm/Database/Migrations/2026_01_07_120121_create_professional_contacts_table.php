@@ -18,12 +18,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement("CREATE UNIQUE INDEX professional_contacts_unique_content ON professional_contacts (professional_id, contact_type, content) WHERE content IS NOT NULL");
+        DB::statement('CREATE UNIQUE INDEX professional_contacts_unique_content ON professional_contacts (professional_id, contact_type, content) WHERE content IS NOT NULL');
     }
 
     public function down(): void
     {
-        DB::statement("DROP INDEX IF EXISTS professional_contacts_unique_content");
+        DB::statement('DROP INDEX IF EXISTS professional_contacts_unique_content');
         Schema::dropIfExists('professional_contacts');
     }
 };

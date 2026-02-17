@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Services\CacheService;
 use Modules\Core\Services\Contracts\CacheServiceContract;
 use Modules\Users\Models\User;
 use Spatie\Permission\Models\Permission;
@@ -101,7 +100,7 @@ class SyncPermissions extends Command
             $this->cacheService->clearUserCache($user);
         }
 
-        $this->info("Permissions synced successfully");
+        $this->info('Permissions synced successfully');
 
         return self::SUCCESS;
     }

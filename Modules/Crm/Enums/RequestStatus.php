@@ -17,7 +17,7 @@ enum RequestStatus: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Abandoned => __('statuses.abandoned'),
             self::Assigned => __('statuses.assigned'),
             self::Completed => __('statuses.completed'),
@@ -33,7 +33,7 @@ enum RequestStatus: string
 
     public static function options(): array
     {
-        return array_map(fn($status) => [
+        return array_map(fn ($status) => [
             'value' => $status->value,
             'text' => $status->label(),
         ], self::cases());

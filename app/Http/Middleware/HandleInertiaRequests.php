@@ -18,6 +18,7 @@ class HandleInertiaRequests extends Middleware
         $this->cacheService = $cacheService;
         $this->menuService = $menuService;
     }
+
     /**
      * The root template that is loaded on the first page visit.
      *

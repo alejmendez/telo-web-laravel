@@ -8,12 +8,11 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Professional\StoreRequest;
 use Modules\Crm\Http\Requests\Professional\UpdateRequest;
 use Modules\Crm\Http\Resources\ProfessionalResource;
-use Modules\Crm\Http\Resources\ProfessionalResourceCollection;
 use Modules\Crm\Services\CategoryService;
+use Modules\Crm\Services\ContactTypeService;
 use Modules\Crm\Services\LocationService;
 use Modules\Crm\Services\ProfessionalService;
 use Modules\Crm\Services\ProfessionalTypeService;
-use Modules\Crm\Services\ContactTypeService;
 
 class ProfessionalsController extends Controller
 {
@@ -25,8 +24,7 @@ class ProfessionalsController extends Controller
         protected LocationService $locationService,
         protected CategoryService $categoryService,
         protected ContactTypeService $contactTypeService
-    )
-    {
+    ) {
         $this->setupPermissionMiddleware();
     }
 
@@ -39,6 +37,7 @@ class ProfessionalsController extends Controller
             $params = json_decode(request('dt_params', '[]'), true);
 
             $data = $this->professionalService->list($params);
+
             return response()->json($data);
         }
 

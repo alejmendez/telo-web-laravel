@@ -29,8 +29,8 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("DROP INDEX IF EXISTS subscriptions_unique_active_professional");
-        DB::statement("ALTER TABLE subscriptions DROP CONSTRAINT IF EXISTS subscriptions_status_check");
+        DB::statement('DROP INDEX IF EXISTS subscriptions_unique_active_professional');
+        DB::statement('ALTER TABLE subscriptions DROP CONSTRAINT IF EXISTS subscriptions_status_check');
         Schema::dropIfExists('subscriptions');
     }
 };

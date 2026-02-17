@@ -2,14 +2,14 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\Category;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\Category;
 
 class CategoryService
 {
     protected const SEARCHABLE_COLUMNS = ['name', 'slug'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = Category::query();
 
@@ -29,7 +29,7 @@ class CategoryService
         return Category::findOrFail($id);
     }
 
-    public function create(Array $data): Category
+    public function create(array $data): Category
     {
         $category = new Category;
         $category->name = $data['name'];
@@ -39,7 +39,7 @@ class CategoryService
         return $category;
     }
 
-    public function update(int $id, Array $data): Category
+    public function update(int $id, array $data): Category
     {
         $category = $this->find($id);
         $category->name = $data['name'] ?? $category->name;
@@ -52,6 +52,7 @@ class CategoryService
     public function delete(int $id): bool
     {
         $category = $this->find($id);
+
         return $category->delete();
     }
 }

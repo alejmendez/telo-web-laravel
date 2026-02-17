@@ -2,14 +2,14 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\ProfessionalType;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\ProfessionalType;
 
 class ProfessionalTypeService
 {
     protected const SEARCHABLE_COLUMNS = ['name', 'code'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = ProfessionalType::query();
 
@@ -29,7 +29,7 @@ class ProfessionalTypeService
         return query_to_select(ProfessionalType::select('id as value', 'name as text')->orderBy('name'), ['id', 'name', 'code'], $filter);
     }
 
-    public function create(Array $data): ProfessionalType
+    public function create(array $data): ProfessionalType
     {
         $professionaltype = new ProfessionalType;
         $professionaltype->name = $data['name'];
@@ -39,7 +39,7 @@ class ProfessionalTypeService
         return $professionaltype;
     }
 
-    public function update(int $id, Array $data): ProfessionalType
+    public function update(int $id, array $data): ProfessionalType
     {
         $professionaltype = $this->find($id);
         $professionaltype->name = $data['name'] ?? $professionaltype->name;
@@ -52,6 +52,7 @@ class ProfessionalTypeService
     public function delete(int $id): bool
     {
         $professionaltype = $this->find($id);
+
         return $professionaltype->delete();
     }
 }

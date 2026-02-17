@@ -13,12 +13,6 @@ use Laravel\Sanctum\HasApiTokens;
 use Modules\Users\Observers\UserObserver;
 use Spatie\Permission\Traits\HasRoles;
 
-use Modules\Shelves\Models\Shelf;
-use Modules\Statistics\Models\Statistic;
-use Modules\Collections\Models\Collection;
-use Modules\UsageHistories\Models\UsageHistory;
-use Modules\Locations\Models\Location;
-
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {

@@ -3,9 +3,7 @@
 namespace Modules\Crm\Http\Requests\Services;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use Modules\Crm\Enums\ServicesStatus;
-
 
 class StoreRequest extends FormRequest
 {
@@ -19,7 +17,7 @@ class StoreRequest extends FormRequest
         return [
             'request_id' => 'required|integer|exists:requests,id',
             'professional_id' => 'required|integer|exists:professionals,id',
-            'status' => 'required|string|in:' . implode(',', array_column(ServicesStatus::cases(), 'value')),
+            'status' => 'required|string|in:'.implode(',', array_column(ServicesStatus::cases(), 'value')),
             'started_at' => 'required|date',
             'completed_at' => 'nullable|date|after_or_equal:started_at',
         ];

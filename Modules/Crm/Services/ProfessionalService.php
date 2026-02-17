@@ -2,16 +2,16 @@
 
 namespace Modules\Crm\Services;
 
+use Modules\Core\Services\PrimevueDatatables;
 use Modules\Crm\Models\Professional;
 use Modules\Crm\Models\ProfessionalAddress;
 use Modules\Crm\Models\ProfessionalContact;
-use Modules\Core\Services\PrimevueDatatables;
 
 class ProfessionalService
 {
     protected const SEARCHABLE_COLUMNS = ['dni', 'full_name'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = Professional::query()->with(['professionalType', 'categories', 'addresses', 'contacts']);
 
@@ -30,7 +30,7 @@ class ProfessionalService
         )->map(function (Professional $professional) {
             return [
                 'value' => $professional->id,
-                'text' => $professional->full_name . ' - ' . $professional->dni,
+                'text' => $professional->full_name.' - '.$professional->dni,
             ];
         });
     }
@@ -40,14 +40,14 @@ class ProfessionalService
         return Professional::with(['professionalType', 'location'])->findOrFail($id);
     }
 
-    public function create(Array $data): Professional
+    public function create(array $data): Professional
     {
         $professional = new Professional;
         $professional->dni = $data['dni'];
         $professional->professional_type_id = $data['professional_type_id'];
         $professional->first_name = $data['first_name'];
         $professional->last_name = $data['last_name'];
-        $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
+        $professional->full_name = trim($professional->first_name.' '.$professional->last_name);
         $professional->bio = $data['bio'] ?? null;
         $professional->save();
 
@@ -61,13 +61,13 @@ class ProfessionalService
         return $professional;
     }
 
-    public function update(int $id, Array $data): Professional
+    public function update(int $id, array $data): Professional
     {
         $professional = $this->find($id);
         $professional->dni = $data['dni'] ?? $professional->dni;
         $professional->first_name = $data['first_name'] ?? $professional->first_name;
         $professional->last_name = $data['last_name'] ?? $professional->last_name;
-        $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
+        $professional->full_name = trim($professional->first_name.' '.$professional->last_name);
         $professional->professional_type_id = $data['professional_type_id'] ?? $professional->professional_type_id;
         $professional->bio = $data['bio'] ?? $professional->bio;
         $professional->save();
@@ -82,7 +82,7 @@ class ProfessionalService
         return $professional;
     }
 
-    protected function create_contacts(Professional $professional, Array $contacts_data)
+    protected function create_contacts(Professional $professional, array $contacts_data)
     {
         foreach ($contacts_data as $contact) {
             if ($contact['contact_type'] == null && $contact['content'] == null) {
@@ -96,13 +96,13 @@ class ProfessionalService
         }
     }
 
-    protected function update_contacts(Professional $professional, Array $contacts_data)
+    protected function update_contacts(Professional $professional, array $contacts_data)
     {
         $contacts = collect($contacts_data);
 
         $idContacts = $professional->contacts()->pluck('id');
         $idContactsToDestroy = $idContacts->filter(function ($id, int $key) use ($contacts) {
-            return !$contacts->firstWhere('id', $id);
+            return ! $contacts->firstWhere('id', $id);
         })->toArray();
 
         ProfessionalContact::destroy($idContactsToDestroy);
@@ -111,8 +111,8 @@ class ProfessionalService
                 continue;
             }
             $professional_contact = ProfessionalContact::find($contact['id']);
-            if (!$professional_contact) {
-                $professional_contact = new ProfessionalContact();
+            if (! $professional_contact) {
+                $professional_contact = new ProfessionalContact;
                 $professional_contact->professional_id = $professional->id;
             }
 
@@ -122,7 +122,7 @@ class ProfessionalService
         }
     }
 
-    protected function create_addresses(Professional $professional, Array $addresses_data)
+    protected function create_addresses(Professional $professional, array $addresses_data)
     {
         foreach ($addresses_data as $address) {
             if ($address['location_id'] == null && $address['address'] == null && $address['postal_code'] == null) {
@@ -138,13 +138,13 @@ class ProfessionalService
         }
     }
 
-    protected function update_addresses(Professional $professional, Array $addresses_data)
+    protected function update_addresses(Professional $professional, array $addresses_data)
     {
         $addresses = collect($addresses_data);
 
         $idAddresses = $professional->addresses()->pluck('id');
         $idAddressesToDestroy = $idAddresses->filter(function ($id, int $key) use ($addresses) {
-            return !$addresses->firstWhere('id', $id);
+            return ! $addresses->firstWhere('id', $id);
         })->toArray();
 
         ProfessionalAddress::destroy($idAddressesToDestroy);
@@ -153,8 +153,8 @@ class ProfessionalService
                 continue;
             }
             $professional_address = ProfessionalAddress::find($address['id']);
-            if (!$professional_address) {
-                $professional_address = new ProfessionalAddress();
+            if (! $professional_address) {
+                $professional_address = new ProfessionalAddress;
                 $professional_address->professional_id = $professional->id;
             }
 
@@ -169,6 +169,7 @@ class ProfessionalService
     public function delete(int $id): bool
     {
         $professional = $this->find($id);
+
         return $professional->delete();
     }
 }

@@ -14,15 +14,15 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         $type = CustomerType::query()->inRandomOrder()->first();
-        if (!$type) {
-             $type = CustomerType::create(['name' => 'Regular', 'code' => 'REG']);
+        if (! $type) {
+            $type = CustomerType::create(['name' => 'Regular', 'code' => 'REG']);
         }
 
         $location = Location::query()->inRandomOrder()->first();
 
         $firstName = $this->faker->firstName();
         $lastName = $this->faker->lastName();
-        $fullName = trim($firstName . ' ' . $lastName);
+        $fullName = trim($firstName.' '.$lastName);
 
         return [
             'customer_type_id' => $type->id,

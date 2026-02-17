@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
             'notes' => 'nullable|max:800',
             'contacts' => 'required|array',
             'contacts.*.id' => 'nullable|integer|exists:customer_contacts,id',
-            'contacts.*.contact_type' => 'required|string|in:' . implode(',', ContactTypes::codes()),
+            'contacts.*.contact_type' => 'required|string|in:'.implode(',', ContactTypes::codes()),
             'contacts.*.content' => [
                 'required',
                 'max:200',
@@ -33,11 +33,11 @@ class StoreRequest extends FormRequest
                     $type = $contacts[$index]['contact_type'] ?? null;
 
                     if ($type === ContactTypes::Email->value) {
-                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        if (! filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $fail('El formato del correo electrónico es inválido.');
                         }
                     } elseif (in_array($type, [ContactTypes::Phone->value, ContactTypes::Whatsapp->value])) {
-                        if (!preg_match('/^\+[1-9]\d{7,14}$/', $value)) {
+                        if (! preg_match('/^\+[1-9]\d{7,14}$/', $value)) {
                             $fail('El formato del teléfono es inválido. Debe cumplir con el estándar E.164 (ej. +54911...)');
                         }
                     }
@@ -80,6 +80,7 @@ class StoreRequest extends FormRequest
             if ($contact['contact_type'] == null || $contact['content'] == null) {
                 return null;
             }
+
             return [
                 'id' => $contact['id'] ?? null,
                 'contact_type' => $contact['contact_type']['value'],

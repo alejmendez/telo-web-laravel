@@ -4,13 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
+use Modules\Crm\Database\Seeders\CrmSeeder;
 use Modules\Users\Database\Seeders\RolSeeder;
 use Modules\Users\Database\Seeders\UserSeeder;
-use Modules\Crm\Database\Seeders\CrmSeeder;
-
 use Modules\Users\Models\User;
-
-use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {

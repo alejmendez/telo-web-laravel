@@ -4,7 +4,6 @@ namespace Modules\Crm\Http\Requests\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Crm\Enums\RequestStatus;
-use Illuminate\Support\Str;
 
 class StoreRequest extends FormRequest
 {
@@ -17,7 +16,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'description' => 'required|string',
-            'status' => 'required|in:' . implode(',', RequestStatus::values()),
+            'status' => 'required|in:'.implode(',', RequestStatus::values()),
             'priority' => 'required|integer',
             'address' => 'required|string',
             'sla_due_at' => 'required|date_format:Y-m-d',

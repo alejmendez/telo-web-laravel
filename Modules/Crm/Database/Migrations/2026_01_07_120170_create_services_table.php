@@ -30,7 +30,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE services DROP CONSTRAINT IF EXISTS services_status_check");
+        DB::statement('ALTER TABLE services DROP CONSTRAINT IF EXISTS services_status_check');
         Schema::dropIfExists('services');
     }
 };

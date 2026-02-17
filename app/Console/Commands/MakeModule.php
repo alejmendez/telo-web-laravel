@@ -124,7 +124,7 @@ class MakeModule extends Command
         $configModules = config('modules.providers');
         $configModules[] = "Modules\\{$module}\\Providers\\{$module}ServiceProvider::class";
 
-        $configModulesContent = "<?php\n\nreturn [\n    'providers' => [\n        " . implode("::class,\n        ", $configModules) . ",\n    ],\n];\n";
+        $configModulesContent = "<?php\n\nreturn [\n    'providers' => [\n        ".implode("::class,\n        ", $configModules).",\n    ],\n];\n";
 
         file_put_contents(base_path('config/modules.php'), $configModulesContent);
 

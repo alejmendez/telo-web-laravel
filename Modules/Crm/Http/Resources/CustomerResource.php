@@ -4,7 +4,6 @@ namespace Modules\Crm\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Crm\Enums\ContactTypes;
 
 class CustomerResource extends JsonResource
 {

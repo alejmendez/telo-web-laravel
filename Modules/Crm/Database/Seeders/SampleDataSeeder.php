@@ -3,7 +3,6 @@
 namespace Modules\Crm\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Modules\Crm\Enums\RequestStatus;
 use Modules\Crm\Models\Category;
 use Modules\Crm\Models\Customer;
@@ -111,7 +110,7 @@ class SampleDataSeeder extends Seeder
         });
 
         Request::query()->where('status', 'active')->get()->each(function (Request $r) {
-            if ($r->professional_id && !Service::where('request_id', $r->id)->exists()) {
+            if ($r->professional_id && ! Service::where('request_id', $r->id)->exists()) {
                 Service::create([
                     'request_id' => $r->id,
                     'customer_id' => $r->customer_id,
@@ -159,7 +158,7 @@ class SampleDataSeeder extends Seeder
         });
 
         Service::all()->each(function (Service $svc) {
-            if (!ServiceRating::where('service_id', $svc->id)->exists() && random_int(0, 1)) {
+            if (! ServiceRating::where('service_id', $svc->id)->exists() && random_int(0, 1)) {
                 ServiceRating::factory()->create([
                     'service_id' => $svc->id,
                     'customer_id' => $svc->customer_id,

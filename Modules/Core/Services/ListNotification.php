@@ -3,8 +3,8 @@
 namespace Modules\Core\Services;
 
 use Modules\Core\Models\Notification;
-use Modules\Users\Models\User;
 use Modules\Core\Services\Contracts\ListNotificationContract;
+use Modules\Users\Models\User;
 
 class ListNotification implements ListNotificationContract
 {

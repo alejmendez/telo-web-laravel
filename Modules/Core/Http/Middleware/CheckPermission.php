@@ -27,13 +27,13 @@ class CheckPermission
         $routeName = $request->route()->getName();
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
         $userPermissions = $this->cacheService->getUserPermissions($user);
 
-        if (!$userPermissions->contains($routeName)) {
+        if (! $userPermissions->contains($routeName)) {
             throw new PermissionException($routeName);
         }
 

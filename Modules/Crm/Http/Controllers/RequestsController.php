@@ -8,14 +8,12 @@ use Modules\Core\Traits\HasPermissionMiddleware;
 use Modules\Crm\Http\Requests\Requests\StoreRequest;
 use Modules\Crm\Http\Requests\Requests\UpdateRequest;
 use Modules\Crm\Http\Resources\RequestsResource;
-use Modules\Crm\Services\{
-    RequestsService,
-    CustomerService,
-    CategoryService,
-    UrgencyTypeService,
-    ProfessionalService,
-    StatusService
-};
+use Modules\Crm\Services\CategoryService;
+use Modules\Crm\Services\CustomerService;
+use Modules\Crm\Services\ProfessionalService;
+use Modules\Crm\Services\RequestsService;
+use Modules\Crm\Services\StatusService;
+use Modules\Crm\Services\UrgencyTypeService;
 
 class RequestsController extends Controller
 {
@@ -28,8 +26,7 @@ class RequestsController extends Controller
         protected UrgencyTypeService $urgencyTypeService,
         protected StatusService $statusService,
         protected ProfessionalService $professionalService
-    )
-    {
+    ) {
         $this->setupPermissionMiddleware();
     }
 

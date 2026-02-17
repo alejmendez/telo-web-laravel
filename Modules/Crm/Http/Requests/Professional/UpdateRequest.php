@@ -9,7 +9,7 @@ class UpdateRequest extends StoreRequest
         $rules = parent::rules();
         $id = $this->route('professional');
 
-        $rules['dni'] = 'required|max:64|unique:professionals,dni,' . $id;
+        $rules['dni'] = 'required|max:64|unique:professionals,dni,'.$id;
 
         return $rules;
     }

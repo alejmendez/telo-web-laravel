@@ -13,7 +13,6 @@ use Modules\Crm\Services\ProfessionalService;
 use Modules\Crm\Services\RequestsService;
 use Modules\Crm\Services\ServicesService;
 use Modules\Crm\Services\StatusService;
-use Modules\Crm\Http\Resources\ServicesResourceCollection;
 
 class ServicesController extends Controller
 {
@@ -25,8 +24,7 @@ class ServicesController extends Controller
         protected CustomerService $customerService,
         protected ProfessionalService $professionalService,
         protected StatusService $statusService,
-    )
-    {
+    ) {
         $this->setupPermissionMiddleware();
     }
 

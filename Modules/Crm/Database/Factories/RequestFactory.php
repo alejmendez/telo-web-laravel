@@ -3,12 +3,12 @@
 namespace Modules\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Crm\Enums\RequestStatus;
+use Modules\Crm\Models\Category;
 use Modules\Crm\Models\Customer;
 use Modules\Crm\Models\Professional;
 use Modules\Crm\Models\Request;
-use Modules\Crm\Models\Category;
 use Modules\Crm\Models\UrgencyType;
-use Modules\Crm\Enums\RequestStatus;
 
 class RequestFactory extends Factory
 {
@@ -19,14 +19,14 @@ class RequestFactory extends Factory
         $customer = Customer::factory()->create();
 
         $category = Category::query()->inRandomOrder()->first();
-        if (!$category) {
+        if (! $category) {
             $category = \Modules\Crm\Models\Category::query()->inRandomOrder()->first() ?? \Modules\Crm\Models\Category::factory()->create();
             $category = Category::factory()->create(['category_id' => $category->id]);
         }
 
         $urgency = UrgencyType::query()->inRandomOrder()->first();
-        if (!$urgency) {
-             $urgency = UrgencyType::create(['code' => 'medium', 'name' => 'Medium', 'priority_weight' => 2, 'sla_hours' => 48]);
+        if (! $urgency) {
+            $urgency = UrgencyType::create(['code' => 'medium', 'name' => 'Medium', 'priority_weight' => 2, 'sla_hours' => 48]);
         }
 
         $status = $this->faker->randomElement(RequestStatus::values());
@@ -35,10 +35,10 @@ class RequestFactory extends Factory
 
         $assigned = null;
         if ($this->faker->boolean(50)) {
-             $professional = Professional::query()->inRandomOrder()->first();
-             if ($professional) {
-                 $assigned = $professional->id;
-             }
+            $professional = Professional::query()->inRandomOrder()->first();
+            if ($professional) {
+                $assigned = $professional->id;
+            }
         }
 
         $acceptedAt = $status === 'active' ? $this->faker->dateTimeBetween('-3 days', 'now') : null;

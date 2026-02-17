@@ -2,14 +2,14 @@
 
 namespace Modules\Crm\Services;
 
-use Modules\Crm\Models\CustomerType;
 use Modules\Core\Services\PrimevueDatatables;
+use Modules\Crm\Models\CustomerType;
 
 class CustomerTypeService
 {
     protected const SEARCHABLE_COLUMNS = ['name', 'code'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $query = CustomerType::query();
 
@@ -29,7 +29,7 @@ class CustomerTypeService
         return CustomerType::findOrFail($id);
     }
 
-    public function create(Array $data): CustomerType
+    public function create(array $data): CustomerType
     {
         $customertype = new CustomerType;
         $customertype->name = $data['name'];
@@ -39,7 +39,7 @@ class CustomerTypeService
         return $customertype;
     }
 
-    public function update(int $id, Array $data): CustomerType
+    public function update(int $id, array $data): CustomerType
     {
         $customertype = $this->find($id);
         $customertype->name = $data['name'] ?? $customertype->name;
@@ -52,6 +52,7 @@ class CustomerTypeService
     public function delete(int $id): bool
     {
         $customertype = $this->find($id);
+
         return $customertype->delete();
     }
 }

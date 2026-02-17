@@ -3,13 +3,12 @@
 namespace Modules\Crm\Services;
 
 use Modules\Crm\Models\Location;
-use Modules\Core\Services\PrimevueDatatables;
 
 class LocationService
 {
     protected const SEARCHABLE_COLUMNS = ['name'];
 
-    public function list(Array $params = [])
+    public function list(array $params = [])
     {
         $locations = Location::query()->orderBy('name')->get();
 
@@ -21,7 +20,7 @@ class LocationService
         return Location::findOrFail($id);
     }
 
-    public function create(Array $data): Location
+    public function create(array $data): Location
     {
         $location = new Location;
         $location->name = $data['name'];
@@ -36,7 +35,7 @@ class LocationService
         return $location;
     }
 
-    public function update(int $id, Array $data): Location
+    public function update(int $id, array $data): Location
     {
         $location = $this->find($id);
         $location->name = $data['name'] ?? $location->name;
@@ -54,6 +53,7 @@ class LocationService
     public function delete(int $id): bool
     {
         $location = $this->find($id);
+
         return $location->delete();
     }
 }

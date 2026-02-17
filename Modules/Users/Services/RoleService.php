@@ -3,8 +3,8 @@
 namespace Modules\Users\Services;
 
 use Modules\Core\Services\PrimevueDatatables;
-use Spatie\Permission\Models\Role;
 use Modules\Users\Services\Contracts\RoleServiceContract;
+use Spatie\Permission\Models\Role;
 
 class RoleService implements RoleServiceContract
 {

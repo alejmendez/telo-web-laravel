@@ -3,9 +3,9 @@
 namespace Modules\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Crm\Models\Location;
 use Modules\Crm\Models\Customer;
 use Modules\Crm\Models\CustomerAddress;
+use Modules\Crm\Models\Location;
 
 class CustomerAddressFactory extends Factory
 {

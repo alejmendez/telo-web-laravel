@@ -3,8 +3,8 @@
 namespace Modules\Crm\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Crm\Models\ProfessionalContact;
 use Modules\Crm\Enums\ContactTypes;
+use Modules\Crm\Models\ProfessionalContact;
 
 class ProfessionalContactFactory extends Factory
 {
@@ -14,9 +14,9 @@ class ProfessionalContactFactory extends Factory
     {
         $contactType = $this->faker->randomElement(ContactTypes::codes());
 
-        $content = match($contactType) {
+        $content = match ($contactType) {
             'email' => $this->faker->unique()->safeEmail(),
-            'phone', 'whatsapp' => '+' . $this->faker->numberBetween(1, 9) . $this->faker->numerify('##########'),
+            'phone', 'whatsapp' => '+'.$this->faker->numberBetween(1, 9).$this->faker->numerify('##########'),
             default => $this->faker->text(20),
         };
 

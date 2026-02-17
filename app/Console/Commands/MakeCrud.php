@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MakeCrud extends Command
 {
@@ -33,11 +33,12 @@ class MakeCrud extends Command
 
         $this->info("Generating CRUD for {$resource} in module {$module}...");
 
-        if (!is_dir(base_path("Modules/{$module}"))) {
+        if (! is_dir(base_path("Modules/{$module}"))) {
             if ($this->confirm("Module {$module} does not exist. Do you want to create it?")) {
                 $this->call('modules:make', ['module' => $module]);
             } else {
                 $this->error("Module {$module} does not exist.");
+
                 return;
             }
         }
@@ -66,18 +67,19 @@ class MakeCrud extends Command
         $this->checkServiceProvider($module, $placeholders);
 
         $this->info("CRUD for {$resource} generated successfully!");
-        $this->comment("Remember to register translations and permissions if needed.");
+        $this->comment('Remember to register translations and permissions if needed.');
     }
 
     protected function getStub($name)
     {
-        return file_get_contents(__DIR__ . "/Stubs/Crud/{$name}.stub");
+        return file_get_contents(__DIR__."/Stubs/Crud/{$name}.stub");
     }
 
     protected function createFile($path, $stubName, $placeholders)
     {
         if (File::exists($path)) {
             $this->warn("File already exists: {$path}");
+
             return;
         }
 
@@ -161,8 +163,9 @@ class MakeCrud extends Command
     {
         $routesPath = base_path("Modules/{$module}/Routes/web.php");
 
-        if (!File::exists($routesPath)) {
+        if (! File::exists($routesPath)) {
             $this->warn("Routes file not found: {$routesPath}");
+
             return;
         }
 
@@ -170,45 +173,46 @@ class MakeCrud extends Command
         $routeDefinition = "        Route::resources([\n            '{$placeholders['{{resource_plural_lower}}']}' => {$resourcePlural}Controller::class,\n        ]);";
         $useStatement = "use Modules\\{$module}\\Http\\Controllers\\{$resourcePlural}Controller;";
 
-        if (strpos($routesContent, $resourcePlural . 'Controller::class') !== false) {
+        if (strpos($routesContent, $resourcePlural.'Controller::class') !== false) {
             $this->warn("Route for {$resourcePlural} seems to exist already.");
+
             return;
         }
 
         // Add Use statement
         if (strpos($routesContent, $useStatement) === false) {
-             // Find the namespace or open tag and add use statement after it
-             // Or just after the first use statement
-             $pattern = '/^use .*;/m';
-             if (preg_match($pattern, $routesContent, $matches)) {
-                 $routesContent = preg_replace($pattern, "$0\n{$useStatement}", $routesContent, 1);
-             } else {
-                 $routesContent = str_replace("<?php", "<?php\n\n{$useStatement}", $routesContent);
-             }
+            // Find the namespace or open tag and add use statement after it
+            // Or just after the first use statement
+            $pattern = '/^use .*;/m';
+            if (preg_match($pattern, $routesContent, $matches)) {
+                $routesContent = preg_replace($pattern, "$0\n{$useStatement}", $routesContent, 1);
+            } else {
+                $routesContent = str_replace('<?php', "<?php\n\n{$useStatement}", $routesContent);
+            }
         }
 
         // Add Route inside middleware group
         if (strpos($routesContent, 'Route::resources([') !== false) {
             // Add to existing array
-             $routesContent = preg_replace(
+            $routesContent = preg_replace(
                 "/Route::resources\(\[\s*/",
                 "Route::resources([\n            '{$placeholders['{{resource_plural_lower}}']}' => {$resourcePlural}Controller::class,\n            ",
                 $routesContent,
                 1
             );
         } else {
-             // Try to find the inner auth group
-             $target = "Route::middleware(['auth', 'check.permission'])->group(function () {";
-             if (strpos($routesContent, $target) !== false) {
-                 $routesContent = str_replace(
-                     $target,
-                     "{$target}\n{$routeDefinition}",
-                     $routesContent
-                 );
-             } else {
-                 // Fallback
-                 $routesContent .= "\n\n" . $routeDefinition;
-             }
+            // Try to find the inner auth group
+            $target = "Route::middleware(['auth', 'check.permission'])->group(function () {";
+            if (strpos($routesContent, $target) !== false) {
+                $routesContent = str_replace(
+                    $target,
+                    "{$target}\n{$routeDefinition}",
+                    $routesContent
+                );
+            } else {
+                // Fallback
+                $routesContent .= "\n\n".$routeDefinition;
+            }
         }
 
         File::put($routesPath, $routesContent);
@@ -218,8 +222,8 @@ class MakeCrud extends Command
     protected function checkServiceProvider($module, $placeholders)
     {
         $path = base_path("Modules/{$module}/Providers/{$module}ServiceProvider.php");
-        if (!File::exists($path)) {
-             $this->createFile($path, 'ServiceProvider', $placeholders);
+        if (! File::exists($path)) {
+            $this->createFile($path, 'ServiceProvider', $placeholders);
         }
     }
 
@@ -227,8 +231,9 @@ class MakeCrud extends Command
     {
         $path = base_path("Modules/{$module}/Providers/{$module}ServiceProvider.php");
 
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             $this->warn("ServiceProvider not found: {$path}");
+
             return;
         }
 
@@ -236,18 +241,18 @@ class MakeCrud extends Command
         $serviceClass = "{$resource}Service";
         $binding = "        \$this->app->singleton({$serviceClass}::class, function (Application \$app) {\n            return new {$serviceClass}();\n        });";
         $useStatement = "use Modules\\{$module}\\Services\\{$serviceClass};";
-        $appUseStatement = "use Illuminate\\Foundation\\Application;";
+        $appUseStatement = 'use Illuminate\\Foundation\\Application;';
 
-        if (strpos($content, $serviceClass . '::class') !== false) {
-             return;
+        if (strpos($content, $serviceClass.'::class') !== false) {
+            return;
         }
 
         // Add use statements
         if (strpos($content, $useStatement) === false) {
-             $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$useStatement}\n", $content, 1);
+            $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$useStatement}\n", $content, 1);
         }
         if (strpos($content, $appUseStatement) === false) {
-             $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$appUseStatement}\n", $content, 1);
+            $content = preg_replace('/(use .*;\n)(?!use)/', "$1{$appUseStatement}\n", $content, 1);
         }
 
         // Add binding to boot method
@@ -255,13 +260,13 @@ class MakeCrud extends Command
         if (preg_match('/public function boot\(\): void\s*\{(.*)\}/s', $content, $matches)) {
             $bootBody = $matches[1];
             // Insert at the end of the boot body
-            $newBootBody = $bootBody . "\n" . $binding . "\n    ";
+            $newBootBody = $bootBody."\n".$binding."\n    ";
             $content = str_replace($bootBody, $newBootBody, $content);
         } else {
-             // Fallback for different formatting
-             $content = str_replace('    public function boot(): void
+            // Fallback for different formatting
+            $content = str_replace('    public function boot(): void
     {', '    public function boot(): void
-    {' . "\n" . $binding, $content);
+    {'."\n".$binding, $content);
         }
 
         File::put($path, $content);
@@ -272,8 +277,9 @@ class MakeCrud extends Command
     {
         $path = base_path('app/Console/Commands/SyncPermissions.php');
 
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             $this->warn("SyncPermissions command not found: {$path}");
+
             return;
         }
 
@@ -296,14 +302,14 @@ class MakeCrud extends Command
                 $entitiesBlock .= ',';
             }
 
-            $newEntitiesBlock = $entitiesBlock . "\n        '{$entity}',";
+            $newEntitiesBlock = $entitiesBlock."\n        '{$entity}',";
 
             $content = str_replace($matches[1], $newEntitiesBlock, $content);
 
             File::put($path, $content);
             $this->info("Entity '{$entity}' added to SyncPermissions.");
         } else {
-            $this->warn("Could not find entities array in SyncPermissions.php");
+            $this->warn('Could not find entities array in SyncPermissions.php');
         }
     }
 }
