@@ -29,7 +29,9 @@ Route::middleware('throttle:web')->prefix('backoffice')->group(function () {
         Route::get('/start', [StartController::class, 'index'])->name('start.index');
 
         Route::get('/notifications/{type}/unread', [NotificationsController::class, 'unread'])->name('notifications.unread');
+    });
 
+    Route::middleware(['auth'])->group(function () {
         Route::get('/forbidden', [ForbiddenController::class, 'forbidden'])->name('forbidden');
     });
 });

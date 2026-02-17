@@ -86,6 +86,11 @@ class SyncPermissions extends Command
         $this->create_permission('selects', 'index');
         $this->create_permission('selects', 'multiple');
 
+        $this->create_permission('profile', 'edit');
+        $this->create_permission('profile', 'update');
+        $this->create_permission('profile', 'destroy');
+        $this->create_permission('forbidden');
+
         $this->save_permissions();
 
         $this->permissions = collect($this->permissions);
@@ -121,9 +126,13 @@ class SyncPermissions extends Command
         }
     }
 
-    public function create_permission($entity, $action)
+    public function create_permission($entity, $action = null)
     {
-        $permission = $entity.'.'.$action;
+        $permission = $entity;
+
+        if ($action) {
+            $permission .= '.'.$action;
+        }
 
         if (! isset($this->permissions[$entity])) {
             $this->permissions[$entity] = [];
