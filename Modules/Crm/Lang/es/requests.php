@@ -19,7 +19,6 @@ return [
             'created' => 'Creada',
             'updated' => 'Actualizada',
             'deleted' => 'Eliminada',
-            'restored' => 'Restaurada',
         ],
     ],
     'table' => [

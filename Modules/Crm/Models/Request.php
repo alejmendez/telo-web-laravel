@@ -45,10 +45,6 @@ class Request extends Model
         static::deleted(function (self $request) {
             $request->storeHistory('deleted');
         });
-
-        static::restored(function (self $request) {
-            $request->storeHistory('restored');
-        });
     }
 
     protected static function newFactory()
