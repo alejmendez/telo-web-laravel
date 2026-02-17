@@ -29,7 +29,7 @@ class {{resource_plural}}Controller extends Controller
             $params = json_decode(request('dt_params', '[]'), true);
 
             $data = $this->{{resource_camel}}Service->list($params)
-            return response()->json(new {{resource}}ResourceCollection($data));
+            return response()->json(new {{resource}}ResourceCollection($data)->resource);
         }
 
         return Inertia::render('{{module}}::{{resource_plural}}/List', [
