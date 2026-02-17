@@ -1,11 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 
 import AuthenticatedLayout from '@Core/Layouts/AuthenticatedLayout.vue';
@@ -13,6 +12,7 @@ import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import CustomerService from '@Crm/Services/CustomerService.js';
 import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
+import { trans } from 'laravel-vue-i18n';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -27,11 +27,19 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  dni: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  full_name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  email: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-  phone_e164: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+  dni: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  full_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  email: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  phone_e164: { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
+
+const columns = computed(() => [
+  { field: 'dni', header: trans('customer.table.dni.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'full_name', header: trans('customer.table.full_name.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'email', header: trans('customer.table.email.label'), sortable: false, style: 'min-width: 200px' },
+  { field: 'phone_e164', header: trans('customer.table.phone_e164.label'), sortable: false, style: 'min-width: 200px' },
+  { type: 'actions', style: 'min-width: 130px', exportable: false },
+]);
 
 const canShow = can('customers.show');
 const canEdit = can('customers.edit');
@@ -72,65 +80,39 @@ onMounted(async () => {
       :fetchHandler="fetchHandler"
       sortField="full_name"
       :sortOrder="1"
+      :columns="columns"
     >
-      <Column field="dni" :header="__('customer.table.dni.label')" sortable frozen style="min-width: 200px">
-        <template #body="{ data }">
-          {{ data.dni }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.dni.placeholder')" />
-        </template>
-      </Column>
+      <template #filter-dni="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('customer.table.dni.placeholder')" />
+      </template>
 
-      <Column field="full_name" :header="__('customer.table.full_name.label')" sortable frozen style="min-width: 200px">
-        <template #body="{ data }">
-          {{ data.full_name }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.full_name.placeholder')" />
-        </template>
-      </Column>
+      <template #filter-full_name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('customer.table.full_name.placeholder')" />
+      </template>
 
-      <Column field="email" :header="__('customer.table.email.label')" sortable style="min-width: 200px">
-        <template #body="{ data }">
-          <div v-for="email in data.email">
-            {{ email }}
-          </div>
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.email.placeholder')" />
-        </template>
-      </Column>
+      <template #body-email="{ data }">
+        {{ data.email.join(', ') }}
+      </template>
 
-      <Column field="phone_e164" :header="__('customer.table.phone_e164.label')" sortable style="min-width: 200px">
-        <template #body="{ data }">
-          <div v-for="phone_e164 in data.phone_e164">
-            {{ phone_e164 }}
-          </div>
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" type="text" :placeholder="__('customer.table.phone_e164.placeholder')" />
-        </template>
-      </Column>
+      <template #body-phone_e164="{ data }">
+        {{ data.phone_e164.join(', ') }}
+      </template>
 
-
-      <Column :exportable="false" style="max-width: 130px">
-        <template #body="slotProps">
-          <Link :href="route('customers.show', slotProps.data.id)" v-if="canShow">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
-          </Link>
-          <Link :href="route('customers.edit', slotProps.data.id)" v-if="canEdit">
-            <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
-          </Link>
-          <span
-            class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-pink-600"
-            @click="deleteHandler(slotProps.data)"
-            v-if="canDestroy"
-          >
-            delete
-          </span>
-        </template>
-      </Column>
+      <template #body-actions="{ data }">
+        <Link :href="route('customers.show', data.id)" v-if="canShow">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-sky-600">visibility</span>
+        </Link>
+        <Link :href="route('customers.edit', data.id)" v-if="canEdit">
+          <span class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-emerald-600">edit</span>
+        </Link>
+        <span
+          class="material-symbols-rounded cursor-pointer transition-all text-slate-500 hover:text-pink-600"
+          @click="deleteHandler(data)"
+          v-if="canDestroy"
+        >
+          delete
+        </span>
+      </template>
     </Datatable>
   </AuthenticatedLayout>
 </template>
