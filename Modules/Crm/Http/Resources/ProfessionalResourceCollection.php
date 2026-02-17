@@ -3,9 +3,9 @@
 namespace Modules\Crm\Http\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\PaginatedResourceResponse;
 
-class ProfessionalResourceCollection extends ResourceCollection
+class ProfessionalResourceCollection extends PaginatedResourceResponse
 {
     /**
      * Transform the resource collection into an array.

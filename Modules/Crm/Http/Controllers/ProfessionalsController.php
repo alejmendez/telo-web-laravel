@@ -39,7 +39,7 @@ class ProfessionalsController extends Controller
             $params = json_decode(request('dt_params', '[]'), true);
 
             $data = $this->professionalService->list($params);
-            return response()->json(new ProfessionalResourceCollection($data));
+            return response()->json($data);
         }
 
         return Inertia::render('Crm::Professionals/List', [

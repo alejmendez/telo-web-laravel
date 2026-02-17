@@ -49,8 +49,11 @@ class ProfessionalService
         $professional->last_name = $data['last_name'];
         $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
         $professional->bio = $data['bio'] ?? null;
-        $professional->categories()->sync($data['categories'] ?? []);
         $professional->save();
+
+        if ($data['categories']) {
+            $professional->categories()->sync($data['categories']);
+        }
 
         $this->create_contacts($professional, $data['contacts']);
         $this->create_addresses($professional, $data['addresses']);
@@ -67,8 +70,11 @@ class ProfessionalService
         $professional->full_name = trim($professional->first_name . ' ' . $professional->last_name);
         $professional->professional_type_id = $data['professional_type_id'] ?? $professional->professional_type_id;
         $professional->bio = $data['bio'] ?? $professional->bio;
-        $professional->categories()->sync($data['categories'] ?? []);
         $professional->save();
+
+        if ($data['categories']) {
+            $professional->categories()->sync($data['categories']);
+        }
 
         $this->update_contacts($professional, $data['contacts']);
         $this->update_addresses($professional, $data['addresses']);
