@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('average_rating', 3, 2)->default(0);
             $table->text('bio')->nullable();
 
-            $table->foreignId('professional_type_id')->constrained('professional_types')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_type_id')->constrained('professional_types')->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->unique(['dni']);
             $table->index(['professional_type_id']);

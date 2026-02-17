@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('professional_contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('contact_type', 32);
             $table->string('content', 200);
 

@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('customer_contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('contact_type', 32);
             $table->string('content', 200);
 

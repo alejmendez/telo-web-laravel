@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('subscription_plan_id')->constrained('subscription_plans')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('subscription_plan_id')->constrained('subscription_plans')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('status', 20);
             $table->timestamp('active_at')->nullable();
             $table->timestamp('expires_at')->nullable();

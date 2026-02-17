@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('professional_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('location_id')->constrained('locations')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('address', 250);
             $table->string('postal_code', 32)->nullable();
             $table->boolean('is_primary')->default(false);

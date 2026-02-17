@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('subscription_id')->nullable()->constrained('subscriptions')->cascadeOnUpdate()->nullOnDelete();
             $table->bigInteger('amount_cents');
             $table->string('currency', 8);

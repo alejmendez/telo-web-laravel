@@ -18,9 +18,9 @@ return new class extends Migration
             $table->timestamp('sla_due_at');
             $table->timestamp('accepted_at')->nullable();
 
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('urgency_type_id')->constrained('urgency_types')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('urgency_type_id')->constrained('urgency_types')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('professional_id')->nullable()->constrained('professionals')->cascadeOnUpdate()->nullOnDelete();
 
             $table->index(['status']);

@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('professional_category', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('professional_id')->constrained('professionals')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnUpdate()->cascadeOnDelete();
             $table->unique(['professional_id', 'category_id']);
 
             $table->timestamps();

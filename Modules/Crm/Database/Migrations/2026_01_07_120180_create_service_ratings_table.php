@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('service_ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('service_id')->constrained('services')->cascadeOnUpdate()->restrictOnDelete()->unique();
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('service_id')->constrained('services')->cascadeOnUpdate()->cascadeOnDelete()->unique();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedTinyInteger('csat');
             $table->text('comment')->nullable();
             $table->unique(['service_id', 'customer_id']);
