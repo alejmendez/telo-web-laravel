@@ -10,6 +10,7 @@ import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import { useToast } from 'primevue/usetoast';
 import { trans } from 'laravel-vue-i18n';
+import { debouncedFilter } from '@Core/Utils/table.js';
 
 import { useSideBarStore } from '@Core/Stores/sidebar';
 
@@ -268,7 +269,7 @@ onMounted(() => {
             <InputIcon>
               <i class="pi pi-search" />
             </InputIcon>
-            <InputText v-model="filters['global'].value" :placeholder="__('generics.tables.search') + '...'" @keyup.enter="onFilter" />
+            <InputText v-model="filters['global'].value" :placeholder="__('generics.tables.search') + '...'" @input="debouncedFilter(onFilter)" />
           </IconField>
         </div>
       </template>
