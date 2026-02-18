@@ -31,6 +31,7 @@ const filters = {
   id: { value: null, matchMode: FilterMatchMode.CONTAINS },
   dni: { value: null, matchMode: FilterMatchMode.CONTAINS },
   full_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'addresses.location.name': { value: null, matchMode: FilterMatchMode.CONTAINS },
   email: { value: null, matchMode: FilterMatchMode.CONTAINS },
   phone_e164: { value: null, matchMode: FilterMatchMode.CONTAINS },
 };
@@ -39,6 +40,7 @@ const columns = computed(() => [
   { field: 'id', header: trans('customer.table.id.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'dni', header: trans('customer.table.dni.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'full_name', header: trans('customer.table.full_name.label'), sortable: true, style: 'min-width: 200px' },
+  { field: 'addresses.location.name', header: trans('customer.table.location.label'), sortable: false, style: 'min-width: 200px' },
   { field: 'email', header: trans('customer.table.email.label'), sortable: false, style: 'min-width: 200px' },
   { field: 'phone_e164', header: trans('customer.table.phone_e164.label'), sortable: false, style: 'min-width: 200px' },
   { type: 'actions', style: 'min-width: 130px', exportable: false },
@@ -97,6 +99,10 @@ onMounted(async () => {
         <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('customer.table.full_name.placeholder')" />
       </template>
 
+      <template #filter-addresses.location.name="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('professional.table.location.placeholder')" />
+      </template>
+
       <template #body-id="{ data }">
         {{ idFormater(data.id, 'TU') }}
       </template>
@@ -107,6 +113,10 @@ onMounted(async () => {
 
       <template #body-phone_e164="{ data }">
         {{ data.phone_e164.join(', ') }}
+      </template>
+
+      <template #body-addresses.location.name="{ data }">
+        {{ data.addresses.map((address) => address.location.name).join(', ') }}
       </template>
 
       <template #body-actions="{ data }">

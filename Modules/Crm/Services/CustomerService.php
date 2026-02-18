@@ -13,7 +13,7 @@ class CustomerService
 
     public function list(array $params = [])
     {
-        $query = Customer::query()->with(['customerType', 'addresses', 'contacts']);
+        $query = Customer::query()->with(['customerType', 'addresses.location', 'contacts']);
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $customers = $datatable->of($query)->make();

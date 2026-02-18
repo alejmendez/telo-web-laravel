@@ -28,6 +28,10 @@ return [
             'label' => 'Teléfono',
             'placeholder' => 'Buscar por Teléfono',
         ],
+        'location' => [
+            'label' => 'Lugar',
+            'placeholder' => 'Buscar por Lugar',
+        ],
     ],
     'form' => [
         'first_name' => [

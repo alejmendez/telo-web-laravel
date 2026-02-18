@@ -31,6 +31,10 @@ return [
             'label' => 'Número de teléfono',
             'placeholder' => 'Buscar por número de teléfono',
         ],
+        'location' => [
+            'label' => 'Lugar',
+            'placeholder' => 'Buscar por Lugar',
+        ],
     ],
     'form' => [
         'dni' => [

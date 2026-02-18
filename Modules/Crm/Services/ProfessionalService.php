@@ -13,7 +13,7 @@ class ProfessionalService
 
     public function list(array $params = [])
     {
-        $query = Professional::query()->with(['professionalType', 'categories', 'addresses', 'contacts']);
+        $query = Professional::query()->with(['professionalType', 'categories', 'addresses.location', 'contacts']);
 
         $datatable = new PrimevueDatatables($params, self::SEARCHABLE_COLUMNS);
         $professionals = $datatable->of($query)->make();
