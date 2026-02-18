@@ -15,6 +15,25 @@ class LocationService
         return $locations;
     }
 
+    public function listAsSelect()
+    {
+        $RM = Location::where('code', 'RM')->select('id')->first();
+        $RM_children_ids = Location::where('parent_id', $RM->id)->select('id')->pluck('id');
+        $RM_children_lv2_ids = Location::whereIn('parent_id', $RM_children_ids)->select('id')->pluck('id');
+
+        $ids = array_merge(
+            [$RM->id],
+            $RM_children_ids->toArray(),
+            $RM_children_lv2_ids->toArray()
+        );
+
+        $locations = Location::orderBy('name')
+            ->select('id', 'name', 'parent_id', 'code')
+            ->whereIn('id', $ids);
+
+        return $locations->get();
+    }
+
     public function find(int $id): Location
     {
         return Location::findOrFail($id);

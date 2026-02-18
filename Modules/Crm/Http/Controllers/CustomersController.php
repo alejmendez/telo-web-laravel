@@ -42,7 +42,7 @@ class CustomersController extends Controller
         return Inertia::render('Crm::Customers/List', [
             'toast' => session('toast'),
             'customer_types' => $this->customerTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
         ]);
     }
 
@@ -53,7 +53,7 @@ class CustomersController extends Controller
     {
         return Inertia::render('Crm::Customers/Create', [
             'customer_types' => $this->customerTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }
@@ -84,7 +84,7 @@ class CustomersController extends Controller
         return Inertia::render('Crm::Customers/Show', [
             'data' => new CustomerResource($customer),
             'customer_types' => $this->customerTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }
@@ -99,7 +99,7 @@ class CustomersController extends Controller
         return Inertia::render('Crm::Customers/Edit', [
             'data' => new CustomerResource($customer),
             'customer_types' => $this->customerTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
         ]);
     }

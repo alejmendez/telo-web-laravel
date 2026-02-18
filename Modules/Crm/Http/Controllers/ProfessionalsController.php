@@ -44,7 +44,7 @@ class ProfessionalsController extends Controller
         return Inertia::render('Crm::Professionals/List', [
             'toast' => session('toast'),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
@@ -57,7 +57,7 @@ class ProfessionalsController extends Controller
         return Inertia::render('Crm::Professionals/Create', [
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
@@ -89,7 +89,7 @@ class ProfessionalsController extends Controller
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
     }
@@ -105,7 +105,7 @@ class ProfessionalsController extends Controller
             'data' => new ProfessionalResource($professional),
             'professional_types' => $this->professionalTypeService->listAsSelect(),
             'contact_types' => $this->contactTypeService->listAsSelect(),
-            'locations' => $this->locationService->list(),
+            'locations' => $this->locationService->listAsSelect(),
             'categories' => $this->categoryService->listAsSelect(),
         ]);
     }

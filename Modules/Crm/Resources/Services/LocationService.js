@@ -28,9 +28,11 @@ const createNodes = (originalNodes) => {
     nodes.forEach((node) => {
       if (node.children.length > 0) {
         node.icon = 'pi pi-fw pi-folder';
+        node.selectable = false;
         setIcons(node.children);
       } else {
         node.icon = 'pi pi-fw pi-map-marker';
+        node.selectable = true;
       }
     });
   };
