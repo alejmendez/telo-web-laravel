@@ -122,7 +122,6 @@ onUnmounted(() => {
     >
       <div class="text-black dark:text-gray-100 font-semibold text-left block px-4 py-2">
         <div>{{ $page.props.auth.user.full_name }}</div>
-        -{{ $page.props.auth.user.avatar_url }}-
       </div>
       <div class="text-black font-semibold text-left block px-4 py-2 select-mode">
         <SelectButton
