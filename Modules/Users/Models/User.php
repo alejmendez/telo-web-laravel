@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar === null || $this->avatar === '' ? 'https://avatar.iran.liara.run/username?size=32&username='.urlencode($this->full_name) : (Str::startsWith($this->avatar, 'http') ? $this->avatar : Storage::url($this->avatar));
+        return $this->avatar === null || $this->avatar === '' ? null : (Str::startsWith($this->avatar, 'http') ? $this->avatar : Storage::url($this->avatar));
     }
 
     public function reviewSchedules(): HasMany

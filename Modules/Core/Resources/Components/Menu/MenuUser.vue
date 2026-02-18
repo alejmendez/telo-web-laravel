@@ -3,6 +3,8 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { usePreset } from '@primeuix/themes';
 import SelectButton from 'primevue/selectbutton';
+import Avatar from 'primevue/avatar';
+
 import Presents from '@Core/Libs/PrimePresents';
 import { useDrawerRightMenuStore } from '@Core/Stores/sidebar.js';
 import { canShowRightMenu } from '@Auth/Services/Auth';
@@ -96,12 +98,23 @@ onUnmounted(() => {
   <div class="w-10" ref="root">
     <!-- User login -->
     <div class="flex items-center justify-start space-x-4" @click="toggleDrop">
-      <img class="w-10 h-10 rounded-full border-2 border-gray-50" :src="$page.props.auth.user.avatar_url" alt="" />
+      <Avatar
+        :image="$page.props.auth.user.avatar_url"
+        class="mt-1 border-2 border-gray-50"
+        shape="circle"
+        v-if="$page.props.auth.user.avatar_url"
+      />
+      <Avatar
+        :label="$page.props.auth.user.full_name.substring(0, 1)"
+        class="mt-1 border-2 border-gray-50"
+        shape="circle"
+        v-else
+      />
     </div>
     <!-- Drop down -->
     <div
       v-show="showDropDown"
-      class="absolute right-[10px] z-50 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      class="absolute right-2.5 z-50 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-slate-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-button"
@@ -109,6 +122,7 @@ onUnmounted(() => {
     >
       <div class="text-black dark:text-gray-100 font-semibold text-left block px-4 py-2">
         <div>{{ $page.props.auth.user.full_name }}</div>
+        -{{ $page.props.auth.user.avatar_url }}-
       </div>
       <div class="text-black font-semibold text-left block px-4 py-2 select-mode">
         <SelectButton
