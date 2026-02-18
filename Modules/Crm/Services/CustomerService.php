@@ -23,14 +23,26 @@ class CustomerService
 
     public function listAsSelect(array $filter = [])
     {
+        $primaryAddressSub = CustomerAddress::query()
+            ->join('locations', 'customer_addresses.location_id', '=', 'locations.id')
+            ->whereColumn('customer_addresses.customer_id', 'customers.id')
+            // ->where('customer_addresses.is_primary', true)
+            ->selectRaw("locations.name || ' - ' || customer_addresses.address")
+            ->limit(1);
+
+        $query = Customer::select('customers.id', 'customers.full_name', 'customers.dni')
+            ->selectSub($primaryAddressSub, 'primary_address')
+            ->orderBy('customers.full_name');
+
         return query_to_select(
-            Customer::select('id', 'full_name', 'dni')->orderBy('full_name'),
+            $query,
             ['id', 'full_name', 'dni'],
             $filter
         )->map(function (Customer $customer) {
             return [
                 'value' => $customer->id,
                 'text' => $customer->full_name.' - '.$customer->dni,
+                'address' => $customer->primary_address,
             ];
         });
     }

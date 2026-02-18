@@ -2,7 +2,6 @@
 import CardSection from '@Core/Components/CardSection.vue';
 import VInput from '@Core/Components/Form/VInput.vue';
 import VSelect from '@Core/Components/Form/VSelect.vue';
-import VInputDate from '@Core/Components/Form/VInputDate.vue';
 
 const props = defineProps({
   form: Object,
@@ -19,6 +18,11 @@ const props = defineProps({
 });
 
 const form = props.form;
+
+const handleCategoryChange = () => {
+  const address = form.customer_id?.address || '';
+  form.address = address;
+};
 </script>
 
 <template>
@@ -28,6 +32,7 @@ const form = props.form;
         id="customer_id"
         v-model="form.customer_id"
         filter
+        @change="handleCategoryChange"
         :options="props.customers"
         :label="__('requests.form.customer_id.label')"
         :placeholder="__('generics.please_select')"
