@@ -22,6 +22,10 @@ return [
         ],
     ],
     'table' => [
+        'id' => [
+            'label' => 'ID',
+            'placeholder' => 'Buscar por ID',
+        ],
         'created_at' => [
             'label' => 'Creado el',
             'placeholder' => 'Ingrese la fecha de creación',

@@ -47,7 +47,20 @@ class Filter
 
     public function buildWhere(Builder &$q, ?bool $or = false)
     {
+        if ($this->value === null) {
+            return;
+        }
+
+        if ($this->field === 'id' || str_ends_with($this->field, '.id') || str_ends_with($this->field, '_id')) {
+            $this->value = (int) preg_replace('/^0+/', '', preg_replace('/\D/', '', $this->value));
+            if ($this->value <= 0) {
+                return;
+            }
+        }
+
         $searchParts = explode('.', $this->field);
+
+
         $tableName = $q->getModel()->getTable();
         $countSearchParts = count($searchParts);
 

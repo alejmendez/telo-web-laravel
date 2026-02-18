@@ -11,6 +11,10 @@ return [
         'add_contact' => 'Agregar Contacto',
     ],
     'table' => [
+        'id' => [
+            'label' => 'ID',
+            'placeholder' => 'Buscar por ID',
+        ],
         'dni' => [
             'label' => 'DNI',
             'placeholder' => 'Buscar por DNI',

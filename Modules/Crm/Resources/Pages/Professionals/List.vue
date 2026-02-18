@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { trans } from 'laravel-vue-i18n';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm';
 
@@ -12,7 +13,7 @@ import HeaderCrud from '@Core/Components/Crud/HeaderCrud.vue';
 import Datatable from '@Core/Components/Table/Datatable.vue';
 import ProfessionalService from '@Crm/Services/ProfessionalService.js';
 import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
-import { trans } from 'laravel-vue-i18n';
+import { idFormater } from '@Core/Utils/format.js';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -29,6 +30,7 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  id: { value: null, matchMode: FilterMatchMode.CONTAINS },
   dni: { value: null, matchMode: FilterMatchMode.CONTAINS },
   full_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
   email: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -36,6 +38,7 @@ const filters = {
 };
 
 const columns = computed(() => [
+  { field: 'id', header: trans('professional.table.id.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'dni', header: trans('professional.table.dni.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'full_name', header: trans('professional.table.full_name.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'email', header: trans('professional.table.email.label'), sortable: false, style: 'min-width: 200px' },
@@ -84,12 +87,20 @@ onMounted(async () => {
       :sortOrder="1"
       :columns="columns"
     >
+      <template #filter-id="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('professional.table.id.placeholder')" />
+      </template>
+
       <template #filter-dni="{ filterModel, filterCallback }">
         <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('professional.table.dni.placeholder')" />
       </template>
 
       <template #filter-full_name="{ filterModel, filterCallback }">
         <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('professional.table.full_name.placeholder')" />
+      </template>
+
+      <template #body-id="{ data }">
+        {{ idFormater(data.id, 'TP') }}
       </template>
 
       <template #body-email="{ data }">

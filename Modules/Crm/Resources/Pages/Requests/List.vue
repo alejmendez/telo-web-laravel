@@ -16,6 +16,7 @@ import Datatable from '@Core/Components/Table/Datatable.vue';
 import RequestsService from '@Crm/Services/RequestsService.js';
 import { defaultDeleteHandler, debouncedFilter } from '@Core/Utils/table.js';
 import { stringToFormat } from '@Core/Utils/date.js';
+import { idFormater } from '@Core/Utils/format.js';
 
 import { can } from '@Auth/Services/Auth';
 
@@ -35,6 +36,7 @@ const datatable = ref(null);
 
 const filters = {
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  id: { value: null, matchMode: FilterMatchMode.CONTAINS },
   created_at: { value: null, matchMode: FilterMatchMode.CONTAINS },
   'customer.full_name': { value: null, matchMode: FilterMatchMode.CONTAINS },
   'professional.full_name': { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -47,6 +49,7 @@ const filters = {
 };
 
 const columns = computed(() => [
+  { field: 'id', header: trans('requests.table.id.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'created_at', header: trans('requests.table.created_at.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'customer.full_name', header: trans('requests.table.customer.label'), sortable: true, style: 'min-width: 200px' },
   { field: 'professional.full_name', header: trans('requests.table.professional.label'), sortable: true, style: 'min-width: 200px' },
@@ -100,12 +103,10 @@ onMounted(async () => {
       :sortOrder="1"
       :columns="columns"
     >
-      <template #body-created_at="{ data }">
-        {{ stringToFormat(data.created_at) }}
+      <template #filter-id="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" @input="debouncedFilter(filterCallback)" fluid :placeholder="__('professional.table.id.placeholder')" />
       </template>
-      <template #body-status="{ data }">
-        {{ props.statuses.find((status) => status.value == data.status)?.text || '-' }}
-      </template>
+
       <template #filter-created_at="{ filterModel, filterCallback }">
         <DatePicker v-model="filterModel.value" @value-change="debouncedFilter(filterCallback)" showClear :placeholder="__('requests.table.created_at.placeholder')" />
       </template>
@@ -138,11 +139,24 @@ onMounted(async () => {
         <Select v-model="filterModel.value" :options="props.urgency_types" optionLabel="text" optionValue="value" showClear @change="filterCallback()" :placeholder="__('requests.table.urgency_type.placeholder')" />
       </template>
 
-      <template #body-sla_due_at="{ data }">
-        {{ stringToFormat(data.sla_due_at) }}
-      </template>
       <template #filter-sla_due_at="{ filterModel, filterCallback }">
         <DatePicker v-model="filterModel.value" @value-change="debouncedFilter(filterCallback)" showClear :placeholder="__('requests.table.sla_due_at.placeholder')" />
+      </template>
+
+      <template #body-id="{ data }">
+        {{ idFormater(data.id, 'TS') }}
+      </template>
+
+      <template #body-created_at="{ data }">
+        {{ stringToFormat(data.created_at) }}
+      </template>
+
+      <template #body-status="{ data }">
+        {{ props.statuses.find((status) => status.value == data.status)?.text || '-' }}
+      </template>
+
+      <template #body-sla_due_at="{ data }">
+        {{ stringToFormat(data.sla_due_at) }}
       </template>
 
       <template #body-actions="{ data }">
