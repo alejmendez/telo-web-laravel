@@ -122,9 +122,9 @@ const remove_element = (id) => {
 
 <template>
   <div class="md:flex md:flex-row gap-x-5">
-    <div class="min-h-[150px]" v-if="props.imagePreview">
+    <div class="min-h-37.5" v-if="props.imagePreview">
       <div
-        class="w-32 min-h-[150px] border rounded-md"
+        class="w-32 min-h-37.5 border rounded-md"
         :class="{ 'h-full': !preview }"
       >
         <img
@@ -152,7 +152,7 @@ const remove_element = (id) => {
       />
 
       <div class="max-w-full mt-2" :title="file.name" v-for="file in filesServer">
-        <span class="material-symbols-rounded cursor-pointer mt-1 me-1 !text-md text-black hover:text-red-500" @click="remove_element(file.id)">delete</span>
+        <span class="material-symbols-rounded cursor-pointer mt-1 me-1 text-md! text-black hover:text-red-500" @click="remove_element(file.id)">delete</span>
 
         <a :href="file.url" target="_blank">
           {{ file.name }}
@@ -170,7 +170,7 @@ const remove_element = (id) => {
       <div class="md:w-[420px] max-w-full sm:hidden md:block">
         <InputGroup>
           <div
-            class="border border-gray-300 dark:border-(--p-surface-700) dark:text-(--p-surface-400) dark:bg-(--p-surface-950) p-2 grow truncate rounded-s border-e-0 dark:text-gray-100"
+            class="border border-gray-300 dark:border-(--p-surface-700) dark:text-gray-100 dark:bg-(--p-surface-950) p-2 grow truncate rounded-s border-e-0"
             :title="filePath"
           >
             {{ filePath }}
@@ -185,7 +185,7 @@ const remove_element = (id) => {
       <div class="md:w-[420px] max-w-full sm:block md:hidden">
         <InputGroup>
           <div
-            class="border dark:border-(--p-surface-700) dark:text-(--p-surface-400) dark:bg-(--p-surface-950) p-2 grow truncate rounded-s border-e-0 dark:text-gray-100"
+            class="border dark:border-(--p-surface-700) dark:text-gray-100 dark:bg-(--p-surface-950) p-2 grow truncate rounded-s border-e-0"
             :title="filePath"
           >
             {{ filePath }}

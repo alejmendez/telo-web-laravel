@@ -30,7 +30,7 @@ const sideBarStore = useSideBarStore();
     :class="{ active: props.active }"
     @click="sideBarStore.close"
   >
-    <div class="w-[25px] mr-2 flex justify-center">
+    <div class="w-6.25 mr-2 flex justify-center">
       <span v-html="props.icon"></span>
     </div>
     {{ props.text }}
