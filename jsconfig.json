@@ -19,6 +19,9 @@
             ],
             "@Crm/*": [
                 "./Modules/Crm/Resources/*"
+            ],
+            "@Cms/*": [
+                "./Modules/Cms/Resources/*"
             ]
         }
     },

@@ -8,5 +8,6 @@ return [
         Modules\Dashboard\Providers\DashboardServiceProvider::class,
         Modules\Website\Providers\WebsiteServiceProvider::class,
         Modules\Crm\Providers\CrmServiceProvider::class,
+        Modules\Cms\Providers\CmsServiceProvider::class,
     ],
 ];

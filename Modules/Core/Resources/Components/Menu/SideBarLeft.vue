@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import { usePage } from '@inertiajs/vue3';
 
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
@@ -10,10 +9,7 @@ import AccordionContent from 'primevue/accordioncontent';
 import MenuElement from './MenuElement.vue';
 import { menuElements } from '@Core/Services/Menu.js';
 
-const page = usePage();
-const currentComponent = page.component;
-
-const menuData = menuElements(currentComponent);
+const menuData = menuElements();
 const initialState = menuData.map((_, index) => index);
 const menuState = ref(JSON.parse(localStorage.getItem('menu-state')) || initialState);
 

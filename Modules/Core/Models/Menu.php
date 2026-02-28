@@ -13,9 +13,10 @@ class Menu extends Model
         'text',
         'link',
         'icon',
-        'active_with',
-        'parent_id',
         'order',
+        'parent_id',
+        'type',
+        'active_with',
         'module_id',
     ];
 

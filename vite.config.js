@@ -11,6 +11,7 @@ const modules = [
   'Dashboard',
   'Crm',
   'Users',
+  'Cms',
 ]
 
 const aliasModules = modules.reduce((acc, module) => {

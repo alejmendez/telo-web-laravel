@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Modules\Core\Enums\MenuTypes;
 
 return new class extends Migration
 {
@@ -52,6 +53,7 @@ return new class extends Migration
                 $menuGroupId = DB::table('menus')->insertGetId([
                     'text' => $item['text'],
                     'order' => $menuGroupOrder++,
+                    'type' => MenuTypes::main->value,
                 ]);
                 $menuGroup = (object) ['id' => $menuGroupId];
             } else {
@@ -69,6 +71,7 @@ return new class extends Migration
                         'icon' => $child['icon'],
                         'active_with' => $child['active_with'],
                         'parent_id' => $menuGroup->id,
+                        'type' => MenuTypes::main->value,
                         'order' => $menuElementOrder++,
                         'module_id' => $module->id,
                     ]);
@@ -82,7 +85,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $module = DB::table('modules')->where('slug', 'users')->first();
+        $module = DB::table('modules')->where('slug', 'crm')->first();
         DB::table('menus')->where('module_id', $module->id)->delete();
     }
 };

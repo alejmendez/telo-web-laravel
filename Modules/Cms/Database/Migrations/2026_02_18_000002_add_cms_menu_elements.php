@@ -2,28 +2,40 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Enums\MenuTypes;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        $module = DB::table('modules')->where('slug', 'users')->first();
+        $module = DB::table('modules')->where('slug', 'cms')->first();
 
         $menu = [
             [
-                'text' => 'users_module.menu.settings',
+                'text' => 'cms_module.menu.cms',
+                'type' => MenuTypes::main->value,
                 'children' => [
                     [
-                        'text' => 'users_module.menu.users',
-                        'link' => 'users.index',
-                        'icon' => '<span class="material-symbols-rounded">groups</span>',
-                        'active_with' => 'users.*',
+                        'text' => 'cms_module.menu.posts',
+                        'link' => 'post.index',
+                        'icon' => '<span class="material-symbols-rounded">article</span>',
+                        'active_with' => 'post.*',
+                        'type' => MenuTypes::main->value,
                     ],
                 ],
+            ],
+            [
+                'text' => 'cms_module.menu.post_categories',
+                'link' => 'post_category.index',
+                'icon' => '<span class="material-symbols-rounded">article</span>',
+                'active_with' => 'post_category.*',
+                'type' => MenuTypes::right_sidebar->value,
+            ],
+            [
+                'text' => 'cms_module.menu.tags',
+                'link' => 'tag.index',
+                'icon' => '<span class="material-symbols-rounded">article</span>',
+                'active_with' => 'tag.*',
+                'type' => MenuTypes::right_sidebar->value,
             ],
         ];
 
@@ -35,7 +47,6 @@ return new class extends Migration
                 $menuGroupId = DB::table('menus')->insertGetId([
                     'text' => $item['text'],
                     'order' => $menuGroupOrder++,
-                    'type' => MenuTypes::main->value,
                 ]);
                 $menuGroup = (object) ['id' => $menuGroupId];
             } else {
@@ -47,14 +58,13 @@ return new class extends Migration
             foreach ($item['children'] as $child) {
                 $menuItem = DB::table('menus')->where('text', $child['text'])->first();
                 if (! $menuItem) {
-                    $menuItem = DB::table('menus')->insert([
+                    DB::table('menus')->insert([
                         'text' => $child['text'],
                         'link' => $child['link'],
                         'icon' => $child['icon'],
                         'active_with' => $child['active_with'],
                         'parent_id' => $menuGroup->id,
                         'order' => $menuElementOrder++,
-                        'type' => MenuTypes::main->value,
                         'module_id' => $module->id,
                     ]);
                 }
@@ -62,12 +72,9 @@ return new class extends Migration
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        $module = DB::table('modules')->where('slug', 'users')->first();
+        $module = DB::table('modules')->where('slug', 'cms')->first();
         DB::table('menus')->where('module_id', $module->id)->delete();
     }
 };

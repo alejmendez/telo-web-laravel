@@ -2,7 +2,7 @@ import { toRaw } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { can } from '@Auth/Services/Auth';
 
-export const menuElements = (currentComponent) => {
+export const menuElements = () => {
   const page = usePage();
   const menuItems = toRaw(page.props.menu);
 
