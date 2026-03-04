@@ -12,8 +12,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $with = ['contacts'];
-
     protected $fillable = [
         'first_name',
         'last_name',

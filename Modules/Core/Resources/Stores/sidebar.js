@@ -7,7 +7,12 @@ const LS_KEY_SHOW_SIDE_BAR = 'showSideBar';
 const LS_KEY_SHOW_DRAWER_RIGHT_MENU = 'showDrawerRightMenu';
 
 const getItem = (key, defaultValue) => localStorage.getItem(key) || defaultValue;
-const setItem = (key, value) => localStorage.setItem(key, value);
+
+const debounceTimers = {};
+const setItem = (key, value) => {
+  clearTimeout(debounceTimers[key]);
+  debounceTimers[key] = setTimeout(() => localStorage.setItem(key, value), 300);
+};
 
 export const useSideBarStore = defineStore('sideBar', () => {
   const show = ref(getItem(LS_KEY_SHOW_SIDE_BAR, DEFAULT_SHOW_SIDE_BAR) === 'true');

@@ -12,7 +12,7 @@ class CacheService implements CacheServiceContract
 
     private int $unreadNotificationsTtl = 60; // 1 minute
 
-    private int $menuTtl = 1; // 86_400; // 24 hours
+    private int $menuTtl = 86_400; // 24 hours
 
     public function getUserDataSession(User $user)
     {

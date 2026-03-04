@@ -61,6 +61,10 @@ export default defineConfig({
                         }
                         return 'vendor';
                     }
+                    const moduleMatch = id.match(/Modules\/(\w+)\//);
+                    if (moduleMatch) {
+                        return `module-${moduleMatch[1].toLowerCase()}`;
+                    }
                 }
             }
         }

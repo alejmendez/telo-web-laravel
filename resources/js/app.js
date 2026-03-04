@@ -12,8 +12,7 @@ import { Ziggy } from './ziggy.js';
 const appName = import.meta.env.VITE_APP_NAME || 'Telo';
 const isLocal = import.meta.env.VITE_APP_ENV === 'local';
 
-// Importamos todos los módulos de una vez
-const modulePages = import.meta.glob('./../../Modules/*/Resources/Pages/**/*.vue', { eager: true });
+const modulePages = import.meta.glob('./../../Modules/*/Resources/Pages/**/*.vue');
 
 const resolvePageComponent = (name) => {
   const [module, pageName] = name.split('::');

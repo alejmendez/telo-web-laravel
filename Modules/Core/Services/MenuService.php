@@ -15,9 +15,9 @@ use Modules\Users\Models\User;
  */
 class MenuService implements MenuServiceContract
 {
-    private const CACHE_TTL_MODULES = 600; // 10 minutes
+    private const CACHE_TTL_MODULES = 86_400; // 24 hours
 
-    private const CACHE_TTL_MENUS = 600; // 10 minutes
+    private const CACHE_TTL_MENUS = 86_400; // 24 hours
 
     private const CACHE_KEY_MODULES = 'modules';
 

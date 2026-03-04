@@ -37,7 +37,7 @@ class ProfessionalService
 
     public function find(int $id): Professional
     {
-        return Professional::with(['professionalType', 'location'])->findOrFail($id);
+        return Professional::with(['professionalType', 'location', 'categories', 'addresses.location', 'contacts'])->findOrFail($id);
     }
 
     public function create(array $data): Professional
@@ -100,22 +100,19 @@ class ProfessionalService
     {
         $contacts = collect($contacts_data);
 
-        $idContacts = $professional->contacts()->pluck('id');
-        $idContactsToDestroy = $idContacts->filter(function ($id, int $key) use ($contacts) {
-            return ! $contacts->firstWhere('id', $id);
-        })->toArray();
+        $existingIds = $professional->contacts()->pluck('id');
+        $incomingIds = $contacts->pluck('id')->filter();
 
-        ProfessionalContact::destroy($idContactsToDestroy);
+        $toDestroy = $existingIds->diff($incomingIds)->toArray();
+        ProfessionalContact::destroy($toDestroy);
+
+        $existingContacts = ProfessionalContact::whereIn('id', $incomingIds)->get()->keyBy('id');
+
         foreach ($contacts as $contact) {
             if ($contact['contact_type'] == null && $contact['content'] == null) {
                 continue;
             }
-            $professional_contact = ProfessionalContact::find($contact['id']);
-            if (! $professional_contact) {
-                $professional_contact = new ProfessionalContact;
-                $professional_contact->professional_id = $professional->id;
-            }
-
+            $professional_contact = $existingContacts->get($contact['id']) ?? new ProfessionalContact(['professional_id' => $professional->id]);
             $professional_contact->contact_type = $contact['contact_type'];
             $professional_contact->content = $contact['content'];
             $professional_contact->save();
@@ -142,22 +139,19 @@ class ProfessionalService
     {
         $addresses = collect($addresses_data);
 
-        $idAddresses = $professional->addresses()->pluck('id');
-        $idAddressesToDestroy = $idAddresses->filter(function ($id, int $key) use ($addresses) {
-            return ! $addresses->firstWhere('id', $id);
-        })->toArray();
+        $existingIds = $professional->addresses()->pluck('id');
+        $incomingIds = $addresses->pluck('id')->filter();
 
-        ProfessionalAddress::destroy($idAddressesToDestroy);
+        $toDestroy = $existingIds->diff($incomingIds)->toArray();
+        ProfessionalAddress::destroy($toDestroy);
+
+        $existingAddresses = ProfessionalAddress::whereIn('id', $incomingIds)->get()->keyBy('id');
+
         foreach ($addresses as $address) {
             if ($address['location_id'] == null && $address['address'] == null && $address['postal_code'] == null) {
                 continue;
             }
-            $professional_address = ProfessionalAddress::find($address['id']);
-            if (! $professional_address) {
-                $professional_address = new ProfessionalAddress;
-                $professional_address->professional_id = $professional->id;
-            }
-
+            $professional_address = $existingAddresses->get($address['id']) ?? new ProfessionalAddress(['professional_id' => $professional->id]);
             $professional_address->location_id = $address['location_id'];
             $professional_address->address = $address['address'];
             $professional_address->postal_code = $address['postal_code'];

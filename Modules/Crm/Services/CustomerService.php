@@ -106,22 +106,19 @@ class CustomerService
     {
         $contacts = collect($contacts_data);
 
-        $idContacts = $customer->contacts()->pluck('id');
-        $idContactsToDestroy = $idContacts->filter(function ($id, int $key) use ($contacts) {
-            return ! $contacts->firstWhere('id', $id);
-        })->toArray();
+        $existingIds = $customer->contacts()->pluck('id');
+        $incomingIds = $contacts->pluck('id')->filter();
 
-        CustomerContact::destroy($idContactsToDestroy);
+        $toDestroy = $existingIds->diff($incomingIds)->toArray();
+        CustomerContact::destroy($toDestroy);
+
+        $existingContacts = CustomerContact::whereIn('id', $incomingIds)->get()->keyBy('id');
+
         foreach ($contacts as $contact) {
             if ($contact['contact_type'] == null && $contact['content'] == null) {
                 continue;
             }
-            $customer_contact = CustomerContact::find($contact['id']);
-            if (! $customer_contact) {
-                $customer_contact = new CustomerContact;
-                $customer_contact->customer_id = $customer->id;
-            }
-
+            $customer_contact = $existingContacts->get($contact['id']) ?? new CustomerContact(['customer_id' => $customer->id]);
             $customer_contact->contact_type = $contact['contact_type'];
             $customer_contact->content = $contact['content'];
             $customer_contact->save();
@@ -148,22 +145,19 @@ class CustomerService
     {
         $addresses = collect($addresses_data);
 
-        $idAddresses = $customer->addresses()->pluck('id');
-        $idAddressesToDestroy = $idAddresses->filter(function ($id, int $key) use ($addresses) {
-            return ! $addresses->firstWhere('id', $id);
-        })->toArray();
+        $existingIds = $customer->addresses()->pluck('id');
+        $incomingIds = $addresses->pluck('id')->filter();
 
-        CustomerAddress::destroy($idAddressesToDestroy);
+        $toDestroy = $existingIds->diff($incomingIds)->toArray();
+        CustomerAddress::destroy($toDestroy);
+
+        $existingAddresses = CustomerAddress::whereIn('id', $incomingIds)->get()->keyBy('id');
+
         foreach ($addresses as $address) {
             if ($address['location_id'] == null && $address['address'] == null && $address['postal_code'] == null) {
                 continue;
             }
-            $customer_address = CustomerAddress::find($address['id']);
-            if (! $customer_address) {
-                $customer_address = new CustomerAddress;
-                $customer_address->customer_id = $customer->id;
-            }
-
+            $customer_address = $existingAddresses->get($address['id']) ?? new CustomerAddress(['customer_id' => $customer->id]);
             $customer_address->location_id = $address['location_id'];
             $customer_address->address = $address['address'];
             $customer_address->postal_code = $address['postal_code'];

@@ -13,8 +13,6 @@ class Professional extends Model
 {
     use HasFactory;
 
-    protected $with = ['contacts'];
-
     protected $fillable = [
         'professional_type_id',
         'full_name',
