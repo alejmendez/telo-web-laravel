@@ -1,0 +1,12 @@
+{
+    "agents": [
+        "claude_code"
+    ],
+    "packages": [
+        "tightenco/duster"
+    ],
+    "skills": [
+        "inertia-vue-development",
+        "tailwindcss-development"
+    ]
+}
