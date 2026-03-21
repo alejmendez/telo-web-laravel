@@ -48,6 +48,7 @@ const submit = () => {
         v-model="form.email"
         :label="__('auth.login.form.email')"
         :message="form.errors.email"
+        @keyup.enter="submit"
       />
 
       <VInput
@@ -58,6 +59,7 @@ const submit = () => {
         v-model="form.password"
         :label="__('auth.login.form.password')"
         :message="form.errors.password"
+        @keyup.enter="submit"
       />
 
       <div class="block mt-4">

@@ -7,6 +7,7 @@ import InputMask from 'primevue/inputmask';
 import VInputDate from '@Core/Components/Form/VInputDate.vue';
 import VTextarea from '@Core/Components/Form/VTextarea.vue';
 import VInputNumber from '@Core/Components/Form/VInputNumber.vue';
+import VInputPassword from '@Core/Components/Form/VInputPassword.vue';
 
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
@@ -100,6 +101,21 @@ const isInvalid = props.message !== '' && props.message !== undefined;
         v-model="model"
         fluid
         mask="+99999999?9999999"
+        :invalid="isInvalid"
+        @change="emit('change', $event)"
+        @input="emit('input', $event)"
+        @click="emit('click', $event)"
+        @focus="emit('focus', $event)"
+        @blur="emit('blur', $event)"
+        @keydown="emit('keydown', $event)"
+      />
+    </template>
+    <template v-else-if="props.type === 'password'">
+      <VInputPassword
+        v-bind="attrs"
+        v-model="model"
+        fluid
+        toggleMask
         :invalid="isInvalid"
         @change="emit('change', $event)"
         @input="emit('input', $event)"

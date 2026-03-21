@@ -148,7 +148,7 @@ onUnmounted(() => {
       </div>
       <div class="py-1 text-left" role="none">
         <Link :href="route('profile.edit')" class="text-gray-700 dark:text-gray-100 block px-4 py-2"> {{ __('menu.top.profile') }} </Link>
-        <Link :href="route('logout')" method="post" as="button" class="text-gray-700 dark:text-gray-100 block px-4 py-2">
+        <Link :href="route('logout')" method="post" as="button" class="text-gray-700 dark:text-gray-100 block px-4 py-2 cursor-pointer">
             {{ __('menu.top.logout') }}
         </Link>
       </div>
