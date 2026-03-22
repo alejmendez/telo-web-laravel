@@ -139,8 +139,11 @@ sed -i 's/^REDIS_HOST=.*/REDIS_HOST=127.0.0.1/' .env
 sed -i 's/^REDIS_PORT=.*/REDIS_PORT=6379/' .env
 sed -i 's/^REDIS_PASSWORD=.*/REDIS_PASSWORD=null/' .env
 
-# FrankenPHP/Octane — apuntar al Caddyfile personalizado
+# FrankenPHP/Octane
 sed -i 's/^OCTANE_SERVER=.*/OCTANE_SERVER=frankenphp/' .env
+sed -i 's/^OCTANE_WORKERS=.*/OCTANE_WORKERS=auto/' .env
+sed -i 's/^OCTANE_MAX_REQUESTS=.*/OCTANE_MAX_REQUESTS=500/' .env
+sed -i 's/^OCTANE_TASK_WORKERS=.*/OCTANE_TASK_WORKERS=6/' .env
 echo "LARAVEL_OCTANE_CADDYFILE=${APP_DIR}/Caddyfile" >> .env
 
 php artisan optimize
@@ -167,6 +170,41 @@ composer dump-autoload
 php artisan optimize
 php artisan migrate --force
 php artisan app:sync-permissions
+
+
+# ============================================================
+# POSTGRESQL — TUNING DE PERFORMANCE
+#
+# La configuración por defecto de PostgreSQL es extremadamente conservadora.
+# Estos valores están calibrados para t3.small (2GB RAM).
+# Para t3.medium (4GB): shared_buffers=1GB, effective_cache_size=3GB, work_mem=32MB
+# Para t3.large  (8GB): shared_buffers=2GB, effective_cache_size=6GB, work_mem=64MB
+# ============================================================
+
+sudo tee /etc/postgresql/18/main/conf.d/performance.conf > /dev/null <<'PG_PERF'
+# Memoria
+shared_buffers = 512MB                # 25% de RAM — cache de páginas en memoria
+effective_cache_size = 1536MB         # 75% de RAM — estimación para el query planner
+work_mem = 16MB                       # por operación sort/hash (puede multiplicarse por conexiones)
+maintenance_work_mem = 128MB          # para VACUUM, CREATE INDEX, ALTER TABLE
+
+# Write-Ahead Log
+wal_buffers = 16MB
+checkpoint_completion_target = 0.9
+max_wal_size = 1GB
+
+# Conexiones — PgBouncer gestiona el pooling, PostgreSQL ve pocas conexiones reales
+max_connections = 50
+
+# Planner — SSDs tienen I/O aleatorio casi tan rápido como secuencial
+random_page_cost = 1.1
+effective_io_concurrency = 200
+
+# Logging de queries lentas (identificar cuellos de botella)
+log_min_duration_statement = 200      # loggear queries > 200ms
+PG_PERF
+
+sudo systemctl reload postgresql
 
 
 # ============================================================

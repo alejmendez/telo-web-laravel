@@ -135,7 +135,36 @@ php artisan octane:install --server=frankenphp --no-interaction
 
 > Los assets de `public/build/` **no se generan aquí**. El pipeline de GitHub Actions los compila con Bun y los sube al servidor via SCP antes del SSH deploy.
 
-### 6. PgBouncer
+### 6. PostgreSQL — tuning de performance
+
+La configuración por defecto de PostgreSQL es muy conservadora. Se crea `/etc/postgresql/18/main/conf.d/performance.conf`:
+
+```ini
+# Valores para t3.small (2GB RAM) — ajustar para instancias mayores
+shared_buffers = 512MB          # 25% de RAM
+effective_cache_size = 1536MB   # 75% de RAM (estimación para el planner)
+work_mem = 16MB                 # por operación sort/hash
+maintenance_work_mem = 128MB    # para VACUUM, CREATE INDEX
+
+wal_buffers = 16MB
+checkpoint_completion_target = 0.9
+max_wal_size = 1GB
+
+max_connections = 50            # PgBouncer limita las conexiones reales
+
+random_page_cost = 1.1          # SSDs: I/O aleatorio ≈ I/O secuencial
+effective_io_concurrency = 200
+
+log_min_duration_statement = 200  # loggear queries > 200ms en /var/log/postgresql/
+```
+
+| Instancia | `shared_buffers` | `effective_cache_size` | `work_mem` |
+|-----------|-----------------|----------------------|------------|
+| t3.small (2GB) | 512MB | 1536MB | 16MB |
+| t3.medium (4GB) | 1GB | 3GB | 32MB |
+| t3.large (8GB) | 2GB | 6GB | 64MB |
+
+### 7. PgBouncer
 
 **El problema que resuelve:** con Octane corriendo N workers persistentes, cada worker mantiene una conexión abierta a PostgreSQL (~5MB RAM por conexión). PgBouncer actúa como proxy y agrupa todas esas conexiones en un pool pequeño.
 
@@ -175,7 +204,17 @@ DB_PORT=6432   ; PgBouncer
 
 > **Nota:** `pool_mode = transaction` no soporta `SET` statements persistentes, advisory locks, ni `LISTEN/NOTIFY`. Si se necesitan, usar `pool_mode = session`.
 
-### 7. Caddyfile
+### 8. Octane — workers y max requests
+
+```dotenv
+OCTANE_WORKERS=auto          # usa todos los CPUs disponibles
+OCTANE_MAX_REQUESTS=500      # reinicia el worker cada 500 requests (previene memory leaks)
+OCTANE_TASK_WORKERS=6        # workers para tareas concurrentes (Octane::concurrently)
+```
+
+`OCTANE_MAX_REQUESTS=500` es clave en producción: aunque Octane mantiene el estado entre requests, después de N requests el worker se reinicia limpiamente para evitar acumulación de memoria.
+
+### 9. Caddyfile
 
 FrankenPHP usa un `Caddyfile` en la raíz del proyecto. Se referencia con `LARAVEL_OCTANE_CADDYFILE` en `.env`.
 
@@ -212,7 +251,7 @@ telochile.cl, www.telochile.cl {
 }
 ```
 
-### 8. Servicios systemd
+### 10. Servicios systemd
 
 **Octane** — depende de `pgbouncer.service` (no de `postgresql.service` directamente):
 ```ini
@@ -270,6 +309,42 @@ Los aliases son para uso manual de emergencia. El flujo normal es vía GitHub Ac
 | PgBouncer | 127.0.0.1:6432 | Connection pooler → PostgreSQL |
 | PostgreSQL | 127.0.0.1:5432 | Base de datos (solo accesible via PgBouncer) |
 | Queue Worker | — | Procesamiento de jobs en background |
+
+---
+
+## Optimizaciones pendientes (manuales)
+
+Estas no se pueden automatizar en el script de instalación porque dependen de datos de runtime o de configuración externa.
+
+### CloudFront CDN (recomendado)
+
+Una vez creada la distribución CloudFront apuntando a `telochile.cl`:
+
+```dotenv
+# .env en producción
+ASSET_URL=https://xxxxxxxxxx.cloudfront.net
+```
+
+Los assets de `public/build/` (CSS/JS con hash Vite) se servirán desde edge locations globales. Cache hit rate cercano al 100% por los headers `immutable`.
+
+### Índices en PostgreSQL
+
+Identificar queries lentas en `/var/log/postgresql/postgresql-18-main.log` (se loggan las de >200ms) y agregar índices en las migraciones:
+
+```php
+// Ejemplos comunes para el modelo CRM
+$table->index(['status', 'created_at']);
+$table->index('professional_id');
+$table->index(['customer_id', 'status']);
+```
+
+### Tuning de PostgreSQL para instancias mayores
+
+Si se escala a `t3.medium` (4GB) o superior, editar `/etc/postgresql/18/main/conf.d/performance.conf` con los valores de la tabla de la sección 6 y recargar:
+
+```bash
+sudo systemctl reload postgresql
+```
 
 ---
 
