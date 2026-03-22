@@ -1,6 +1,6 @@
 # Instalación en AWS EC2
 
-Stack: **Laravel Octane + FrankenPHP (Caddy) + Valkey + PostgreSQL 18**
+Stack: **Laravel Octane + FrankenPHP (Caddy) + PgBouncer + Valkey + PostgreSQL 18**
 Sistema operativo: **Ubuntu 24.04 LTS**
 
 ## Arquitectura
@@ -14,12 +14,13 @@ Internet (80/443)
  │  Caddy (HTTP server)                    │
  │  - SSL/TLS automático (Let's Encrypt)   │
  │  - HTTP → HTTPS redirect                │
- │  - Archivos estáticos                   │
+ │  - Archivos estáticos (sin tocar PHP)   │
  │  - Compresión zstd / brotli / gzip      │
+ │  - HTTP/3 (QUIC)                        │
  │                                         │
  │  PHP Workers persistentes (Octane)      │
  │  - Sin bootstrap por request            │
- │  - Conexiones DB reutilizadas           │
+ │  - OPcache + JIT activado              │
  └─────────────────────────────────────────┘
       │
       ▼
@@ -27,20 +28,25 @@ Internet (80/443)
  - Cache, sesiones, queues
       │
       ▼
+ PgBouncer (127.0.0.1:6432)        ← la app apunta aquí
+ - Connection pooling (pool_mode=transaction)
+ - Agrupa N workers en ~20 conexiones reales
+      │
+      ▼
  PostgreSQL (127.0.0.1:5432)
 ```
 
-> FrankenPHP es Caddy con PHP embebido. Reemplaza a Nginx/Apache + PHP-FPM + Certbot en un solo proceso. No hay proxy adicional.
+> FrankenPHP es Caddy con PHP embebido. Reemplaza Nginx + PHP-FPM + Certbot en un solo proceso. PgBouncer evita que los workers de Octane saturen las conexiones de PostgreSQL.
 
 ---
 
 ## Prerequisitos
 
 - Instancia EC2 con Ubuntu 24.04 LTS (mínimo `t3.small`, recomendado `t3.medium`)
-- Los registros DNS tipo A de `telochile.cl` y `www.telochile.cl` apuntando a la IP pública del servidor **antes de iniciar la instalación** (necesario para que Caddy obtenga el certificado SSL)
-- Puerto 22 (SSH), 80 (HTTP) y 443 (HTTPS) abiertos en el Security Group
+- Los registros DNS tipo A de `telochile.cl` y `www.telochile.cl` apuntando a la IP pública del servidor **antes de iniciar la instalación** (Caddy los necesita para obtener el certificado SSL automáticamente)
+- Puertos 22 (SSH), 80 (HTTP) y 443 (HTTPS) abiertos en el Security Group
 
-Verificar IP pública del servidor:
+Verificar IP pública:
 ```bash
 curl ifconfig.me
 ```
@@ -56,32 +62,48 @@ curl ifconfig.me
 ```bash
 sudo apt update && sudo apt upgrade -y
 
-# Swap de 2GB — evita que bun run build congele el servidor
-sudo fallocate -l 2G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile && sudo swapon /swapfile
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+# Swap — solo necesario en t3.micro (1GB RAM)
+# sudo fallocate -l 1G /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
 ```
 
 ### 2. Repositorios y paquetes
 
-Se agregan los repos de PostgreSQL, PHP (ondrej) y Valkey con el método moderno (`gpg --dearmor` + `signed-by`), sin el deprecado `apt-key add`.
+Se agregan los repos de PostgreSQL, PHP (ondrej) y Valkey con `gpg --dearmor` + `signed-by` (sin el deprecado `apt-key add`).
 
-Paquetes instalados:
 | Paquete | Propósito |
 |---------|-----------|
 | `php8.5`, `php8.5-cli` | PHP + CLI |
 | `php8.5-pgsql`, `php8.5-redis`, etc. | Extensiones PHP |
 | `postgresql-18` | Base de datos |
+| `pgbouncer` | Connection pooler para PostgreSQL |
 | `valkey` | Cache / sesiones / colas (fork Redis) |
 | `composer` | Gestor de dependencias PHP |
 
 > No se instala nginx, certbot, php-fpm, Node.js ni Bun. FrankenPHP reemplaza el servidor web. Los assets JS se compilan en CI.
 
-### 3. Valkey
+### 3. OPcache + JIT
+
+Configurado en `/etc/php/8.5/cli/conf.d/99-performance.ini` (Octane corre como proceso CLI):
+
+```ini
+; OPcache
+opcache.enable=1
+opcache.enable_cli=1
+opcache.memory_consumption=256
+opcache.interned_strings_buffer=16
+opcache.max_accelerated_files=20000
+opcache.validate_timestamps=0      ; seguro porque Octane reinicia workers en deploy
+
+; JIT tracing — beneficia lógica de negocio y transformaciones de datos
+opcache.jit=tracing
+opcache.jit_buffer_size=64M
+```
+
+> `validate_timestamps=0` es crítico en producción: evita que PHP revise el filesystem en cada request. Los workers de Octane se reinician en cada deploy, por lo que el bytecode se recompila automáticamente.
+
+### 4. Valkey
 
 ```bash
-# Configurar para escuchar solo en localhost
 sudo sed -i 's/^bind .*/bind 127.0.0.1 -::1/' /etc/valkey/valkey.conf
 sudo sed -i 's/^# maxmemory .*/maxmemory 256mb/' /etc/valkey/valkey.conf
 sudo sed -i 's/^# maxmemory-policy .*/maxmemory-policy allkeys-lru/' /etc/valkey/valkey.conf
@@ -99,7 +121,7 @@ REDIS_PASSWORD=null
 
 > Valkey es binariamente compatible con Redis. La extensión `php8.5-redis` funciona sin cambios.
 
-### 4. Aplicación Laravel
+### 5. Aplicación Laravel
 
 ```bash
 git clone https://github.com/alejmendez/telo-web-laravel.git teloweb
@@ -111,15 +133,55 @@ cp .env.example .env && php artisan key:generate
 php artisan octane:install --server=frankenphp --no-interaction
 ```
 
-> Los assets de `public/build/` **no se generan aquí**. El pipeline de GitHub Actions los compila con Bun y los sube al servidor via SCP antes de ejecutar el SSH deploy.
+> Los assets de `public/build/` **no se generan aquí**. El pipeline de GitHub Actions los compila con Bun y los sube al servidor via SCP antes del SSH deploy.
 
-### 5. Caddyfile
+### 6. PgBouncer
 
-FrankenPHP usa un `Caddyfile` en la raíz del proyecto para configurar el servidor. Se apunta con la variable `LARAVEL_OCTANE_CADDYFILE` en `.env`.
+**El problema que resuelve:** con Octane corriendo N workers persistentes, cada worker mantiene una conexión abierta a PostgreSQL (~5MB RAM por conexión). PgBouncer actúa como proxy y agrupa todas esas conexiones en un pool pequeño.
+
+```
+Sin PgBouncer:  App (8 workers) → PostgreSQL (8 conexiones abiertas permanentemente)
+Con PgBouncer:  App (8 workers) → PgBouncer → PostgreSQL (máx. 20 conexiones, compartidas)
+```
+
+Configuración (`/etc/pgbouncer/pgbouncer.ini`):
+
+```ini
+[databases]
+teloweb = host=127.0.0.1 port=5432 dbname=teloweb
+
+[pgbouncer]
+listen_addr = 127.0.0.1
+listen_port = 6432
+
+auth_type = scram-sha-256
+auth_file = /etc/pgbouncer/userlist.txt
+
+; transaction mode: la conexión se devuelve al pool al terminar cada transacción
+; Es el modo más eficiente y compatible con Octane workers persistentes
+pool_mode = transaction
+server_reset_query = DISCARD ALL
+
+max_client_conn = 1000
+default_pool_size = 20
+min_pool_size = 5
+```
+
+La app apunta a PgBouncer, no a PostgreSQL directamente:
+```dotenv
+DB_PORT=6432   ; PgBouncer
+; PostgreSQL sigue en :5432 pero solo PgBouncer lo usa
+```
+
+> **Nota:** `pool_mode = transaction` no soporta `SET` statements persistentes, advisory locks, ni `LISTEN/NOTIFY`. Si se necesitan, usar `pool_mode = session`.
+
+### 7. Caddyfile
+
+FrankenPHP usa un `Caddyfile` en la raíz del proyecto. Se referencia con `LARAVEL_OCTANE_CADDYFILE` en `.env`.
 
 ```caddyfile
 {
-    email alejmendez.87@gmail.com   # Para Let's Encrypt
+    email alejmendez.87@gmail.com
 
     frankenphp {
         num_threads auto
@@ -129,10 +191,8 @@ FrankenPHP usa un `Caddyfile` en la raíz del proyecto para configurar el servid
 telochile.cl, www.telochile.cl {
     root * /home/ubuntu/teloweb/public
 
-    # Compresión (zstd > brotli > gzip)
     encode zstd br gzip
 
-    # Archivos estáticos — caché de 1 año (Vite usa hashes por build)
     @static path_regexp \.(ico|css|js|gif|jpg|jpeg|png|svg|webp|woff|woff2|ttf|eot)$
     handle @static {
         header Cache-Control "public, max-age=31536000, immutable"
@@ -143,7 +203,6 @@ telochile.cl, www.telochile.cl {
         max_size 20MB
     }
 
-    # Workers persistentes de Octane
     php_server {
         worker {
             file /home/ubuntu/teloweb/public/frankenphp-worker.php
@@ -153,54 +212,17 @@ telochile.cl, www.telochile.cl {
 }
 ```
 
-Ventajas sobre Nginx:
-- Caddy obtiene y renueva certificados SSL automáticamente (ACME)
-- HTTP/3 (QUIC) habilitado por defecto
-- Compresión brotli y zstd (no disponibles en Nginx sin módulo adicional)
-- Los archivos estáticos los sirve Caddy directamente, sin tocar los workers PHP
+### 8. Servicios systemd
 
-### 6. Servicio systemd — Octane
-
+**Octane** — depende de `pgbouncer.service` (no de `postgresql.service` directamente):
 ```ini
-[Unit]
-Description=Laravel Octane (FrankenPHP)
-After=network.target valkey.service postgresql.service
-
-[Service]
-User=ubuntu
-Group=ubuntu
-WorkingDirectory=/home/ubuntu/teloweb
-ExecStart=/usr/bin/php artisan octane:start --server=frankenphp
-Restart=always
-RestartSec=5
-
-# Permite enlazarse a puertos 80 y 443 sin ejecutar como root
-AmbientCapabilities=CAP_NET_BIND_SERVICE
-CapabilityBoundingSet=CAP_NET_BIND_SERVICE
-
-# Caddy necesita estas variables para guardar certificados en el home del usuario
-Environment="HOME=/home/ubuntu"
-Environment="XDG_DATA_HOME=/home/ubuntu/.local/share"
-Environment="XDG_CONFIG_HOME=/home/ubuntu/.config"
+After=network.target valkey.service pgbouncer.service
+AmbientCapabilities=CAP_NET_BIND_SERVICE   ; permite bind a puertos 80/443 sin root
 ```
 
-> `AmbientCapabilities` es más seguro que `setcap` sobre el binario: la capacidad es temporal y solo aplica a este servicio.
-
-Los certificados se almacenan en `/home/ubuntu/.local/share/caddy/`.
-
-### 7. Servicio systemd — Queue Worker
-
+**Queue Worker** — también pasa por PgBouncer:
 ```ini
-[Unit]
-Description=Laravel Queue Worker
-After=network.target valkey.service
-
-[Service]
-User=ubuntu
-WorkingDirectory=/home/ubuntu/teloweb
-ExecStart=/usr/bin/php artisan queue:work --sleep=3 --tries=3 --max-time=3600
-Restart=always
-RestartSec=5
+After=network.target valkey.service pgbouncer.service
 ```
 
 ---
@@ -208,25 +230,27 @@ RestartSec=5
 ## Gestión de servicios
 
 ```bash
-# Ver estado
-status_services
-
-# Iniciar / detener
+status_services     # octane, queue-worker, pgbouncer, valkey
 start_services
 stop_services
 restart_services
 
-# Logs en tiempo real
-logs_octane     # FrankenPHP + PHP errors
-logs_queue      # Queue worker
-logs_caddy      # Solo líneas de Caddy
+# Logs
+logs_octane         # FrankenPHP + PHP errors
+logs_queue          # Queue worker
+logs_caddy          # Solo líneas de Caddy
+logs_pgbouncer      # PgBouncer
+
+# Estadísticas de PgBouncer en tiempo real
+pgb_stats           # SHOW POOLS — ver pool de conexiones
+pgb_clients         # SHOW CLIENTS — ver clientes conectados
 ```
 
 ---
 
 ## Actualizaciones
 
-Los aliases son para uso manual de emergencia. El flujo normal de deploy es vía GitHub Actions (push a `main`).
+Los aliases son para uso manual de emergencia. El flujo normal es vía GitHub Actions (push a `main`).
 
 | Alias | Cuándo usarlo |
 |-------|--------------|
@@ -237,39 +261,54 @@ Los aliases son para uso manual de emergencia. El flujo normal de deploy es vía
 
 ---
 
-## Troubleshooting
-
-### El certificado SSL no se obtiene
-- Verificar que el DNS ya apunta al servidor: `dig telochile.cl +short`
-- Ver logs de Caddy: `logs_caddy`
-- Let's Encrypt tiene rate limits — en desarrollo/staging usar `acme_ca https://acme-staging-v02.api.letsencrypt.org/directory` en el bloque global del Caddyfile
-
-### Error al enlazarse a puerto 80/443
-- Verificar que `AmbientCapabilities` está en el servicio: `sudo systemctl cat octane`
-- Reiniciar el daemon: `sudo systemctl daemon-reload && sudo systemctl restart octane`
-
-### Workers PHP no responden
-- Verificar que `public/frankenphp-worker.php` existe (generado por `octane:install`)
-- Reinstalar: `php artisan octane:install --server=frankenphp --no-interaction`
-
-### Valkey no conecta
-```bash
-sudo systemctl status valkey
-valkey-cli ping   # Debe responder PONG
-```
-
-### Ver certificados almacenados
-```bash
-ls ~/.local/share/caddy/certificates/
-```
-
----
-
 ## Servicios activos
 
 | Servicio | Puerto | Descripción |
 |----------|--------|-------------|
-| FrankenPHP (octane) | 80, 443 | HTTP/HTTPS + PHP workers |
+| FrankenPHP (octane) | 80, 443 | HTTP/HTTPS + PHP workers + SSL automático |
 | Valkey | 127.0.0.1:6379 | Cache / sesiones / colas |
-| PostgreSQL | 127.0.0.1:5432 | Base de datos |
+| PgBouncer | 127.0.0.1:6432 | Connection pooler → PostgreSQL |
+| PostgreSQL | 127.0.0.1:5432 | Base de datos (solo accesible via PgBouncer) |
 | Queue Worker | — | Procesamiento de jobs en background |
+
+---
+
+## Troubleshooting
+
+### El certificado SSL no se obtiene
+- Verificar DNS: `dig telochile.cl +short`
+- Ver logs de Caddy: `logs_caddy`
+- Let's Encrypt tiene rate limits — en staging usar `acme_ca https://acme-staging-v02.api.letsencrypt.org/directory` en el bloque global del Caddyfile
+
+### Error al enlazarse a puerto 80/443
+```bash
+sudo systemctl cat octane   # verificar AmbientCapabilities
+sudo systemctl daemon-reload && sudo systemctl restart octane
+```
+
+### Workers PHP no responden
+```bash
+# Verificar que el worker file existe
+ls public/frankenphp-worker.php
+
+# Reinstalar si falta
+php artisan octane:install --server=frankenphp --no-interaction
+```
+
+### PgBouncer no conecta
+```bash
+sudo systemctl status pgbouncer
+# Verificar que el password en userlist.txt coincide con PostgreSQL
+psql -h 127.0.0.1 -p 6432 -U postgres -d teloweb
+```
+
+### Valkey no conecta
+```bash
+sudo systemctl status valkey
+valkey-cli ping   # debe responder PONG
+```
+
+### Ver certificados SSL
+```bash
+ls ~/.local/share/caddy/certificates/
+```
